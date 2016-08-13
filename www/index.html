@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="tesisMovil">
+<html ng-app="movilapp">
 
 <head>
     <meta charset="utf-8" />
@@ -19,10 +19,10 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    
-  	<script src="https://code.jquery.com/jquery-3.1.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
   	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
     <title>Inicio</title>
 </head>
 
@@ -138,7 +138,7 @@
   	  </div> <!--row-->
 	</div> <!-- Container -->
     <script>
-      angular.module('tesisApp', []).controller('inicioController', function($scope) {
+      angular.module('movilapp', []).controller('inicioController', function($scope) {
         $scope.changeView = function(view){
           window.location.replace(view);            
         };
