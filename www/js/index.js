@@ -16,7 +16,6 @@ var app = {
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
-        this.phonegapLoaded();
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -29,12 +28,4 @@ var app = {
 
         console.log('Received Event: ' + id);
     },
-    phonegapLoaded: function(){
-        navigator.geolocation.getCurrentPosition(onSuccess);
-
-    },
-    onSuccess: function(position){
-        alert("TimeStamp:" + new Date(position.timestamp));
-        
-    }
 };

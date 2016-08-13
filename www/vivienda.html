@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="tesisApp">
+<html ng-app="movilapp">
 
 <head>
     <meta charset="utf-8" />
@@ -17,13 +17,38 @@
     * Create your own at http://cspisawesome.com
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
-    
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-  	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-resource.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
+
+    <script>
+        // ---------------------Funcion para la geolocalizacion ------------------
+        function geolocation(){
+            var options = { enableHighAccuracy: true };
+            watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+        
+            /*Esta funcion es llamada si recibimos datos de parte de geolocation*/
+            function onSuccess(position){
+                var lat = position.coords.latitude;
+                var lon = position.coords.longitude;
+
+                localStorage.setItem("latitude", lat);
+                localStorage.setItem("longitude", lon);
+
+                //alert(lat+", "+lon);
+                document.getElementById("campoUbic").value = lat+", "+lon;
+            }
+            /*Esta funcion es llamada si existe un error en la geolocation*/
+            function onError(error){
+                alert("Message: "+error.message);
+                //localStorage.setItem("Message", error)
+            }
+        }
+    </script>
+
     <title>Viviendas</title>
 </head>
 
@@ -131,6 +156,14 @@
                         <input type="text" name="cantInsecticidaVivienda" class="form-control" placeholder="Grs/ml">  
                     </div>
                 </div>
+                <div class="form-group">
+                    <div class="col-xs-5">
+                        <button type="button" class="btn btn-primary btn-block btn-sm" onClick ="geolocation()">Ubicacion</button>
+                    </div>
+                    <div class="col-xs-7">
+                        <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitude; Longitud" disabled>  
+                    </div>
+                </div>
 
                 <div class="form-group"> 
                     <div class="col-xs-11">
@@ -143,7 +176,7 @@
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script>
-          angular.module('tesisApp', []).controller('menuController', function($scope) {
+          angular.module('movilapp', []).controller('menuController', function($scope) {
             $scope.changeView = function(view){
             window.location.replace(view);            
         }
