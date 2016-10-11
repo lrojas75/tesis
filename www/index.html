@@ -28,130 +28,153 @@
 </head>
 
 <body ng-controller="inicioController">
-	<div align="center">
-  		<h4>Ingreso al sistema</h4>
-  		<div class="row">
-      <!-- MENU DE INICIO - NAVIGATION TABS -->
-        <div class="col-xs-10">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#tab_Inicio" data-toggle="pill">Inicio</a></li>
-              <li><a href="#tab_Registro" data-toggle="pill">Registrarse</a></li>
-              <li><a href="#tab_Ayuda" data-toggle="pill">Ayuda</a></li>
-            </ul>
-        </div><br><br><br><br>
+	<div class = "col-xs-12" align="center">
+		<br><h4>Ingreso al sistema</h4><br>
+
+    <!-- MENU DE INICIO - NAVIGATION TABS -->
+    <div class="col-xs-12">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_Inicio" data-toggle="pill">Inicio</a></li>
+        <li><a href="#tab_Registro" data-toggle="pill">Registrarse</a></li>
+        <li><a href="#tab_Ayuda" data-toggle="pill">Ayuda</a></li>
+      </ul>
+    </div><br><br><br>
+        
         <!-- Contenido de cada opcion del menu lateral -->
-        <div class="col-xs-10">
-          <div class="tab-content"> 
-            <div class="tab-pane active" id="tab_Inicio"> <!-- Tab Inicio -->
-            <h4 style="margin-left: 25%">Inicio de sesion</h4>
-              <div align="center" style="margin-left: 25%"> 
-                <div class="separador"></div>
-                <div class="separador"></div><br><br>
-                <form name = "loginForm" ng-submit="login()" class="form-horizontal">
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Usuario:</label>
-                      <div class="col-xs-7">
-                          <input type="text" name="username" class="form-control" placeholder="Usuario" ng-model="username" required>
-                      </div>
-                  </div>
-
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Contraseña:</label>
-                      <div class="col-xs-7">
-                          <input type="text" name="password" class="form-control" placeholder="Contraseña" ng-model="password" required>
-                      </div>
-                  </div>
-                  <div>
-                  {{loginError}}
-                  </div><br>
-                  <div class="form-group"> 
-                      <div class="col-xs-offset-2 col-xs-3">
-                        <button type="submit" class="btn btn-primary" ng-click="changeView('menuTipos.html')" style="margin-left: 25%">Aceptar</button>
-                      </div>
-                  </div>
-                </form>
+    <div class="col-xs-12" align="center">
+      <div class="tab-content"> 
+        <div class="tab-pane active" id="tab_Inicio"> <!-- Tab Inicio -->
+        
+          <h4>Inicio de sesion</h4><br>
+          <form name = "loginForm" class="form-horizontal">
+            
+            <div class = "col-xs-12">
+              <div class="form-group">
+                <div class = "col-xs-5" style="text-align: left;">
+                  <label>Usuario:</label>
+                </div>
+                <div class="col-xs-7">
+                  <input type="text" class="form-control" placeholder="Usuario" ng-model="userLogin" required>
+                </div>
               </div>
-            </div> <!-- Cierra Tab inicio -->
-            <!-- Tab Registro -->
-            <div class="tab-pane" id="tab_Registro">
-              <h4 style="margin-left: 25%">Registro</h4>
-              <div align="center" style="margin-left: 25%">
-                <div class="separador"></div>
-                <div class="separador"></div><br><br>
-                <form name = "registroForm" ng-submit="login()" class="form-horizontal">
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Nombres:</label>
-                      <div class="col-xs-7">
-                          <input type="text" name="nombres" class="form-control" placeholder="Nombres" ng-model = "nombres" required>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Apellidos:</label>
-                      <div class="col-xs-7">
-                          <input type="text" name="apellidos" class="form-control" placeholder="Apellidos" ng-model = "apellidos" required>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Email:</label>
-                      <div class="col-xs-7">
-                          <input type="text" name="email" class="form-control" placeholder="Email" ng-model = "email" required>
-                      </div>
-                  </div>
-
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Cedula:</label>
-                      <div class="col-xs-7  ">
-                          <input type="text" name="cedula" class="form-control" placeholder="Cedula" ng-model="cedula" required>
-                      </div>
-                  </div>
-                  
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Contraseña:</label>
-                      <div class="col-xs-7  ">
-                          <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="password" required>
-                      </div>
-                  </div>
-                  <div class="form-group">
-                      <label class="control-label col-xs-5">Codigo:</label>
-                      <div class="col-xs-7  ">
-                          <input type="text" name="code" class="form-control" placeholder="Codigo" ng-model="code" required>
-                      </div>
-                  </div>
-                  <div>
-                  {{loginError}}
-                  </div><br>
-                  <div class="form-group"> 
-                      <div class="col-xs-offset-2 col-xs-3">
-                        <button type="submit" class="btn btn-primary" ng-click="changeView('index.html')" style="margin-left: 25%">Registrarse</button>
-                      </div>
-                  </div>
-                </form>
-              </div>
-            </div> <!-- Cierra Tab Registro -->
-            <!-- Tab Ayuda -->
-            <div class="tab-pane" id="tab_Ayuda">
-              <h4>Ayuda</h4>
-              <p>Texto ayuda</p>
             </div>
-          </div><!-- tab content -->
-  		  </div> <!-- Division de contenido -->
-  	  <div class="clearfix visible-lg"></div>
-  	  </div> <!--row-->
-	</div> <!-- Container -->
-    <script>
-      angular.module('movilapp', []).controller('inicioController', function($scope) {
-        $scope.changeView = function(view){
-          window.location.replace(view);            
-        };
-        $scope.login = function(){
-        }
-      });
-    </script>
-    <script type="text/javascript" src="cordova.js"></script>
-    <script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript">
-        app.initialize();
-    </script>
+
+            <div class = "col-xs-12">
+              <div class="form-group">
+                <div class = "col-xs-5" style="text-align: left;">
+                  <label>Contraseña:</label>
+                </div>
+                <div class="col-xs-7">
+                  <input type="password" class="form-control" placeholder="Contraseña" ng-model="passLogin" required>
+                </div>
+              </div>
+            </div>
+
+            <div> {{mensaje}} </div><br>
+
+            <div class = "col-xs-12">
+              <br>
+              <div class="form-group">
+                <button class="btn btn-primary" ng-click = "login()">Aceptar</button>
+              </div>
+            </div>
+          </form>
+        </div> <!-- Cierra Tab inicio -->
+
+        <!-- Tab Registro -->
+        <div class="tab-pane" id="tab_Registro">
+          <div class="col-xs-12" align="center">
+            <h4>Registro</h4><br>
+
+            <form name = "registroForm" ng-submit="" class="form-horizontal">
+              <div class = "col-xs-12">
+                <div class="form-group">
+                  <div class = "col-xs-5" style="text-align: left;">
+                    <label>Nombres:</label>
+                  </div>
+                  <div class="col-xs-7">
+                    <input type="text" name="nombres" class="form-control" placeholder="Nombres" ng-model = "nombres" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class = "col-xs-12">
+                <div class="form-group">
+                  <div class = "col-xs-5" style="text-align: left;">
+                    <label>Apellidos:</label>
+                  </div>
+                  <div class="col-xs-7">
+                    <input type="text" name="apellidos" class="form-control" placeholder="Apellidos" ng-model = "apellidos" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div class = "col-xs-12">
+                <div class="form-group">
+                  <div class = "col-xs-5" style="text-align: left;">
+                    <label>Cedula:</label>
+                  </div>
+                  <div class="col-xs-7">
+                    <input type="text" name="cedula" class="form-control" placeholder="Cedula" ng-model="cedula" required>
+                  </div>
+                </div>
+              </div>
+
+              <div class = "col-xs-12">
+                <div class="form-group">
+                  <div class = "col-xs-5" style="text-align: left;">
+                    <label>Contraseña:</label>
+                  </div>
+                  <div class="col-xs-7">
+                    <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="password" required>
+                  </div>
+                </div>
+              </div>
+              
+              <div> {{loginError}} </div><br>
+
+              <div class = "col-xs-12">
+                <div class="form-group">
+                  <br><button type="submit" class="btn btn-primary" ng-click="changeView('')">Registrarse</button>
+                </div>
+              </div>
+
+            </form>
+          </div>
+        </div> <!-- Cierra Tab Registro -->
+
+        <!-- Tab Ayuda -->
+          <div class="tab-pane" id="tab_Ayuda">
+            <h4>Ayuda</h4>
+            <p>Texto ayuda</p>
+          </div>
+        </div><!-- tab content -->
+
+  		</div> <!-- Division de contenido, Tab-content -->
+    </div>
+
+  	<div class="clearfix visible-lg"></div>
+	</div> <!-- Primera division de columas -->
+  
+  <script>
+    angular.module('movilapp', []).controller('inicioController', function($scope, $http) {
+      console.log("Readyyy!");
+      $scope.login = function(){
+        $http.post('DB.php',{
+            user: $scope.userLogin,
+            pas: $scope.passLogin            
+        }).success(function(data) {         
+            $scope.mensaje = "";
+            console.log(data);
+        }).error(function(data) {
+            console.log('Error: ' + data);
+        });
+        $scope.username=$scope.password='';
+      }
+    });
+  </script>
+  <script type="text/javascript" src="cordova.js"></script>
+  <script type="text/javascript" src="js/index.js"></script>
 </body>
 
 </html>

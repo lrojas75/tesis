@@ -19,6 +19,7 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -38,13 +39,11 @@
                 localStorage.setItem("latitude", lat);
                 localStorage.setItem("longitude", lon);
 
-                //alert(lat+", "+lon);
-                document.getElementById("campoUbic").value = lat+", "+lon;
+                document.getElementById("campoUbic").value = lat+" - "+lon;
             }
             /*Esta funcion es llamada si existe un error en la geolocation*/
             function onError(error){
                 alert("Message: "+error.message);
-                //localStorage.setItem("Message", error)
             }
         }
     </script>
@@ -53,134 +52,174 @@
 </head>
 
 <body ng-controller="menuController">
-    <h4 align="center">Datos de la vivienda:</h4><br>
-        <div class="col-xs-11">
-            <div align="center">
+        <div class="col-xs-12">
             <form ng-submit="" class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Habitantes:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="cantHabitantes" class="form-control" placeholder="Habitantes">
-                    </div>
+                <div class = "col-xs-12" align="center">
+                    <br><h4>Datos de la vivienda:</h4>
                 </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Clave:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="clave" class="form-control" placeholder="Clave">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Tanques bajos:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
+
+                <div class = "col-xs-12">
+                <br>
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Habitantes:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <input type="text" name = "habitantesCasa" class="form-control">
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Llantas:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Clave:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <select class="form-control">
+                                <option>Negativa</option>
+                                <option>Positiva</option>
+                                <option>Cerrada</option>
+                                <option>Renuente</option>
+                                <option>Tratada</option>
+                                <option>Inspeccionada</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Tinas:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Floreros/Matas en agua:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Tarros / Botellas: </label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Criaderos naturales:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Diversos:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Total:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="larvas" class="form-control" placeholder="Con larvas Aedes">
-                        <input type="text" name="pupas" class="form-control" placeholder="Con pupas Aedes">
-                        <input type="text" name="totalInspeccionados" class="form-control" placeholder="Total">
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Depositos:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <select class="form-control">
+                                <option>Tanques bajos</option>
+                                <option>Llantas</option>
+                                <option>Floreros/Plantas en agua</option>
+                                <option>Tinas (> 55 gal)</option>
+                                <option>Tarros-baldes (< 55 gal)</option>
+                                <option>Criaderos naturales</option>
+                                <option>Botellas</option>
+                                <option>Diversos</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="separadorDos"></div>
-                <div class="separadorDos"></div><br>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Destruidos:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="cantDestruidos" class="form-control" placeholder="Destruidos">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Tratados:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="cantTratados" class="form-control" placeholder="Tratados">  
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Insecticida:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="cantInsecticidaVivienda" class="form-control" placeholder="Grs/ml">  
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-5">
-                        <button type="button" class="btn btn-primary btn-block btn-sm" onClick ="geolocation()">Ubicacion</button>
-                    </div>
-                    <div class="col-xs-7">
-                        <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitude; Longitud" disabled>  
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-1">
+                            <label>I:</label>
+                        </div>
+                        <div class = "col-xs-3">
+                            <input type="number" name = "I" min = "0" max = "10" class="form-control">
+                        </div>
+                        <div class = "col-xs-1" style="margin-left: -10px">
+                            <label>L:</label>
+                        </div>
+                        <div class = "col-xs-3">
+                            <input type="number" name = "I" min = "0" max = "10" class="form-control">
+                        </div>
+                        <div class = "col-xs-1" style="margin-left: -10px">
+                            <label>P:</label>
+                        </div>
+                        <div class = "col-xs-3">
+                            <input type="number" name = "I" min = "0" max = "10" class="form-control">
+                        </div>
+                        
                     </div>
                 </div>
 
-                <div class="form-group"> 
-                    <div class="col-xs-11">
-                      <button type="submit" class="btn btn-primary" style="margin-left: 15%">Guardar</button>
-                      <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
+                <div class = "col-xs-12">
+                <br>
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Nombre de quien recibio la visita:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <input type="text" name = "persona" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "col-xs-12" align="center">
+                    <button type="submit" class="btn btn-primary">Agregar</button>
+                </div>
+
+                <div class = "col-xs-12" align="center">
+                    <div class="form-group">
+                        <br>
+                        <h4>Control:</h4>
+                        <div class="separadorDos"></div>
+                        <div class="separadorDos"></div><br>
+                    </div>
+                </div>
+
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Eliminados:</label>
+                        </div>
+                        <div class = "col-xs-7">
+                            <input type="number" name = "eliminados" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Tratados:</label>
+                        </div>
+                        <div class = "col-xs-7">
+                            <input type="number" name = "tratados" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                        <div class = "col-xs-5">
+                            <label>Larvicida (gr/ml):</label>
+                        </div>
+                        <div class = "col-xs-7">
+                            <input type="number" name = "larvicida" class="form-control">
+                        </div>
+                    </div>
+                </div>
+
+                <div class = "col-xs-12" align="center">
+                    <div class="form-group">
+                        <div class="col-xs-9">
+                            <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled>  
+                        </div>
+                        <div class="col-xs-3">
+                            <button type="button" class="btn btn-primary btn-block btn-xs" onClick ="geolocation()"><i class="material-icons">my_location</i></button>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class = "col-xs-12">
+                    <div class="form-group">
+                    <br> 
+                        <div class="col-xs-6" align="right">
+                            <button type="submit" class="btn btn-primary">Guardar</button>
+                        </div>
+                        <div class="col-xs-6">
+                            <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
+                        </div>
                     </div>
                 </div>
             </form>
-            </div>
         </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script>
-          angular.module('movilapp', []).controller('menuController', function($scope) {
-            $scope.changeView = function(view){
-            window.location.replace(view);            
-        }
-      });
-    </script>
+            angular.module('movilapp', []).controller('menuController', function($scope) {
+                $scope.changeView = function(view){
+                window.location.replace(view);            
+            }});
+        </script>
 </body>
 </html>

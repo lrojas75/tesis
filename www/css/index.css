@@ -22,9 +22,9 @@
 
 body {
     font-family:'Roboto', sans-serif;
-    font-size:12px;
+    font-size:14px;
     height:100%;
-    text-transform:uppercase;
+    /*text-transform:uppercase;*/
     width:100%;
 }
 
@@ -106,16 +106,16 @@ h4 {
     border-bottom: 1px solid;
     border-color: gray;
     width: 100%;
-    margin-bottom: 2px;
 }
 .separadorDos{ /*separados en sumideros.html*/
     border-top: 1px solid;
     border-bottom: 1px solid;
     border-color: gray;
     width: 100%;
-    margin-bottom: 2px;
-    margin-left: 10%;
 }
+.material-icons {vertical-align: middle;}
+
+
 /* -------------- menuTipos.html ---------------*/
 
 /* ----------------   Sumidero.html ------*/

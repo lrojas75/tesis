@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html ng-app="movilapp">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
+    <!-- This is a wide open CSP declaration. To lock this down for production, see below. -->
+    <!--<meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+    <!-- Good default declaration:
+    * gap: is required only on iOS (when using UIWebView) and is needed for JS->native communication
+    * https://ssl.gstatic.com is required only on Android and is needed for TalkBack to function properly
+    * Disables use of eval() and inline scripts in order to mitigate risk of XSS vulnerabilities. To change this:
+        * Enable inline JS: add 'unsafe-inline' to default-src
+        * Enable eval(): add 'unsafe-eval' to default-src
+    * Create your own at http://cspisawesome.com
+    -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
+
+    <title>Informacion General</title>
+</head>
+
+<body ng-controller="menuController">
+        <div class="col-xs-12" align="center">
+            <br>
+                <h4>Informacion General</h4>
+                <form ng-submit="" class="form-horizontal">
+                    <div class = "col-xs-12">
+                    <br>
+                        <div class="form-group">
+                            <div class = "col-xs-5" style="text-align: left;">
+                                <label>Municipio:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <select class="form-control" ng-model="municipio" ng-options = "municipio as municipio.municipio for municipio in opciones">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "col-xs-12">
+                        <div class="form-group">
+                            <div class = "col-xs-5" style="text-align: left;">
+                                <label>Barrio:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="barrio">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "col-xs-12">
+                        <div class="form-group">
+                            <div class = "col-xs-5" style="text-align: left;">
+                                <label>Comuna:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <select ng-model="comuna" ng-options="comuna as comuna for comuna in municipio.comunaNum" class="form-control">
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "col-xs-12">
+                        <div class="form-group">
+                            <div class = "col-xs-5" style="text-align: left;">
+                                <label>Actividad:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <select class="form-control">
+                                    <option>Encuesta larvaria</option>
+                                    <option>Control larvario</option>
+                                    <option>Evaluacion de control</option>
+                                    <option>Supervision</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "col-xs-12">
+                        <div class="form-group">
+                            <div class = "col-xs-5" style="text-align: left;">
+                                <label>Fecha (dd-mm-aaaa):</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <input type="text" class="form-control" ng-model="fecha" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class = "col-xs-12">
+                    <br>
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" ng-click="changeView('menuTipos.html')">Aceptar</button>
+                        </div>
+                    </div>
+                </form>
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script>
+            angular.module('movilapp', []).controller('menuController', function($scope, $filter) {
+                $scope.changeView = function(view){
+                    window.location.replace(view);            
+                }
+                $scope.opciones = [
+                    { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
+                    { municipio: "Palmira", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "14", "15", "16"]},
+                    { municipio: "Cartago", comunaNum: ["1", "2", "3", "4", "5", "6","7"]}];
+                $scope.fecha = $filter('date')(Date.now(), 'dd-MM-yyyy');
+            });
+        </script>
+</body>
+</html>

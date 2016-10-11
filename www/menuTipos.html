@@ -19,30 +19,63 @@
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+
+    <!--Morris JS API -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.6/raphael.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
+    
 
     <title>Tipos de Focos de Infeccion</title>
 </head>
 
 <body ng-controller="menuController">
-    <br><br><br>
-    <h4 align="center">Escoger el tipo de factor de riesgo:</h4><br><br>
-    <div align="center">
+    
+    <div class="col-xs-12" align="center">
+        <h4>Escoger el tipo de factor de riesgo:</h4><br>
         <div class="btn-group-vertical">
-          <button type="button" class="btn btn-primary btn-block btn-lg" ng-click ="changeView('sumidero.html')">Sumidero</button><br>
-          <button type="button" class="btn btn-primary btn-block btn-lg" ng-click ="changeView('vivienda.html')">Vivienda</button><br>
-          <button type="button" class="btn btn-primary btn-block btn-lg">Centro de<br>concentracion<br>humana</button><br>
+          <button type="button" class="btn btn-primary btn-lg" ng-click ="changeView('sumidero.html')" style="font-size: 16px">Sumidero</button><br>
+          <button type="button" class="btn btn-primary btn-lg" ng-click ="changeView('vivienda.html')" style="font-size: 16px">Vivienda</button><br>
+          <button type="button" class="btn btn-primary btn-lg" style="font-size: 16px">CDH</button><br>
         </div>
     </div>
+
+    <div class="col-xs-12">
+        <h4 align="left">Resumen del dia:</h4>
+    </div>
+    <div class="col-xs-12" align="center">
+        <div id="resumenDelDia" style="height: 200px; width: 200px;"></div>
+    </div>
+    <div class="col-xs-12" align="center">
+        <br><br><button type="button" class="btn btn-primary btn-md" ng-click ="changeView('infoGeneral.html')">Terminar</button>
+    </div>
+
+
 
     <script>
       angular.module('movilapp', []).controller('menuController', function($scope) {
         $scope.changeView = function(view){
           window.location.replace(view);            
         }
+        var sumideros = 1;
+        var viviendas = 1;
+        var cdh = 1;
+
+        Morris.Donut({
+          element: 'resumenDelDia',
+          data: [
+            {label: "Sumidero", value: sumideros},
+            {label: "Vivienda", value: viviendas},
+            {label: "CDH", value: cdh},
+          ],
+          colors: ['#ffcd28', '#5d6865', '#f93e04']
+        }); //Cierra codigo de Donut.
       });
     </script>
     <script type="text/javascript" src="cordova.js"></script>

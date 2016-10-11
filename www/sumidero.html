@@ -18,7 +18,8 @@
     -->
     <!-- <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: 'unsafe-inline' https://ssl.gstatic.com; style-src 'self' 'unsafe-inline'; media-src *" /> -->
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
-    <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link rel="stylesheet" type="text/css" href="css/index.css"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -38,13 +39,11 @@
                 localStorage.setItem("latitude", lat);
                 localStorage.setItem("longitude", lon);
 
-                //alert(lat+", "+lon);
-                document.getElementById("campoUbic").value = lat+", "+lon;
+                document.getElementById("campoUbic").value = lat+" - "+lon;
             }
             /*Esta funcion es llamada si existe un error en la geolocation*/
             function onError(error){
                 alert("Message: "+error.message);
-                //localStorage.setItem("Message", error)
             }
         }
     </script>
@@ -53,78 +52,139 @@
 </head>
 
 <body ng-controller="menuController">
-    <h4 align="center">Datos del sumidero:</h4><br>
-        <div class="col-xs-11">
-            <div align="center">
-            <form ng-submit="" class="form-horizontal">
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Estado:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="seco" class="form-control" placeholder="Seco">
-                        <input type="text" name="tapado" class="form-control" placeholder="Tapado">
-                        <input type="text" name="aceite" class="form-control" placeholder="Con Aceite">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Larvas (%):</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="aedexLarvas" class="form-control" placeholder="Aedex">
-                        <input type="text" name="culexLarvas" class="form-control" placeholder="Culex">
-                        <input type="text" name="mixtoLarvas" class="form-control" placeholder="Mixto">
-                        <input type="text" name="sinLarvas" class="form-control" placeholder="Sin Larvas">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Pupas (%):</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="aedexPupas" class="form-control" placeholder="Aedex">
-                        <input type="text" name="culexPupas" class="form-control" placeholder="Culex">
-                        <input type="text" name="mixtoPupas" class="form-control" placeholder="Mixto">
-                        <input type="text" name="sinPupas" class="form-control" placeholder="Sin Pupas">
-                    </div>
-                </div>
-                <div class="separadorDos"></div>
-                <div class="separadorDos"></div><br>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Control (%):</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="tratado" class="form-control" placeholder="Tratado">
-                        <input type="text" name="tratadoSinInspec" class="form-control" placeholder="Tratado sin inspec">
-                        <input type="text" name="totalTratados" class="form-control" placeholder="Total Tratados">  <!-- Total de tratados + tratados sin inspeccionar -->
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-xs-5">Insecticida:</label>
-                    <div class="col-xs-7">
-                        <input type="text" name="cantidadInsecticida" class="form-control" placeholder="Grs/ml" disabled>  
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-xs-5">
-                        <button type="button" class="btn btn-primary btn-block btn-sm" onClick ="geolocation()">Ubicacion</button>
-                    </div>
-                    <div class="col-xs-7">
-                        <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitude; Longitud" disabled>  
-                    </div>
-                </div>
-                <div class="form-group"> 
-                    <div class="col-xs-11">
-                      <button type="submit" class="btn btn-primary" style="margin-left: 15%">Guardar</button>
-                      <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
-                    </div>
-                </div>
-            </form>
+    <div class="col-xs-12">
+        <form ng-submit="" class="form-horizontal">
+            <div class = "col-xs-12" align="center">
+                <br><h4>Datos del sumidero:</h4>
             </div>
-        </div>
+            
+            <div class = "col-xs-12">
+            <br>
+                <div class="form-group">
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Estado:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control">
+                            <option>N/A</option>
+                            <option>Seco</option>
+                            <option>Tapado</option>
+                            <option>Con Aceite</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Larvas:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control">
+                            <option>N/A</option>
+                            <option>Aedex</option>
+                            <option>Culex</option>
+                            <option>Mixto</option>
+                            <option>Sin Larvas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Pupas:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control">
+                            <option>N/A</option>
+                            <option>Aedex</option>
+                            <option>Culex</option>
+                            <option>Mixto</option>
+                            <option>Sin Larvas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12" align="center">
+                <div class="form-group">
+                    <br>
+                    <h4>Control:</h4>
+                    <div class="separadorDos"></div>
+                    <div class="separadorDos"></div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <label class="radio-inline">
+                            <input type="radio" name = "optRadio" value = "tratado"> Tratado
+                        </label>
+                    </div>
+                    <div class = "col-xs-6" style="text-align: left;">
+                        <label class="radio-inline">
+                            <input type="radio" name = "optRadio" value = "tratSinInspec"> Tratado sin inspecionar
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <div class = "col-xs-12">
+                <div class="form-group">
+                <br>
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Insecticida:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control">
+                            <option>Ninguno</option>
+                            <option>op1</option>
+                            <option>op2</option>
+                            <option>op3</option>
+                            <option>op4</option>
+                        </select> <br>
+                        <input type="text" name="cantInsecticida" class="form-control" placeholder="Grs/ml">  
+                    </div>
+                </div>
+            </div>
+            
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <br>
+                    <div class="col-xs-8">
+                        <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled>  
+                    </div>
+                    <div class="col-xs-3">
+                        <button type="button" class="btn btn-primary btn-block btn-xs" onClick ="geolocation()"><i class="material-icons">my_location</i></button>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class = "col-xs-12">
+                <div class="form-group">
+                <br> 
+                    <div class="col-xs-6" align="right">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
         <script type="text/javascript" src="cordova.js"></script>
         <script>
             angular.module('movilapp', []).controller('menuController', function($scope) {
                 $scope.changeView = function(view){
-                window.location.replace(view);            
-            }});
+                    window.location.replace(view);            
+                }
+            });
         </script>
-
 </body>
 </html>
