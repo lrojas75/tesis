@@ -36,27 +36,14 @@
         <li class="active"><a href="#tab_datos" data-toggle="pill">Datos <br>Foco infección</a></li>
         <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info general</a></li>
       </ul>
-    </div><br><br><br>
+    </div>
 
     <div class="col-xs-12" align="center">
     <div class="tab-content"> 
         <!--...................................................Tab Informacion General .............................................-->
+        <br>
         <div class="tab-pane" id="tab_infoGeneral">
             <form ng-submit="" class="form-horizontal" ng-controller="infoController">
-                <div class = "col-xs-12">
-                    <br>
-                    <div class="form-group">
-                        <div class = "col-xs-5" style="text-align: left;">
-                            <label>Municipio:</label>
-                        </div>
-                        <div class="col-xs-7">
-                            <select class="form-control" ng-model = "municipio" ng-options = "municipio.municipio for municipio in opciones">
-                                <option ng-disabled="true"  ng-selected="true" value="">Escoger municipio</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
                 <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
@@ -96,20 +83,8 @@
                         </div>
                     </div>
                 </div>
-
                 <div class = "col-xs-12">
-                    <div class="form-group">
-                        <div class = "col-xs-5" style="text-align: left;">
-                            <label>Fecha (dd-mm-aaaa):</label>
-                        </div>
-                        <div class="col-xs-7">
-                            <input type="text" class="form-control" ng-model="fecha" disabled>
-                        </div>
-                    </div>
-                </div>
-
-                <div class = "col-xs-12">
-                <br>
+                    <br>
                     <div class="form-group">
                         <button class="btn btn-primary" ng-click="agregarInfoGeneral()">Aceptar</button>
                     </div>
