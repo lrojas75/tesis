@@ -9,6 +9,10 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
 $scope.changeView = function(view){
     window.location.replace(view);            
 }
+
+$scope.backNavigation = function() {
+    window.history.back()
+}
 //<<--------------------- Funciones para ventana INFORMACION GENERAL ----------------------------------------->>
 $scope.opciones = [
     { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
@@ -41,6 +45,11 @@ $scope.agregarInfoGeneral = function(){
 //<<-------------------------------------------- Controlador para ventana del Menu principal-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("menuController", ['$scope', '$http', function($scope, $http){
+
+    $scope.backNavigation = function() {
+        history.go(-1);
+        navigator.app.backHistory();
+    }
 
 //<<----------------------------- Local Storage ---------------------------------------------->>
 /*$("button").click(function() {//Metodo para obtener el boton al cual le dieron 'click'.

@@ -24,11 +24,13 @@
     <title>Informacion General</title>
 </head>
 
-<body>
-    <div class="col-xs-12" align="center">
-        <br>
-            <h4>Información General</h4>
-            <form ng-submit="" class="form-horizontal" ng-controller="infoController">
+<body ng-controller="infoController">
+    <div class="banner" >
+        <button ng-click="backNavigation()">Back</button>
+        <h4>Información General</h4>
+    </div>
+    <div class="col-xs-12" align="center">           
+            <form ng-submit="" class="form-horizontal">
                 <div class = "col-xs-12">
                 <br>
                     <div class="form-group">

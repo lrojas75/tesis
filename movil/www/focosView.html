@@ -143,7 +143,7 @@
                         </div>
                     </div>
             </div>
-            <div class="col-xs-12" ng-show = "mostrar('Sumidero')"> <!-- ....INICIO FORMULARIO SUMIDERO.... -->
+            <div class="col-xs-12" ng-if = "mostrar('Sumidero')"> <!-- ....INICIO FORMULARIO SUMIDERO.... -->
                 <form ng-submit="" class="form-horizontal" >
                     <div class = "col-xs-12" align="center">
                         <br><h4>Datos del sumidero:</h4><br>
@@ -272,7 +272,7 @@
                 </form>
             </div> <!-- ....FIN FORMULARIO SUMIDERO.... -->
 
-            <div class="col-xs-12" ng-show = "mostrar('Vivienda')">  <!-- ....INICIO FORMULARIO VIVIENDA.... -->
+            <div class="col-xs-12" ng-if = "mostrar('Vivienda')">  <!-- ....INICIO FORMULARIO VIVIENDA.... -->
                 <form ng-submit="" class="form-horizontal" ng-controller="focoController">
                     <div class = "col-xs-12" align="center">
                         <br><h4>Datos de la vivienda:</h4>
