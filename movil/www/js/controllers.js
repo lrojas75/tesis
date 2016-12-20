@@ -6,12 +6,14 @@ var ip = "http://192.168.0.15:80";
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("infoController", ['$scope', '$filter', '$http', function($scope, $filter, $http){
 
-$scope.changeView = function(view){
-    window.location.replace(view);            
+$scope.changeView = function(nextPage,currentPage){
+    window.localStorage.setItem("previousPage", currentPage);
+    window.location.replace(nextPage);
 }
 
 $scope.backNavigation = function() {
-    window.history.back()
+    var previousPage = window.localStorage.getItem("previousPage");    
+    window.location.replace(previousPage);    
 }
 //<<--------------------- Funciones para ventana INFORMACION GENERAL ----------------------------------------->>
 $scope.opciones = [
@@ -31,6 +33,7 @@ $scope.agregarInfoGeneral = function(){
             actividad: $scope.actividad,
             fecha: $scope.fecha        
         }).success(function(data) {
+            window.localStorage.setItem("previousPage", "infoGeneral.html");
             window.location.replace("menuTipos.html");
         }).error(function(data) {
             alert("Error al ingresar los datos");
@@ -47,8 +50,8 @@ $scope.agregarInfoGeneral = function(){
 app.controller("menuController", ['$scope', '$http', function($scope, $http){
 
     $scope.backNavigation = function() {
-        history.go(-1);
-        navigator.app.backHistory();
+        var previousPage = window.localStorage.getItem("previousPage");    
+        window.location.replace(previousPage);    
     }
 
 //<<----------------------------- Local Storage ---------------------------------------------->>
@@ -95,8 +98,9 @@ Morris.Donut({
           colors: ['#ffcd28', '#5d6865', '#f93e04']
 }); //Cierra codigo de Donut.
 
-$scope.changeView = function(view){
-    window.location.replace(view);            
+$scope.changeView = function(nextPage,currentPage){
+    window.localStorage.setItem("previousPage", currentPage);
+    window.location.replace(nextPage);
 }
 }]);
 
@@ -104,17 +108,19 @@ $scope.changeView = function(view){
 //<<-------------------------------------------- Controlador para ventana de Focos de infeccion-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("focoController", ['$scope', '$http', function($scope, $http){
-
-var storage = ''
+    $scope.backNavigation = function() {
+        var previousPage = window.localStorage.getItem("previousPage");    
+        window.location.replace(previousPage);    
+    }
 
 //Funcion para activar el formulario que se va a mostrar
 $scope.mostrar = function(tipoEscogido){
-    console.log(tipoEscogido)
     return $scope.tipo===tipoEscogido;
 }
 
-$scope.changeView = function(view){
-    window.location.replace(view);            
+$scope.changeView = function(nextPage,currentPage){
+    window.localStorage.setItem("previousPage", currentPage);
+    window.location.replace(nextPage);
 }
 $scope.agregarSumidero = function(){
     $http.post(ip+'/webApi.php?val=addSumidero',{
@@ -127,7 +133,8 @@ $scope.agregarSumidero = function(){
         ubicacion: $scope.ubicacionSumidero
 
     }).success(function(data) {
-        window.location.replace("menuTipos.html");
+        window.localStorage.setItem("previousPage", "menuTipos.html");
+        window.location.reload("focosView.html");
     }).error(function(data) {
         alert("Error al ingresar los datos");
         console.log('Error: ' + data);

@@ -25,12 +25,16 @@
 </head>
 
 <body>
+    <div class="header" ng-controller="infoController">
+        <button ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
+        <h4>Foco de infección</h4>
+    </div>
 
 <!-- MENU DE INICIO - NAVIGATION TABS -->
-    <div class="col-xs-12">
+    <div class="col-xs-12 has-header">
       <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab_datos" data-toggle="pill">Datos <br>Foco infección</a></li>
         <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info general</a></li>
-        <li class="active"><a href="#tab_datos" data-toggle="pill">Datos <br>Foco infeccion</a></li>
       </ul>
     </div><br><br><br>
 
@@ -40,19 +44,7 @@
         <div class="tab-pane" id="tab_infoGeneral">
             <form ng-submit="" class="form-horizontal" ng-controller="infoController">
                 <div class = "col-xs-12">
-                <br>
-                    <div class="form-group">
-                        <div class = "col-xs-8" style="text-align: left;">
-                            <label>Editar informacion general?</label>
-                        </div>
-                        <div class="col-xs-4">
-                            <input type="checkbox" ng-model = "editarInfo" ng-true-value = "true" ng-false-value = "false" style="height: 17px; width: 17px;">
-                        </div>
-                    </div>
-                </div>
-
-                <div class = "col-xs-12" ng-show = "editarInfo">
-                <br>
+                    <br>
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Municipio:</label>
@@ -65,7 +57,7 @@
                     </div>
                 </div>
 
-                <div class = "col-xs-12" ng-show = "editarInfo">
+                <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Barrio:</label>
@@ -76,7 +68,7 @@
                     </div>
                 </div>
 
-                <div class = "col-xs-12" ng-show = "editarInfo">
+                <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Comuna:</label>
@@ -89,7 +81,7 @@
                     </div>
                 </div>
 
-                <div class = "col-xs-12" ng-show = "editarInfo">
+                <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Actividad:</label>
@@ -105,7 +97,7 @@
                     </div>
                 </div>
 
-                <div class = "col-xs-12" ng-show = "editarInfo">
+                <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Fecha (dd-mm-aaaa):</label>
@@ -116,7 +108,7 @@
                     </div>
                 </div>
 
-                <div class = "col-xs-12" ng-show = "editarInfo">
+                <div class = "col-xs-12">
                 <br>
                     <div class="form-group">
                         <button class="btn btn-primary" ng-click="agregarInfoGeneral()">Aceptar</button>
@@ -264,7 +256,7 @@
                                 <button type="submit" class="btn btn-primary" ng-click = "agregarSumidero()">Guardar</button>
                             </div>
                             <div class="col-xs-6">
-                                <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
+                                <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
                             </div>
                         </div>
                     </div>
@@ -432,7 +424,7 @@
                                 <button type="submit" class="btn btn-primary">Guardar</button>
                             </div>
                             <div class="col-xs-6">
-                                <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html')">Cancelar</button>
+                                <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
                             </div>
                         </div>
                     </div>

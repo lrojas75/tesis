@@ -17,12 +17,13 @@ $scope.login = function(){
 
     }).success(function(data) {
         window.localStorage.setItem("usuario", $scope.userLogin);
+        window.localStorage.setItem("previousPage", "index.html");        
         window.location.replace("infoGeneral.html");
     }).error(function(data) {
         console.log('Error: ' + data);
         $scope.username="";
         $scope.password="";
-        $scope.loginError = "Usuario/Contraseña invalido.";
+        $scope.loginError = "Usuario y/o Contraseña invalidos.";
     });
 }
 
