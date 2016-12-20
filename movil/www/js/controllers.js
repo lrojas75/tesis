@@ -1,5 +1,5 @@
 var app = angular.module('movilapp', ['ngMaterial']);
-var ip = "http://192.168.0.22:80";
+var ip = "http://192.168.0.15:80";
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana de Informacion General-------------------------------------------->>
@@ -19,20 +19,22 @@ $scope.fecha = $filter('date')(Date.now(), 'dd-MM-yyyy');
 
 //<------------------------------------FUNCION PARA AGREGAR LA INFORMACION GENERAL DEL RECORRIDO ------------------------->
 $scope.agregarInfoGeneral = function(){
-    $http.post(ip+'/webApi.php?val=addInfoGeneral',{
-        municipio: $scope.municipio.municipio,
-        barrio: $scope.barrio,
-        comuna: $scope.comuna,
-        actividad: $scope.actividad,
-        fecha: $scope.fecha
-
-    }).success(function(data) {
-        window.location.replace("menuTipos.html");
-    }).error(function(data) {
-        alert("Error al ingresar los datos");
-        console.log('Error: ' + data);
-    });
+    if ($scope.municipio!=undefined && $scope.barrio!=undefined && $scope.comuna!=undefined && $scope.actividad!=undefined) {
+        $http.post(ip+'/webApi.php?val=addInfoGeneral',{
+            municipio: $scope.municipio.municipio,
+            barrio: $scope.barrio,
+            comuna: $scope.comuna,
+            actividad: $scope.actividad,
+            fecha: $scope.fecha        
+        }).success(function(data) {
+            window.location.replace("menuTipos.html");
+        }).error(function(data) {
+            alert("Error al ingresar los datos");
+            console.log('Error: ' + data);
+        });
+    }
 };
+
 }]);
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>

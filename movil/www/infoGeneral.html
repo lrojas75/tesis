@@ -36,7 +36,7 @@
                             <label>Municipio:</label>
                         </div>
                         <div class="col-xs-7">
-                            <select class="form-control" ng-model = "municipio" ng-options = "municipio.municipio for municipio in opciones">
+                            <select class="form-control" ng-model = "municipio" ng-options = "municipio.municipio for municipio in opciones" required>
                                 <option ng-disabled="true"  ng-selected="true" value="">Escoger municipio</option>
                             </select>
                         </div>
@@ -49,7 +49,7 @@
                             <label>Barrio:</label>
                         </div>
                         <div class="col-xs-7">
-                            <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="barrio">
+                            <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="barrio" required>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                             <label>Comuna:</label>
                         </div>
                         <div class="col-xs-7">
-                            <select ng-model="comuna" ng-options="comuna for comuna in municipio.comunaNum" class="form-control">
+                            <select ng-model="comuna" ng-options="comuna for comuna in municipio.comunaNum" class="form-control" required>
                                 <option ng-disabled="true"  ng-selected="true" value="">Escoger comuna</option>
                             </select>
                         </div>
@@ -73,7 +73,8 @@
                             <label>Actividad:</label>
                         </div>
                         <div class="col-xs-7">
-                            <select class="form-control" ng-model = "actividad">
+                            <select class="form-control" ng-model = "actividad" required>
+                                <option value="">Escoger Actividad</option>
                                 <option>Encuesta larvaria</option>
                                 <option>Control larvario</option>
                                 <option>Evaluacion de control</option>

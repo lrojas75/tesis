@@ -1,4 +1,6 @@
 var app = angular.module('movilapp', []);
+var ip = "http://192.168.0.15:80";
+
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
     $scope.sesion = "";
@@ -9,7 +11,7 @@ $scope.changeView = function(view){
 
 //<-----------------------FUNCION PARA INICIAR SESION ------------------------->
 $scope.login = function(){
-    $http.post('http://192.168.0.22:80/webApi.php?val=loginUsuario',{
+    $http.post(ip+'/webApi.php?val=loginUsuario',{
         username: $scope.userLogin,
         password: $scope.passLogin
 
@@ -26,7 +28,7 @@ $scope.login = function(){
 
 //<-----------------------FUNCION PARA REGISTRAR UN USUARIO NUEVO ------------------------->
 $scope.registro = function(){
-    $http.post('http://192.168.0.22:80/webApi.php?val=registroUsuario',{
+    $http.post(ip+'/webApi.php?val=registroUsuario',{
         cedula: $scope.cedula,
         nombres: $scope.nombres,
         apellidos: $scope.apellidos,
