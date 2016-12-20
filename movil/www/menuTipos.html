@@ -32,21 +32,21 @@
 
 <body ng-controller="menuController">
     
-    <div class="col-xs-12" align="center">
-        <h4>Escoger el tipo de factor de riesgo:</h4><br>
-        <div class="btn-group-vertical">
-          <button type="button" id = "1" class="btn btn-primary btn-lg" ng-click ="changeView('focosView.html')" style="font-size: 16px">Sumidero</button><br>
-          <button type="button" id = "2" class="btn btn-primary btn-lg" ng-click ="changeView('focosView.html')" style="font-size: 16px">Vivienda</button><br>
-          <button type="button" id = "3" class="btn btn-primary btn-lg" ng-click ="changeView('focosView.html')" style="font-size: 16px">CDH</button><br>
-        </div>
-    </div>
-
     <div class="col-xs-12">
-        <h4 align="left">Resumen del dia:</h4>
+        <br>
+        <h4 align="center">Resumen del dia:</h4>
     </div>
     <div class="col-xs-12" align="center">
         <div id = "grafico" ng-model = "resumenDelDia" style="height: 200px; width: 200px;"></div>
     </div>
+
+    <div class="col-xs-12" align="center">
+        <h4></h4><br>
+        <div class="btn-group-vertical">
+          <button type="button" id = "1" class="btn btn-primary btn-lg" ng-click ="changeView('focosView.html')" style="font-size: 16px">Nuevo factor de riesgo</button><br>
+        </div>
+    </div>
+
     <div class="col-xs-12" align="center">
         <br><br><button type="button" class="btn btn-primary btn-md" ng-click ="changeView('infoGeneral.html')">Terminar</button>
     </div>

@@ -127,7 +127,23 @@
 
       <!-- ..............................................Tab Datos Foco de Infeccion.................................................... -->
         <div class="tab-pane active" id="tab_datos" ng-controller="focoController">
-            <div class="col-xs-12" ng-show = "mostrar() == 1"> <!-- ....INICIO FORMULARIO SUMIDERO.... -->
+            <div class = "col-xs-12">
+                    <div class="form-group">
+                        <br>
+                        <div class = "col-xs-5" style="text-align: left;">
+                            <label>Tipo de factor:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <select class="form-control" ng-model = "tipo">
+                                <option value="">Escoja un tipo</option>
+                                <option>Vivienda</option>
+                                <option>Sumidero</option>
+                                <option>CDH</option>
+                            </select>
+                        </div>
+                    </div>
+            </div>
+            <div class="col-xs-12" ng-show = "mostrar('Sumidero')"> <!-- ....INICIO FORMULARIO SUMIDERO.... -->
                 <form ng-submit="" class="form-horizontal" >
                     <div class = "col-xs-12" align="center">
                         <br><h4>Datos del sumidero:</h4><br>
@@ -256,7 +272,7 @@
                 </form>
             </div> <!-- ....FIN FORMULARIO SUMIDERO.... -->
 
-            <div class="col-xs-12" ng-show = "mostrar() == 2">  <!-- ....INICIO FORMULARIO VIVIENDA.... -->
+            <div class="col-xs-12" ng-show = "mostrar('Vivienda')">  <!-- ....INICIO FORMULARIO VIVIENDA.... -->
                 <form ng-submit="" class="form-horizontal" ng-controller="focoController">
                     <div class = "col-xs-12" align="center">
                         <br><h4>Datos de la vivienda:</h4>
@@ -344,7 +360,7 @@
                     <br>
                         <div class="form-group">
                             <div class = "col-xs-5">
-                                <label>Recibio la visita:</label>
+                                <label>Recibió la visita:</label>
                             </div>
                             <div class="col-xs-7">
                                 <input type="text" name = "persona" class="form-control">

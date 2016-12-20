@@ -43,10 +43,10 @@ $scope.agregarInfoGeneral = function(){
 app.controller("menuController", ['$scope', '$http', function($scope, $http){
 
 //<<----------------------------- Local Storage ---------------------------------------------->>
-$("button").click(function() {//Metodo para obtener el boton al cual le dieron 'click'.
+/*$("button").click(function() {//Metodo para obtener el boton al cual le dieron 'click'.
     //Se usa localStorage para guardar el tipo de foco de infeccion seleccionado en la ventana de menu principal.
     window.localStorage.setItem("tipoFoco", $(this).attr('id'));
-});
+});*/
 
 //<<-------------------------------BD local-------------------------------------------->>
 /*function llenarBD(tx) {
@@ -96,16 +96,12 @@ $scope.changeView = function(view){
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("focoController", ['$scope', '$http', function($scope, $http){
 
-var storage =   window.localStorage;
+var storage = ''
 
-
-$scope.mostrar = function(){
-    $scope.tipo = storage.getItem("tipoFoco");
-    if($scope.tipo == null){
-        console.log("error tipo no definido para formulario");
-        //devolver a menu
-    }
-    return $scope.tipo;
+//Funcion para activar el formulario que se va a mostrar
+$scope.mostrar = function(tipoEscogido){
+    console.log(tipoEscogido)
+    return $scope.tipo===tipoEscogido;
 }
 
 $scope.changeView = function(view){
