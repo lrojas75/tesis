@@ -1,4 +1,4 @@
-var app = {
+var movilapp = {
     // Application Constructor
     initialize: function() {
         this.bindEvents();
@@ -27,5 +27,5 @@ var app = {
         receivedElement.setAttribute('style', 'display:block;');
 
         console.log('Received Event: ' + id);
-    },
+    }
 };

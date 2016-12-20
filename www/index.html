@@ -27,7 +27,7 @@
     <title>Inicio</title>
 </head>
 
-<body ng-controller="inicioController">
+<body>
 	<div class = "col-xs-12" align="center">
 		<br><h4>Ingreso al sistema</h4><br>
 
@@ -40,14 +40,14 @@
       </ul>
     </div><br><br><br>
         
-        <!-- Contenido de cada opcion del menu lateral -->
+    <!-- Contenido de cada opcion del menu lateral -->
     <div class="col-xs-12" align="center">
       <div class="tab-content"> 
-        <div class="tab-pane active" id="tab_Inicio"> <!-- Tab Inicio -->
-        
+      <!-- ..............................................Tab Inicio.................................................... -->
+        <div class="tab-pane active" id="tab_Inicio">
           <h4>Inicio de sesion</h4><br>
-          <form name = "loginForm" class="form-horizontal">
-            
+
+          <form name = "loginForm" class="form-horizontal" ng-controller="inicioController">
             <div class = "col-xs-12">
               <div class="form-group">
                 <div class = "col-xs-5" style="text-align: left;">
@@ -70,7 +70,7 @@
               </div>
             </div>
 
-            <div> {{mensaje}} </div><br>
+            <div style="color: red;"> {{loginError}} </div>
 
             <div class = "col-xs-12">
               <br>
@@ -81,12 +81,12 @@
           </form>
         </div> <!-- Cierra Tab inicio -->
 
-        <!-- Tab Registro -->
+        <!-- ......................................... Tab Registro................................................. -->
         <div class="tab-pane" id="tab_Registro">
           <div class="col-xs-12" align="center">
             <h4>Registro</h4><br>
 
-            <form name = "registroForm" ng-submit="" class="form-horizontal">
+            <form name = "registroForm" class="form-horizontal" ng-controller="inicioController">
               <div class = "col-xs-12">
                 <div class="form-group">
                   <div class = "col-xs-5" style="text-align: left;">
@@ -126,16 +126,16 @@
                     <label>Contraseña:</label>
                   </div>
                   <div class="col-xs-7">
-                    <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="password" required>
+                    <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="passRegistro" required>
                   </div>
                 </div>
               </div>
               
-              <div> {{loginError}} </div><br>
+              <div> {{registerError}} </div>
 
               <div class = "col-xs-12">
                 <div class="form-group">
-                  <br><button type="submit" class="btn btn-primary" ng-click="changeView('')">Registrarse</button>
+                  <br><button class="btn btn-primary" ng-click="registro()">Registrarse</button>
                 </div>
               </div>
 
@@ -155,24 +155,8 @@
 
   	<div class="clearfix visible-lg"></div>
 	</div> <!-- Primera division de columas -->
-  
-  <script>
-    angular.module('movilapp', []).controller('inicioController', function($scope, $http) {
-      console.log("Readyyy!");
-      $scope.login = function(){
-        $http.post('DB.php',{
-            user: $scope.userLogin,
-            pas: $scope.passLogin            
-        }).success(function(data) {         
-            $scope.mensaje = "";
-            console.log(data);
-        }).error(function(data) {
-            console.log('Error: ' + data);
-        });
-        $scope.username=$scope.password='';
-      }
-    });
-  </script>
+
+  <script type="text/javascript" src="js/userController.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
   <script type="text/javascript" src="js/index.js"></script>
 </body>
