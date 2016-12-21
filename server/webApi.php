@@ -1,5 +1,5 @@
 <?php
-  require_once 'DB/restApi.php';
+  require_once 'restApi.php';
   require_once 'DB/usuarios.php';
   require_once 'DB/focosInfeccion.php';
 
@@ -26,7 +26,8 @@
       $usuario = new usuarios();
       $data = json_decode(file_get_contents('php://input'),true);
       $result=$usuario->login($data["username"],$data["password"]);
-      if ($result == "yes"){
+      if (!is_null($result)){
+        $sendData=json_encode($result);
         $this->response('', 200 );
       } else {
         $this->response('', 404 );
@@ -48,18 +49,33 @@
       }
     }
 
+//<<--------------------------FUNCION PARA VALIDAR QUE NO HAYA MÁS DE UNA INFORMACIÓN GENERAL POR DIA------------->>
+    private function checkInfoGeneral(){
+      if ($this->get_request_method () != "GET") {
+        $this->response ( '', 406 );
+      }else{
+        $focoInfeccion =  new focosInfeccion();
+        $user = $_GET['usuario'];
+        $fecha= $_GET['fecha'];
+        $result = $focoInfeccion->checkInformacionGeneral($user,$fecha);
+        $this->response(json_encode($result),200);
+      }
+    }
+
+
 //<<----------------------------FUNCIONES PARA GUARDAR DATOS DE INFORMACION GENERAL -------------------------------->>
   private function addInfoGeneral(){
     if ($this->get_request_method () != "POST") {
       $this->response ( '', 406 );
-    }
-    $focoInfeccion = new focosInfeccion();
-    $data = json_decode(file_get_contents('php://input'),true);
-    $result = $focoInfeccion->agregarInformacionGeneral($data);
-    if ($result == "TRUE"){
-      $this->response('', 200 );
-    } else {
-      $this->response('', 404 );
+    }else{
+      $focoInfeccion = new focosInfeccion();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $focoInfeccion->agregarInformacionGeneral($data);
+      if ($result == "TRUE"){
+        $this->response('', 200 );
+      } else {
+        $this->response('', 404 );
+      }
     }
   }
 
@@ -74,7 +90,7 @@
       $this->response('', 200 );
     } else {
       $this->response('', 404 );
-    }*/
+    }
   }
 
 }
