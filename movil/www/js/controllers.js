@@ -22,11 +22,13 @@ $scope.opciones = [
     { municipio: "Cartago", comunaNum: ["1", "2", "3", "4", "5", "6","7"]}];
 
 $scope.fecha = $filter('date')(Date.now(), 'dd-MM-yyyy');
-
+$scope.infoExiste=false;
 //<------------------------------------FUNCION PARA AGREGAR LA INFORMACION GENERAL DEL RECORRIDO ------------------------->
 $scope.agregarInfoGeneral = function(){
     if ($scope.municipio!=undefined && $scope.barrio!=undefined && $scope.comuna!=undefined && $scope.actividad!=undefined) {
+        var user = window.localStorage.getItem("usuario"); 
         $http.post(ip+'/webApi.php?val=addInfoGeneral',{
+            id:user,
             municipio: $scope.municipio.municipio,
             barrio: $scope.barrio,
             comuna: $scope.comuna,
@@ -41,7 +43,27 @@ $scope.agregarInfoGeneral = function(){
         });
     }
 };
-
+    
+$scope.init = function(){
+    var user = window.localStorage.getItem("usuario"); 
+    $http.get(ip+'/webApi.php?val=checkInfoGeneral',{
+        params:{
+            usuario:user,
+            fecha:$scope.fecha
+        }
+    }).success(function(data){
+        if (data!=null) {
+            window.localStorage.setItem("infoID",data.id);
+            window.localStorage.setItem("previousPage", "index.html");
+            window.location.replace("menuTipos.html");
+        }else{
+            $scope.infoExiste=true;
+        }
+    }).error(function(data){
+        alert("Error al consultar los datos");
+    })
+}
+    
 }]);
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>

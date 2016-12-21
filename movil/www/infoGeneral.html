@@ -24,12 +24,12 @@
     <title>Informacion General</title>
 </head>
 
-<body ng-controller="infoController">
-    <div class="header" >
+<body ng-controller="infoController" ng-init="init()">
+    <div class="header" ng-if="infoExiste">
         <button ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
         <h4>Información General</h4>
     </div>
-    <div class="col-xs-12 has-header" align="center">           
+    <div class="col-xs-12 has-header" align="center" ng-if="infoExiste">           
             <form ng-submit="" class="form-horizontal">
                 <div class = "col-xs-12">
                 <br>

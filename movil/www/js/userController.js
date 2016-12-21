@@ -14,10 +14,9 @@ $scope.login = function(){
     $http.post(ip+'/webApi.php?val=loginUsuario',{
         username: $scope.userLogin,
         password: $scope.passLogin
-
     }).success(function(data) {
         window.localStorage.setItem("usuario", $scope.userLogin);
-        window.localStorage.setItem("previousPage", "index.html");        
+        window.localStorage.setItem("previousPage", "index.html");
         window.location.replace("infoGeneral.html");
     }).error(function(data) {
         console.log('Error: ' + data);
