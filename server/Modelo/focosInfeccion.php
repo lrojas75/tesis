@@ -1,10 +1,10 @@
 <?php
 require_once 'db.php';
 class focosInfeccion extends DB {
-	const INSERT_INFO_GENERAL = "insert into informaciongeneral (ID_Usuario,Municipio,Actividad,Fecha) values (?,?,?,?)";
-	const INSERT_SUMIDERO = "insert into focoinfeccion (idTipo, Estado, Larvas, Pupas, Tratamiento, Larvicida, Cantidad,  idInfoGeneral, Ubicacion) values (?,?,?,?,?,?,?,?)";
+	const INSERT_INFO_GENERAL = "insert into informaciongeneral (ID_Usuario,Municipio,Fecha) values (?,?,?)";
+	const INSERT_SUMIDERO = "insert into focoinfeccion (Tipo, Estado, Larvas, Pupas, Tratamiento, Larvicida, Cantidad,  idInfoGeneral, Ubicacion) values (?,?,?,?,?,?,?,?,?)";
 	const LAST_INFO_GENERAL = "select max(ID) from informaciongeneral";
-	const INSERT_COMUNA_BARRIO = "insert into comunaxbarrio (ID_InfoGeneral,Comuna,Barrio) values (?,?,?)";
+	const INSERT_COMUNA_BARRIO = "insert into comunaxbarrio (ID_InfoGeneral,Comuna,Barrio, Actividad) values (?,?,?,?)";
 	const CHECK_USER_INFO = "select id from informaciongeneral where (id_usuario=?) and (fecha=?)";
 //--------AGREGAR INFORMACION GENERAL------------------>>>
 
@@ -15,7 +15,7 @@ class focosInfeccion extends DB {
 		if(!is_null($infoID)){
 			$this->open_connection();
 			$statement = $this->conn->prepare(self::INSERT_COMUNA_BARRIO);
-			$statement->bind_param("iss",intval($infoID['max(ID)']),$data['comuna'],$data['barrio']);
+			$statement->bind_param("isss",intval($infoID['max(ID)']),$data['comuna'],$data['barrio'],$data['actividad']);
 			$result = $statement->execute();
 			$statement->close();
 			$this->close_connection();
@@ -48,7 +48,7 @@ class focosInfeccion extends DB {
 		$statement = $this->conn->prepare(self::INSERT_INFO_GENERAL);
 		if($statement){
 			if (!is_null($info) && count($info)>0) {
-				$statement->bind_param ("isss", $info['id'], $info['municipio'], $info['actividad'], $info['fecha']);
+				$statement->bind_param ("iss", $info['id'], $info['municipio'], $info['fecha']);
 				$result = $statement->execute();
 				$statement->close();
 				$this->close_connection();
@@ -67,7 +67,7 @@ class focosInfeccion extends DB {
 		$statement = $this->conn->prepare(self::INSERT_SUMIDERO);
 		if($statement){
 			if (!is_null($sumidero) && count($sumidero)>0) {
-				$statement->bind_param ("isssssdis", $sumidero['estado'], $sumidero['larvas'], $sumidero['pupas'], $sumidero['tratado'], $sumidero['insecticida'], $sumidero['cantidadInsecticida'], $sumidero['ubicacion']);
+				$statement->bind_param ("sssssdiis",$sumidero['tipo'], $sumidero['estado'], $sumidero['larvas'], $sumidero['pupas'], $sumidero['tratado'], $sumidero['insecticida'], $sumidero['cantidadInsecticida'], $sumidero['idInfoGeneral'], $sumidero['ubicacion']);
 			}
 			$result = $statement->execute();
 			$statement->close();

@@ -146,7 +146,7 @@
                             </div>
                             <div class="col-xs-7">
                                 <select class="form-control" ng-model = "larvasSumidero">
-                                    <option selected="true">N/A</option>
+                                    <option value="">N/A</option>
                                     <option>Aedex</option>
                                     <option>Culex</option>
                                     <option>Mixto</option>
@@ -163,7 +163,7 @@
                             </div>
                             <div class="col-xs-7">
                                 <select class="form-control" ng-model = "pupasSumidero">
-                                    <option selected="true">N/A</option>
+                                    <option value="">N/A</option>
                                     <option>Aedex</option>
                                     <option>Culex</option>
                                     <option>Mixto</option>
@@ -182,7 +182,7 @@
                         </div>
                     </div>
 
-                    <md-radio-group ng-model="tratamientoSumidero">
+                    <md-radio-group ng-model="tratadoSumidero">
                     <div class = "col-xs-12">
                         <div class = "col-xs-6" style="text-align: center;">
                             <md-radio-button value="tratado" class="md-primary">Tratado</md-radio-button>
@@ -196,17 +196,17 @@
                     <div class = "col-xs-12">
                         <div class="form-group">
                         <br>
-                            <div class = "col-xs-5" style="text-align: left;">
+                            <div class = "col-xs-4" style="text-align: left;">
                                 <label>Insecticida:</label>
                             </div>
-                            <div class="col-xs-7">
-                                <select class="form-control" ng-model = "insecticidaSumidero">
-                                    <option>Ninguno</option>
+                            <div class="col-xs-8 insecticidad-inputs">
+                                <select class="form-control" ng-model = "insecticidaSumidero" required>
+                                    <option value="">Ninguno</option>
                                     <option>op1</option>
                                     <option>op2</option>
                                     <option>op3</option>
                                     <option>op4</option>
-                                </select> <br>
+                                </select>
                                 <input type="text" ng-model = "cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Grs/ml">  
                             </div>
                         </div>
@@ -219,7 +219,7 @@
                                 <input type="text" ng-model = "ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>  
                             </div>
                             <div class="col-xs-3">
-                                <button type="button" class="btn btn-primary btn-block btn-xs" onclick="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
                             </div>
                         </div>
                     </div>
@@ -228,7 +228,7 @@
                         <div class="form-group">
                         <br> 
                             <div class="col-xs-6" align="right">
-                                <button type="submit" class="btn btn-primary" ng-click = "agregarSumidero()">Guardar</button>
+                                <button class="btn btn-primary" ng-click = "agregarSumidero()">Guardar</button>
                             </div>
                             <div class="col-xs-6">
                                 <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>

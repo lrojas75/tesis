@@ -41,6 +41,8 @@ $scope.agregarInfoGeneral = function(){
             alert("Error al ingresar los datos");
             console.log('Error: ' + data);
         });
+    }else{
+        alert("Datos");
     }
 };
     
@@ -69,61 +71,56 @@ $scope.init = function(){
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana del Menu principal-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
-app.controller("menuController", ['$scope', '$http', function($scope, $http){
+app.controller("menuController", ['$scope','$filter', '$http', function($scope, $filter,$http){
 
     $scope.backNavigation = function() {
         var previousPage = window.localStorage.getItem("previousPage");    
         window.location.replace(previousPage);    
     }
+    $scope.fecha = $filter('date')(Date.now(), 'dd-MM-yyyy');
 
-//<<----------------------------- Local Storage ---------------------------------------------->>
-/*$("button").click(function() {//Metodo para obtener el boton al cual le dieron 'click'.
-    //Se usa localStorage para guardar el tipo de foco de infeccion seleccionado en la ventana de menu principal.
-    window.localStorage.setItem("tipoFoco", $(this).attr('id'));
-});*/
+    $scope.init = function(){
+        var user = window.localStorage.getItem("usuario"); 
+        $http.get(ip+'/webApi.php?val=checkInfoGeneral',{
+            params:{
+                usuario:user,
+                fecha:$scope.fecha
+            }
+        }).success(function(data){
+            if (data!=null) {
+                window.localStorage.setItem("infoID",data.id);
+            }else{
+                alert("Error en la conexión");
+            }
+        }).error(function(data){
+            alert("Error al consultar los datos");
+        })
+    }
 
-//<<-------------------------------BD local-------------------------------------------->>
-/*function llenarBD(tx) {
-     tx.executeSql('CREATE TABLE IF NOT EXISTS focosInfeccion (ID unique, idTipo, Estado, Larvas, Pupas, Habitantes, Clave, tipoDeposito, Tiene_Agua, L, P, Medida_Tanque, Destruido_Eliminado, Tratado, Tratado_Sin_Insoeccionar, Larvicida, Cantidad, Usuario, idInfoGeneral, Ubicacion, Comuna, Barrrio)');
-     tx.executeSql('CREATE TABLE IF NOT EXISTS infoGeneral (ID unique, Municipio, Actividad, Fecha)');
- }
+    //<<-----------------------Funciones para ventana MENU PRINCIPAL ---------------------------------------->>
+    function obtenerTotales(){ //Funcion que permite obtener el total de focos de infeccion agregados por cada tipo para mostrar el grafico
 
-function errorCB(err) {
-    alert("Error processing SQL: "+err.code);
-}
+    }
 
-function successCB() {
-    alert("success!");
-}
+    var sumideros = 25;
+    var viviendas = 10;
+    var cdh = 34;
+    var campo = document.getElementById("grafico");
 
-var db = window.openDatabase("movilBD", "1.0", "BD movil local", 200000);
-db.transaction(llenarBD, errorCB, successCB);*/
+    Morris.Donut({
+              element: campo,
+              data: [
+                {label: "Sumidero", value: sumideros},
+                {label: "Vivienda", value: viviendas},
+                {label: "CDH", value: cdh},
+              ],
+              colors: ['#ffcd28', '#5d6865', '#f93e04']
+    }); //Cierra codigo de Donut.
 
-
-//<<-----------------------Funciones para ventana MENU PRINCIPAL ---------------------------------------->>
-function obtenerTotales(){ //Funcion que permite obtener el total de focos de infeccion agregados por cada tipo para mostrar el grafico
-
-}
-
-var sumideros = 25;
-var viviendas = 10;
-var cdh = 34;
-var campo = document.getElementById("grafico");
-
-Morris.Donut({
-          element: campo,
-          data: [
-            {label: "Sumidero", value: sumideros},
-            {label: "Vivienda", value: viviendas},
-            {label: "CDH", value: cdh},
-          ],
-          colors: ['#ffcd28', '#5d6865', '#f93e04']
-}); //Cierra codigo de Donut.
-
-$scope.changeView = function(nextPage,currentPage){
-    window.localStorage.setItem("previousPage", currentPage);
-    window.location.replace(nextPage);
-}
+    $scope.changeView = function(nextPage,currentPage){
+        window.localStorage.setItem("previousPage", currentPage);
+        window.location.replace(nextPage);
+    }
 }]);
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
@@ -134,60 +131,72 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         var previousPage = window.localStorage.getItem("previousPage");    
         window.location.replace(previousPage);    
     }
+    $scope.tipo='';
+    //Funcion para activar el formulario que se va a mostrar
+    $scope.mostrar = function(tipoEscogido){
+        return $scope.tipo===tipoEscogido;
+    }
 
-//Funcion para activar el formulario que se va a mostrar
-$scope.mostrar = function(tipoEscogido){
-    return $scope.tipo===tipoEscogido;
-}
+    $scope.changeView = function(nextPage,currentPage){
+        window.localStorage.setItem("previousPage", currentPage);
+        window.location.replace(nextPage);
+    }
+    $scope.agregarSumidero = function(){
+        var idInfo=window.localStorage.getItem("infoID");
+        console.log($scope.estadoSumidero);
+        console.log($scope.tratadoSumidero);
+        console.log($scope.insecticidaSumidero);
+        console.log($scope.cantInsecticidaSumidero);
+        console.log($scope.ubicacionSumidero);
 
-$scope.changeView = function(nextPage,currentPage){
-    window.localStorage.setItem("previousPage", currentPage);
-    window.location.replace(nextPage);
-}
-$scope.agregarSumidero = function(){
-    $http.post(ip+'/webApi.php?val=addSumidero',{
-        estado: $scope.estadoSumidero,
-        larvas: $scope.larvasSumidero,
-        pupas: $scope.pupasSumidero,
-        tratado: $scope.tratadoSumidero,
-        insecticida: $scope.insecticidaSumidero,
-        cantidadInsecticida: $scope.cantInsecticidaSumidero,
-        ubicacion: $scope.ubicacionSumidero
+        if ($scope.estadoSumidero!=undefined && $scope.tratadoSumidero!=undefined && $scope.insecticidaSumidero!=undefined && $scope.cantInsecticidaSumidero!=undefined && $scope.ubicacionSumidero!=undefined) {
+            $http.post(ip+'/webApi.php?val=addSumidero',{
+                tipo:$scope.tipo,
+                estado: $scope.estadoSumidero,
+                larvas: $scope.larvasSumidero,
+                pupas: $scope.pupasSumidero,
+                tratado: $scope.tratadoSumidero,
+                insecticida: $scope.insecticidaSumidero,
+                cantidadInsecticida: $scope.cantInsecticidaSumidero,
+                idInfoGeneral: idInfo,
+                ubicacion: $scope.ubicacionSumidero
+            }).success(function(data) {
+                window.localStorage.setItem("previousPage", "menuTipos.html");
+                window.location.reload("focosView.html");
+            }).error(function(data) {
+                alert("Error al ingresar los datos");
+                console.log('Error: ' + data);
+            });
+        } else {
+            alert("No pueden haber campos vacios");
+        }    
+    }
 
-    }).success(function(data) {
-        window.localStorage.setItem("previousPage", "menuTipos.html");
-        window.location.reload("focosView.html");
-    }).error(function(data) {
-        alert("Error al ingresar los datos");
-        console.log('Error: ' + data);
-    });
+    $scope.agregarVivienda = function(){
 
-}
-$scope.agregarVivienda = function(){
+    }
+    $scope.agregarCDH = function(){
 
-}
-$scope.agregarCDH = function(){
+    }
 
-}
+    //<------------------------------------------FUNCION PARA GEOLOCALIZACION (API GEOLOCATION)--------------------------------->
+    $scope.geolocation=function() {
+        var options = { enableHighAccuracy: true };
+        watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
 
-//<------------------------------------------FUNCION PARA GEOLOCALIZACION (API GEOLOCATION)--------------------------------->
-function geolocation() {
-            var options = { enableHighAccuracy: true };
-            watchID = navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
-        
-            /*Esta funcion es llamada si recibimos datos de parte de geolocation*/
-            function onSuccess(position){
-                var lat = position.coords.latitude;
-                var lon = position.coords.longitude;
+        /*Esta funcion es llamada si recibimos datos de parte de geolocation*/
+        function onSuccess(position){
+            var lat = position.coords.latitude;
+            var lon = position.coords.longitude;
 
-                localStorage.setItem("latitude", lat);
-                localStorage.setItem("longitude", lon);
+            localStorage.setItem("latitude", lat);
+            localStorage.setItem("longitude", lon);
 
-                document.getElementById("campoUbic").value = lat+" - "+lon;
-            }
-            /*Esta funcion es llamada si existe un error en la geolocation*/
-            function onError(error){
-                alert("Message: "+error.message);
-            }
-};
+            $scope.ubicacionSumidero = lat+" - "+lon;
+        }
+        /*Esta funcion es llamada si existe un error en la geolocation*/
+        function onError(error){
+            alert("Message: "+error.message);
+        }
+    };
 }]);
