@@ -47,6 +47,9 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
         }).success(function(data) {
             window.localStorage.setItem("previousPage", "infoGeneral.html");
             window.localStorage.setItem("municipio", $scope.infoFormData.municipio);
+            window.localStorage.setItem("numSumidero",0);
+            window.localStorage.setItem("numVivienda",0);
+            window.localStorage.setItem("numCDH",0);
             window.location.replace("menuTipos.html");
         }).error(function(data) {
             alert("Error al ingresar los datos");
@@ -64,7 +67,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
         }).success(function(data){
             if (data!=null) {
                 window.localStorage.setItem("infoID",data.id);
-                window.localStorage.setItem("municipio",data.municipio);
+                window.localStorage.setItem("municipio",data.municipio);                
                 window.localStorage.setItem("previousPage", "index.html");
                 window.location.replace("menuTipos.html");
             }else{
@@ -99,6 +102,7 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
         }).success(function(data){
             if (data!=null) {
                 window.localStorage.setItem("infoID",data.id);
+                window.localStorage.setItem("municipio",data.municipio);
             }else{
                 alert("Error en la conexión");
             }
@@ -109,9 +113,9 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 
     //<<-----------------------Funciones para ventana MENU PRINCIPAL ---------------------------------------->>
     
-    var sumideros = 25;
-    var viviendas = 10;
-    var cdh = 34;
+    var sumideros = Number(window.localStorage.getItem("numSumidero"));
+    var viviendas = Number(window.localStorage.getItem("numVivienda"));
+    var cdh = Number(window.localStorage.getItem("numCDH"));
     var campo = document.getElementById("grafico");
 
     Morris.Donut({
@@ -199,6 +203,7 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
 
     $scope.agregarSumidero = function(){
         var idInfo=window.localStorage.getItem("infoID");
+        var sumideros=Number(window.localStorage.getItem("numSumidero"));
         if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.tratadoSumidero!='' && $scope.sumideroForm.insecticidaSumidero!='' && $scope.sumideroForm.cantInsecticidaSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
             $http.post(ip+'/webApi.php?val=addSumidero',{
                 tipo:$scope.tipo,
@@ -212,6 +217,7 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
                 ubicacion: $scope.sumideroForm.ubicacionSumidero
             }).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
+                window.localStorage.setItem("numSumidero", sumideros+1);                
                 window.location.reload("focosView.html");
             }).error(function(data) {
                 alert("Error al ingresar los datos");
@@ -245,8 +251,9 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
     }
 
     $scope.agregarVivienda = function(){
+        var viviendas=Number(window.localStorage.getItem("numVivienda"));
         var idInfo=window.localStorage.getItem("infoID");
-        if ($scope.viviendaForm.ubicacionVivienda!='') {
+        if ($scope.viviendaForm.ubicacionVivienda!='' && $scope.viviendaForm.clave!='' ) {
             $http.post(ip+'/webApi.php?val=addVivienda',{
                 tipo:$scope.tipo,
                 clave:$scope.viviendaForm.clave,
@@ -263,13 +270,14 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
                 ubicacion:$scope.viviendaForm.ubicacionVivienda
             }).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
+                window.localStorage.setItem("numVivienda", viviendas+1);
                 window.location.reload("focosView.html");
             }).error(function(data) {
                 alert("Error al ingresar los datos");
                 console.log('Error: ' + data);
             });
         }else{
-            alert("No has dado tu ubicación");
+            alert("Revisa que ingresaste la clave y tu ubicación");
         }
     };
 
