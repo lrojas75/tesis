@@ -62,7 +62,6 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
                 fecha:$scope.infoFormData.fecha
             }
         }).success(function(data){
-            console.log(data);
             if (data!=null) {
                 window.localStorage.setItem("infoID",data.id);
                 window.localStorage.setItem("municipio",data.municipio);
@@ -147,7 +146,9 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         comunas:[],
         actividad:''
     }
-
+    //Tipo de sitio que visita
+    $scope.tipo='';
+    //Comunas de acuerdo al municipio que escogió
     $scope.editarInfo.comunas=$scope.municipios.filter(function( obj ) {
           return obj.municipio == $scope.editarInfo.municipio;
         })[0].comunaNum;
@@ -156,7 +157,6 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         var previousPage = window.localStorage.getItem("previousPage");    
         window.location.replace(previousPage);    
     };
-    $scope.tipo='';
     //Funcion para activar el formulario que se va a mostrar
     $scope.mostrar = function(tipoEscogido){
         return $scope.tipo===tipoEscogido;
@@ -169,23 +169,20 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
 
 
     $scope.modificarInfoGeneral = function(){
-        console.log($scope.editarInfo);
-        console.log("carajo");
         if ($scope.editarInfo.municipio!='' && $scope.editarInfo.barrio!='' && $scope.editarInfo.comuna!='' && $scope.editarInfo.actividad!='') {
-            var infoID = window.localStorage.getItem("infoID"); 
             console.log($scope.editarInfo);
-            // $http.post(ip+'/webApi.php?val=modInfoGeneral',{
-            //     idInfo:infoID,
-            //     barrio: $scope.editarInfo.barrio,
-            //     comuna: $scope.editarInfo.comuna,
-            //     actividad: $scope.editarInfo.actividad,
-            // }).success(function(data) {
-            //     window.localStorage.setItem("previousPage", "infoGeneral.html");
-            //     window.location.replace("menuTipos.html");
-            // }).error(function(data) {
-            //     alert("Error al ingresar los datos");
-            //     console.log('Error: ' + data);
-            // });
+            var user = window.localStorage.getItem("usuario"); 
+            $http.post(ip+'/webApi.php?val=modInfoGeneral',{
+                id: user,
+                barrio: $scope.editarInfo.barrio,
+                comuna: $scope.editarInfo.comuna,
+                actividad: $scope.editarInfo.actividad,
+            }).success(function(data) {
+                window.location.reload("infoGeneral.html");
+            }).error(function(data) {
+                alert("Error al ingresar los datos");
+                console.log('Error: ' + data);
+            });
         }
     };
 
@@ -237,6 +234,8 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         clave:'',
         depositos:'',
         tieneAgua:false,
+        P:0,
+        L:0,
         eliminados:0,
         tratados:0,
         larvicida:0,
