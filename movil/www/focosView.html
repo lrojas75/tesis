@@ -253,7 +253,8 @@
                                 <label>Clave:</label>
                             </div>
                             <div class="col-xs-7">
-                                <select class="form-control" ng-model="viviendaForm.clave">
+                                <select class="form-control" ng-model="viviendaForm.clave" required>
+                                    <option value="" ng-disabled="true">Escoja una clave</option>
                                     <option>Negativa</option>
                                     <option>Positiva</option>
                                     <option>Cerrada</option>
@@ -301,6 +302,18 @@
                         </div>
                     </div>
 
+                    <div class = "col-xs-12" ng-show="medidaTanque()">
+                        <br>
+                        <div class="form-group">
+                            <div class = "col-xs-5">
+                                <label>Medida del Tanque:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <input type="number" ng-model="viviendaForm.medidaTanque" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <div class = "col-xs-8">
@@ -317,7 +330,7 @@
                                 <label>L:</label>
                             </div>
                             <div class = "col-xs-4">
-                                <input type="number" ng-model = "viviendaForm.L" class="form-control" ng-readonly = "!viviendaForm.tieneAgua">
+                                <input type="number" ng-model = "viviendaForm.L" class="form-control" ng-readonly = "!viviendaForm.tieneAgua" required>
                             </div>
                             <div class = "col-xs-2">
                                 <label>P:</label>
@@ -385,7 +398,7 @@
                     <div class = "col-xs-12" align="center">
                         <div class="form-group">
                             <div class="col-xs-9">
-                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled>  
+                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>  
                             </div>
                             <div class="col-xs-3">
                                 <button type="button" class="btn btn-primary btn-block btn-xs" ng-click ="geolocation()"><i class="material-icons">my_location</i></button>
@@ -397,7 +410,7 @@
                         <div class="form-group">
                             <br> 
                             <div class="col-xs-6" align="right">
-                                <button type="submit" class="btn btn-primary">Guardar</button>
+                                <button type="submit" ng-click="agregarVivienda()" class="btn btn-primary">Guardar</button>
                             </div>
                             <div class="col-xs-6">
                                 <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>

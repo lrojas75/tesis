@@ -170,7 +170,6 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
 
     $scope.modificarInfoGeneral = function(){
         if ($scope.editarInfo.municipio!='' && $scope.editarInfo.barrio!='' && $scope.editarInfo.comuna!='' && $scope.editarInfo.actividad!='') {
-            console.log($scope.editarInfo);
             var user = window.localStorage.getItem("usuario"); 
             $http.post(ip+'/webApi.php?val=modInfoGeneral',{
                 id: user,
@@ -200,33 +199,27 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
 
     $scope.agregarSumidero = function(){
         var idInfo=window.localStorage.getItem("infoID");
-        console.log($scope.sumideroForm.estadoSumidero);
-        console.log($scope.sumideroForm.tratadoSumidero);
-        console.log($scope.sumideroForm.insecticidaSumidero);
-        console.log($scope.sumideroForm.cantInsecticidaSumidero);
-        console.log($scope.sumideroForm.ubicacionSumidero);
-
-        // if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.tratadoSumidero!='' && $scope.sumideroForm.insecticidaSumidero!='' && $scope.sumideroForm.cantInsecticidaSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
-        //     $http.post(ip+'/webApi.php?val=addSumidero',{
-        //         tipo:$scope.tipo,
-        //         estado: $scope.estadoSumidero,
-        //         larvas: $scope.larvasSumidero,
-        //         pupas: $scope.pupasSumidero,
-        //         tratado: $scope.tratadoSumidero,
-        //         insecticida: $scope.insecticidaSumidero,
-        //         cantidadInsecticida: $scope.cantInsecticidaSumidero,
-        //         idInfoGeneral: idInfo,
-        //         ubicacion: $scope.ubicacionSumidero
-        //     }).success(function(data) {
-        //         window.localStorage.setItem("previousPage", "menuTipos.html");
-        //         window.location.reload("focosView.html");
-        //     }).error(function(data) {
-        //         alert("Error al ingresar los datos");
-        //         console.log('Error: ' + data);
-        //     });
-        // } else {
-        //     alert("No pueden haber campos vacios");
-        // }    
+        if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.tratadoSumidero!='' && $scope.sumideroForm.insecticidaSumidero!='' && $scope.sumideroForm.cantInsecticidaSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
+            $http.post(ip+'/webApi.php?val=addSumidero',{
+                tipo:$scope.tipo,
+                estado: $scope.sumideroForm.estadoSumidero,
+                larvas: $scope.sumideroForm.larvasSumidero,
+                pupas: $scope.sumideroForm.pupasSumidero,
+                tratado: $scope.sumideroForm.tratadoSumidero,
+                insecticida: $scope.sumideroForm.insecticidaSumidero,
+                cantidadInsecticida: $scope.sumideroForm.cantInsecticidaSumidero,
+                idInfoGeneral: idInfo,
+                ubicacion: $scope.sumideroForm.ubicacionSumidero
+            }).success(function(data) {
+                window.localStorage.setItem("previousPage", "menuTipos.html");
+                window.location.reload("focosView.html");
+            }).error(function(data) {
+                alert("Error al ingresar los datos");
+                console.log('Error: ' + data);
+            });
+        } else {
+            alert("No pueden haber campos vacios");
+        }    
     };
 
     $scope.viviendaForm={
@@ -236,6 +229,7 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         tieneAgua:false,
         P:0,
         L:0,
+        medidaTanque:0,
         eliminados:0,
         tratados:0,
         larvicida:0,
@@ -246,9 +240,39 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         return $scope.viviendaForm.clave!='' && $scope.viviendaForm.clave!='Renuente';
     }
 
-    $scope.agregarVivienda = function(){
+    $scope.medidaTanque = function(){
+        return $scope.viviendaForm.depositos == "Tanques bajos";
+    }
 
+    $scope.agregarVivienda = function(){
+        var idInfo=window.localStorage.getItem("infoID");
+        if ($scope.viviendaForm.ubicacionVivienda!='') {
+            $http.post(ip+'/webApi.php?val=addVivienda',{
+                tipo:$scope.tipo,
+                clave:$scope.viviendaForm.clave,
+                habitantes:$scope.viviendaForm.habitantesCasa,
+                deposito:$scope.viviendaForm.depositos,
+                medidaTanque:$scope.viviendaForm.medidaTanque,
+                tieneAgua:$scope.viviendaForm.tieneAgua,
+                P:$scope.viviendaForm.P,
+                L:$scope.viviendaForm.L,
+                eliminados:$scope.viviendaForm.eliminados,
+                tratados:$scope.viviendaForm.tratados,
+                larvicida:$scope.viviendaForm.larvicida,
+                idInfoGeneral: idInfo,                
+                ubicacion:$scope.viviendaForm.ubicacionVivienda
+            }).success(function(data) {
+                window.localStorage.setItem("previousPage", "menuTipos.html");
+                window.location.reload("focosView.html");
+            }).error(function(data) {
+                alert("Error al ingresar los datos");
+                console.log('Error: ' + data);
+            });
+        }else{
+            alert("No has dado tu ubicación");
+        }
     };
+
     $scope.agregarCDH = function(){
 
     };
@@ -262,8 +286,8 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         function onSuccess(position){
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-            $scope.sumideroForm.ubicacionSumidero = lat+" - "+lon;
-            $scope.viviendaForm.ubicacionVivienda = lat+" - "+lon;
+            $scope.sumideroForm.ubicacionSumidero = lat.toFixed(2)+" - "+lon.toFixed(2);
+            $scope.viviendaForm.ubicacionVivienda = lat.toFixed(2)+" - "+lon.toFixed(2);
         }
         /*Esta funcion es llamada si existe un error en la geolocation*/
         function onError(error){

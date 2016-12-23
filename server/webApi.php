@@ -1,7 +1,8 @@
 <?php
   require_once 'restApi.php';
-  require_once 'DB/usuarios.php';
-  require_once 'DB/focosInfeccion.php';
+  require_once 'Modelo/usuarios.php';
+  require_once 'Modelo/infogeneral.php';
+  require_once 'Modelo/focoinfeccion.php';
 
   header('Access-Control-Allow-Origin: *');
   header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
@@ -22,15 +23,16 @@
     private function loginUsuario(){
       if ($this->get_request_method () != "POST") {
         $this->response ( '', 406 );
-      }
-      $usuario = new usuarios();
-      $data = json_decode(file_get_contents('php://input'),true);
-      $result=$usuario->login($data["username"],$data["password"]);
-      if (!is_null($result)){
-        $sendData=json_encode($result);
-        $this->response('', 200 );
-      } else {
-        $this->response('', 404 );
+      }else{
+        $usuario = new usuarios();
+        $data = json_decode(file_get_contents('php://input'),true);
+        $result=$usuario->login($data["username"],$data["password"]);
+        if ($result=="yes"){
+          $sendData=json_encode($result);
+          $this->response('', 200 );
+        } else {
+          $this->response('', 400 );
+        }
       }
     }
 
@@ -39,13 +41,15 @@
       if ($this->get_request_method () != "POST") {
         $this->response ( '', 406 );
       }
-      $usuario = new usuarios();
-      $data = json_decode(file_get_contents('php://input'),true);
-      $result = $usuario->agregarUsuario($data);
-      if ($result == "TRUE"){
-        $this->response('', 200 );
-      } else {
-        $this->response('', 404 );
+      else{
+        $usuario = new usuarios();
+        $data = json_decode(file_get_contents('php://input'),true);
+        $result = $usuario->agregarUsuario($data);
+        if ($result == "TRUE"){
+          $this->response('', 200 );
+        } else {
+          $this->response('', 400 );
+        }
       }
     }
 
@@ -54,10 +58,10 @@
       if ($this->get_request_method () != "GET") {
         $this->response ( '', 406 );
       }else{
-        $focoInfeccion =  new focosInfeccion();
+        $infogeneral =  new infoGeneral();
         $user = $_GET['usuario'];
         $fecha= $_GET['fecha'];
-        $result = $focoInfeccion->checkInformacionGeneral($user,$fecha);
+        $result = $infogeneral->checkInformacionGeneral($user,$fecha);
         $this->response(json_encode($result),200);
       }
     }
@@ -68,28 +72,61 @@
     if ($this->get_request_method () != "POST") {
       $this->response ( '', 406 );
     }else{
-      $focoInfeccion = new focosInfeccion();
+      $infogeneral = new infoGeneral();
       $data = json_decode(file_get_contents('php://input'),true);
-      $result = $focoInfeccion->agregarInformacionGeneral($data);
+      $result = $infogeneral->agregarInformacionGeneral($data);
       if ($result == "TRUE"){
         $this->response('', 200 );
       } else {
-        $this->response('', 404 );
+        $this->response('', 400 );
       }
     }
   }
 
+  public function modInfoGeneral(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $infogeneral=new infoGeneral();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result=$infogeneral->agregarComunaBarrio($data);
+      if ($result == "TRUE"){
+        $this->response('', 200 );
+      } else {
+        $this->response('', 400 );
+      }
+    }
+  }
+//<<----------------------------FUNCIONES PARA GUARDAR DATOS DE FOCOS DE INFECCION -------------------------------->>
+
   private function addSumidero(){
     if ($this->get_request_method () != "POST") {
       $this->response ( '', 406 );
+    }else{
+      $focoinfeccion = new focoInfeccion();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $focoinfeccion->agregarSumidero($data);
+      if ($result == "TRUE"){
+        $this->response('', 200 );
+      } else {
+        $this->response('', 400 );
+      }
     }
-    $focoInfeccion = new focosInfeccion();
-    $data = json_decode(file_get_contents('php://input'),true);
-    $result = $focoInfeccion->agregarSumidero($data);
-    if ($result == "TRUE"){
-      $this->response('', 200 );
-    } else {
-      $this->response('', 404 );
+  }
+
+   private function addVivienda(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $focoinfeccion = new focoInfeccion();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $focoinfeccion->agregarVivienda($data);
+      if ($result == "TRUE"){
+        echo $result;
+        $this->response('', 200 );
+      } else {
+        $this->response($result, 400 );
+      }
     }
   }
 

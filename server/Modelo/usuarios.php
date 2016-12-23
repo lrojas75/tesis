@@ -1,5 +1,5 @@
 <?php
-require_once 'db.php';
+require_once 'DB/db.php';
 class usuarios extends DB {
 	const ALL_USERS = "select * from usuario";
 	const LOOK_USER = "select cedula,nombres,apellidos,password FROM usuario WHERE cedula=?";
