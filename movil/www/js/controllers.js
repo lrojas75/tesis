@@ -232,6 +232,21 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         // }    
     };
 
+    $scope.viviendaForm={
+        habitantesCasa:0,
+        clave:'',
+        depositos:'',
+        tieneAgua:false,
+        eliminados:0,
+        tratados:0,
+        larvicida:0,
+        ubicacionVivienda:''
+    };
+
+    $scope.viviendaNoRenuente = function(){
+        return $scope.viviendaForm.clave!='' && $scope.viviendaForm.clave!='Renuente';
+    }
+
     $scope.agregarVivienda = function(){
 
     };
@@ -248,11 +263,8 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         function onSuccess(position){
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-
-            localStorage.setItem("latitude", lat);
-            localStorage.setItem("longitude", lon);
-
             $scope.sumideroForm.ubicacionSumidero = lat+" - "+lon;
+            $scope.viviendaForm.ubicacionVivienda = lat+" - "+lon;
         }
         /*Esta funcion es llamada si existe un error en la geolocation*/
         function onError(error){

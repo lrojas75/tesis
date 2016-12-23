@@ -248,24 +248,12 @@
                     </div>
 
                     <div class = "col-xs-12">
-                        <br>
-                        <div class="form-group">
-                            <div class = "col-xs-5">
-                                <label>Habitantes:</label>
-                            </div>
-                            <div class="col-xs-7">
-                                <input type="text" name = "habitantesCasa" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class = "col-xs-12">
                         <div class="form-group">
                             <div class = "col-xs-5">
                                 <label>Clave:</label>
                             </div>
                             <div class="col-xs-7">
-                                <select class="form-control">
+                                <select class="form-control" ng-model="viviendaForm.clave">
                                     <option>Negativa</option>
                                     <option>Positiva</option>
                                     <option>Cerrada</option>
@@ -277,13 +265,29 @@
                         </div>
                     </div>
 
+                    <div ng-show="viviendaNoRenuente()">
+
+                    <div class = "col-xs-12">
+                        <br>
+                        <div class="form-group">
+                            <div class = "col-xs-5">
+                                <label>Habitantes:</label>
+                            </div>
+                            <div class="col-xs-7">
+                                <input type="number" ng-model="viviendaForm.habitantesCasa" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <div class = "col-xs-5">
                                 <label>Depositos:</label>
                             </div>
                             <div class="col-xs-7">
-                                <select class="form-control">
+                                <select class="form-control" ng-model="viviendaForm.depositos">
                                     <option>Tanques bajos</option>
                                     <option>Llantas</option>
                                     <option>Floreros/Plantas en agua</option>
@@ -303,7 +307,7 @@
                                 <label>Tiene agua? (I):</label>
                             </div>
                             <div class = "col-xs-4">
-                                <input type="checkbox" ng-model = "tieneAgua" ng-true-value = "true" ng-false-value = "false" style="height: 17px; width: 17px;">
+                                <input type="checkbox" ng-model = "viviendaForm.tieneAgua" ng-true-value = "true" ng-false-value = "false" style="height: 17px; width: 17px;">
                             </div>
                         </div>
                     </div>
@@ -313,13 +317,13 @@
                                 <label>L:</label>
                             </div>
                             <div class = "col-xs-4">
-                                <input type="number" ng-model = "L" class="form-control" ng-readonly = "!tieneAgua">
+                                <input type="number" ng-model = "L" class="form-control" ng-readonly = "!viviendaForm.tieneAgua">
                             </div>
                             <div class = "col-xs-2">
                                 <label>P:</label>
                             </div>
                             <div class = "col-xs-4">
-                                <input type="number" ng-model = "P" class="form-control" ng-readonly = "!tieneAgua">
+                                <input type="number" ng-model = "P" class="form-control" ng-readonly = "!viviendaForm.tieneAgua">
                             </div>
                             
                         </div>
@@ -329,18 +333,13 @@
                         <br>
                         <div class="form-group">
                             <div class = "col-xs-5">
-                                <label>Recibió la visita:</label>
+                                <label>¿Quién recibió la visita?:</label>
                             </div>
                             <div class="col-xs-7">
-                                <input type="text" name = "persona" class="form-control">
+                                <input type="text" ng-model="viviendaForm.nombrePersona" class="form-control">
                             </div>
                         </div>
                     </div>
-
-                    <div class = "col-xs-12" align="center">
-                        <button type="submit" class="btn btn-primary">Agregar</button>
-                    </div>
-
                     <div class = "col-xs-12" align="center">
                         <div class="form-group">
                             <br>
@@ -356,7 +355,7 @@
                                 <label>Eliminados:</label>
                             </div>
                             <div class = "col-xs-7">
-                                <input type="number" name = "eliminados" class="form-control">
+                                <input type="number" ng-model="viviendaForm.eliminados" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -367,7 +366,7 @@
                                 <label>Tratados:</label>
                             </div>
                             <div class = "col-xs-7">
-                                <input type="number" name = "tratados" class="form-control">
+                                <input type="number" ng-model="viviendaForm.tratados" class="form-control">
                             </div>
                         </div>
                     </div>
@@ -378,18 +377,18 @@
                                 <label>Larvicida (gr/ml):</label>
                             </div>
                             <div class = "col-xs-7">
-                                <input type="number" name = "larvicida" class="form-control">
+                                <input type="number" ng-model="viviendaForm.larvicida" class="form-control">
                             </div>
                         </div>
                     </div>
-
+                </div>
                     <div class = "col-xs-12" align="center">
                         <div class="form-group">
                             <div class="col-xs-9">
-                                <input type="text" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled>  
+                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled>  
                             </div>
                             <div class="col-xs-3">
-                                <button type="button" class="btn btn-primary btn-block btn-xs" onClick ="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click ="geolocation()"><i class="material-icons">my_location</i></button>
                             </div>
                         </div>
                     </div>
