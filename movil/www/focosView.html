@@ -21,20 +21,21 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
+
     <title>Foco de infeccion</title>
 </head>
 
 <body ng-controller="focoController">
     <div class="header">
-        <button ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
+        <button class="back-arrow" ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
         <h4>Foco de infección</h4>
+        <button type="button" class="header-button" ng-click ="sincronizar()" ng-disabled="activeSync()"><i class="material-icons">cached</i></button>
     </div>
-
     <!-- MENU DE INICIO - NAVIGATION TABS -->
     <div class="col-xs-12 has-header">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_datos" data-toggle="pill">Datos <br>Foco infección</a></li>
-        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info general</a></li>
+        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info. general</a></li>
     </ul>
 </div>
 
@@ -44,7 +45,6 @@
         <br>
         <div class="tab-pane" id="tab_infoGeneral">
             <form ng-submit="" class="form-horizontal">
-
                 <div class = "col-xs-12">
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">

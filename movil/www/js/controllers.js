@@ -31,20 +31,17 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
     
     //<------------------------------------FUNCION PARA AGREGAR LA INFORMACION GENERAL DEL RECORRIDO ------------------------->
     $scope.agregarInfoGeneral = function(){
-        console.log($scope.infoFormData.municipio.municipio);
-        console.log($scope.infoFormData.barrio);
-        console.log($scope.infoFormData.comuna);
-        console.log($scope.infoFormData.actividad);
         if ($scope.infoFormData.municipio.municipio.trim()!='' && $scope.infoFormData.barrio.trim()!='' && $scope.infoFormData.comuna.trim()!='' && $scope.infoFormData.actividad.trim()!='') {}
         var user = window.localStorage.getItem("usuario"); 
-        $http.post(ip+'/webApi.php?val=addInfoGeneral',{
+        var jsonData = {
             id:user,
             municipio: $scope.infoFormData.municipio.municipio,
             barrio: $scope.infoFormData.barrio,
             comuna: $scope.infoFormData.comuna,
             actividad: $scope.infoFormData.actividad,
             fecha: $scope.infoFormData.fecha        
-        }).success(function(data) {
+        };
+        $http.post(ip+'/webApi.php?val=addInfoGeneral',jsonData).success(function(data) {
             window.localStorage.setItem("previousPage", "infoGeneral.html");
             window.localStorage.setItem("municipio", $scope.infoFormData.municipio);
             window.localStorage.setItem("numSumidero",0);
@@ -132,6 +129,71 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
         window.localStorage.setItem("previousPage", currentPage);
         window.location.replace(nextPage);
     };
+
+    $scope.sincronizar=function(){
+        var dataToSend=JSON.parse(window.localStorage.getItem("syncData"));
+        dataToSend.forEach(function(data){
+            switch(data.servicio){
+                case 'modInfoGeneral':
+                     $http.post(ip+'/webApi.php?val=modInfoGeneral',data).success(function(data) {
+                        data.enviado=true;
+                        }).error(function(data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
+                    break;
+                
+                case 'addSumidero':
+                    var sumideros=Number(window.localStorage.getItem("numSumidero"));
+                    $http.post(ip+'/webApi.php?val=addSumidero',data).success(function(data) {
+                        window.localStorage.setItem("numSumidero", sumideros+1);
+                        data.enviado=true;
+                    }).error(function(data) {
+                        alert("No se pudo sincronizar los datos, intente más tarde.");
+                    });
+
+                    break;
+
+                case 'addVivienda':
+                    var viviendas=Number(window.localStorage.getItem("numVivienda"));
+                    $http.post(ip+'/webApi.php?val=addVivienda',data).success(function(data) {
+                        window.localStorage.setItem("previousPage", "menuTipos.html");
+                        window.localStorage.setItem("numVivienda", viviendas+1);
+                        data.enviado=true;
+                    }).error(function(data) {
+                        alert("No se pudo sincronizar los datos, intente más tarde.");
+                    });
+                    break;
+
+                case 'addCDH':
+                    break;
+
+            }
+        });
+        console.log(dataToSend);
+        var index=0;
+        var newData=[]
+        while(dataToSend.length>0 && index<dataToSend.length){
+            if(dataToSend[index].enviado==false){
+                newData.push(dataToSend[index]);
+                index+=1;
+            }else{
+                index+=1;
+            }
+        }
+        console.log(newData);
+        window.localStorage.setItem("syncData",JSON.stringify(newData));
+    };
+
+    $scope.activeSync=function(){
+        dataToSync=window.localStorage.getItem("syncData");
+        if (dataToSync.length>0) {
+            return false;
+        }else{            
+            return true;
+        }
+    };
+
+
 }]);
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
@@ -175,15 +237,25 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
     $scope.modificarInfoGeneral = function(){
         if ($scope.editarInfo.municipio!='' && $scope.editarInfo.barrio!='' && $scope.editarInfo.comuna!='' && $scope.editarInfo.actividad!='') {
             var user = window.localStorage.getItem("usuario"); 
-            $http.post(ip+'/webApi.php?val=modInfoGeneral',{
+            var jsonData = {
+                servicio:'modInfoGeneral',
+                enviado:false,//Siempre es falso aunque se envie, ya que no entra a sync data
                 id: user,
                 barrio: $scope.editarInfo.barrio,
                 comuna: $scope.editarInfo.comuna,
-                actividad: $scope.editarInfo.actividad,
-            }).success(function(data) {
-                window.location.reload("infoGeneral.html");
+                actividad: $scope.editarInfo.actividad
+            };
+            $http.post(ip+'/webApi.php?val=modInfoGeneral',jsonData).success(function(data) {
+                window.location.reload("focosView.html");
             }).error(function(data) {
                 alert("Error al ingresar los datos");
+                var dataSync=JSON.parse(window.localStorage.getItem("syncData"));
+                if (dataSync) {
+                    dataSync.push(jsonData);
+                    window.localStorage.setItem("syncData",JSON.stringify(dataSync));
+                }else{
+                    window.localStorage.setItem("syncData",JSON.stringify([jsonData]));
+                }
                 console.log('Error: ' + data);
             });
         }
@@ -205,7 +277,9 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         var idInfo=window.localStorage.getItem("infoID");
         var sumideros=Number(window.localStorage.getItem("numSumidero"));
         if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.tratadoSumidero!='' && $scope.sumideroForm.insecticidaSumidero!='' && $scope.sumideroForm.cantInsecticidaSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
-            $http.post(ip+'/webApi.php?val=addSumidero',{
+            var jsonData = {
+                servicio:'addSumidero',
+                enviado:false,//Siempre es falso aunque se envie, ya que no entra a sync data
                 tipo:$scope.tipo,
                 estado: $scope.sumideroForm.estadoSumidero,
                 larvas: $scope.sumideroForm.larvasSumidero,
@@ -215,16 +289,24 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
                 cantidadInsecticida: $scope.sumideroForm.cantInsecticidaSumidero,
                 idInfoGeneral: idInfo,
                 ubicacion: $scope.sumideroForm.ubicacionSumidero
-            }).success(function(data) {
+            };
+            $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
-                window.localStorage.setItem("numSumidero", sumideros+1);                
+                window.localStorage.setItem("numSumidero", sumideros+1);
                 window.location.reload("focosView.html");
             }).error(function(data) {
+                var dataSync=JSON.parse(window.localStorage.getItem("syncData"));
+                if (dataSync) {
+                    dataSync.push(jsonData);
+                    window.localStorage.setItem("syncData",JSON.stringify(dataSync));
+                }else{
+                    window.localStorage.setItem("syncData",JSON.stringify([jsonData]));
+                }
                 alert("Error al ingresar los datos");
                 console.log('Error: ' + data);
             });
         } else {
-            alert("No pueden haber campos vacios");
+            alert("No pueden haber campos vacios.");
         }    
     };
 
@@ -254,7 +336,9 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         var viviendas=Number(window.localStorage.getItem("numVivienda"));
         var idInfo=window.localStorage.getItem("infoID");
         if ($scope.viviendaForm.ubicacionVivienda!='' && $scope.viviendaForm.clave!='' ) {
-            $http.post(ip+'/webApi.php?val=addVivienda',{
+            var jsonData = {
+                servicio:'addVivienda',
+                enviado:false,//Siempre es falso aunque se envie, ya que no entra a sync data
                 tipo:$scope.tipo,
                 clave:$scope.viviendaForm.clave,
                 habitantes:$scope.viviendaForm.habitantesCasa,
@@ -268,11 +352,19 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
                 larvicida:$scope.viviendaForm.larvicida,
                 idInfoGeneral: idInfo,                
                 ubicacion:$scope.viviendaForm.ubicacionVivienda
-            }).success(function(data) {
+            };
+            $http.post(ip+'/webApi.php?val=addVivienda',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas+1);
                 window.location.reload("focosView.html");
             }).error(function(data) {
+                var dataSync=JSON.parse(window.localStorage.getItem("syncData"));
+                if (dataSync) {
+                    dataSync.push(jsonData);
+                    window.localStorage.setItem("syncData",JSON.stringify(dataSync));
+                }else{
+                    window.localStorage.setItem("syncData",JSON.stringify([jsonData]));
+                }
                 alert("Error al ingresar los datos");
                 console.log('Error: ' + data);
             });
@@ -302,4 +394,60 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
             alert("Message: "+error.message);
         }
     };
+
+
+    $scope.sincronizar=function(){
+        var dataToSend=JSON.parse(window.localStorage.getItem("syncData"));
+        var successSend=[];
+        dataToSend.forEach(function(data,index){
+            switch(data.servicio){
+                case 'modInfoGeneral':
+                     $http.post(ip+'/webApi.php?val=modInfoGeneral',data).success(function(data) {
+                        }).error(function(data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
+                    break;
+
+                case 'addSumidero':
+                    var sumideros=Number(window.localStorage.getItem("numSumidero"));
+                    $http.post(ip+'/webApi.php?val=addSumidero',data).success(function(data) {
+                        window.localStorage.setItem("numSumidero", sumideros+1);
+                    }).error(function(data) {
+                        alert("No se pudo sincronizar los datos, intente más tarde.");
+                    });
+
+                    break;
+
+                case 'addVivienda':
+                    var viviendas=Number(window.localStorage.getItem("numVivienda"));
+                    $http.post(ip+'/webApi.php?val=addVivienda',data).success(function(data) {
+                        window.localStorage.setItem("previousPage", "menuTipos.html");
+                        window.localStorage.setItem("numVivienda", viviendas+1);
+                    }).error(function(data) {
+                        alert("No se pudo sincronizar los datos, intente más tarde.");
+                    });
+                    break;
+
+                case 'addCDH':
+                    break;
+
+            }
+        });
+        
+        window.localStorage.setItem("syncData",JSON.stringify([]));
+    };
+
+    $scope.activeSync=function(){
+        dataToSync=window.localStorage.getItem("syncData");
+        if (dataToSync) {
+            if(dataToSync.length>0){
+                return false;
+            }else{
+                return true
+            }
+        }else{            
+            return true;
+        }
+    };
+
 }]);

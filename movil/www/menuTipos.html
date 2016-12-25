@@ -8,6 +8,8 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="css/index.css" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
@@ -27,8 +29,9 @@
 
 <body ng-controller="menuController" ng-init="init()">
     <div class="header">
-        <button ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
+        <button class="back-arrow" ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
         <h4>Información del dia</h4>
+        <button type="button" class="header-button" ng-click ="sincronizar()" ng-disabled="activeSync()"><i class="material-icons">cached</i></button>
     </div>
     <div class="col-xs-12 has-header">
         <br>
@@ -46,7 +49,7 @@
     </div>
 
     <div class="col-xs-12" align="center">
-        <br><button type="button" class="btn btn-primary btn-md" ng-click ="changeView('infoGeneral.html','index.html')">Terminar</button>
+        <br>
 
     </div>
     <script type="text/javascript" src="js/controllers.js"></script>

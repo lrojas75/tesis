@@ -23,7 +23,7 @@
 
 <body ng-controller="infoController" ng-init="initInfo()">
     <div class="header" ng-if="infoExiste">
-        <button ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
+        <button class="back-arrow" ng-click="backNavigation()"> <span class="glyphicon glyphicon-menu-left"></span>  </button>
         <h4>Información General</h4>
     </div>
     <div class="col-xs-12 has-header" align="center" ng-if="infoExiste">           
