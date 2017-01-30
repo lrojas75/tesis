@@ -132,11 +132,11 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 
     $scope.sincronizar=function(){
         var dataToSend=JSON.parse(window.localStorage.getItem("syncData"));
-        dataToSend.forEach(function(data){
-            switch(data.servicio){
+        dataToSend.forEach(function(jsonData){
+            switch (jsonData.servicio) {
                 case 'modInfoGeneral':
-                     $http.post(ip+'/webApi.php?val=modInfoGeneral',data).success(function(data) {
-                        data.enviado=true;
+                    $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
+                        jsonData.enviado = true;
                         }).error(function(data) {
                             alert("No se pudo sincronizar los datos, intente más tarde.");
                         });
@@ -144,9 +144,9 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                 
                 case 'addSumidero':
                     var sumideros=Number(window.localStorage.getItem("numSumidero"));
-                    $http.post(ip+'/webApi.php?val=addSumidero',data).success(function(data) {
+                    $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
                         window.localStorage.setItem("numSumidero", sumideros+1);
-                        data.enviado=true;
+                        jsonData.enviado = true;
                     }).error(function(data) {
                         alert("No se pudo sincronizar los datos, intente más tarde.");
                     });
@@ -155,10 +155,10 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 
                 case 'addVivienda':
                     var viviendas=Number(window.localStorage.getItem("numVivienda"));
-                    $http.post(ip+'/webApi.php?val=addVivienda',data).success(function(data) {
+                    $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
                         window.localStorage.setItem("previousPage", "menuTipos.html");
                         window.localStorage.setItem("numVivienda", viviendas+1);
-                        data.enviado=true;
+                        jsonData.enviado = true;
                     }).error(function(data) {
                         alert("No se pudo sincronizar los datos, intente más tarde.");
                     });
@@ -170,18 +170,7 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
             }
         });
         console.log(dataToSend);
-        var index=0;
-        var newData=[]
-        while(dataToSend.length>0 && index<dataToSend.length){
-            if(dataToSend[index].enviado==false){
-                newData.push(dataToSend[index]);
-                index+=1;
-            }else{
-                index+=1;
-            }
-        }
-        console.log(newData);
-        window.localStorage.setItem("syncData",JSON.stringify(newData));
+        window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
     };
 
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
@@ -442,66 +431,66 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
 
             marker.setMap(map);
             // Create a renderer for directions and bind it to the map.
-
             directionsDisplay.setMap(map);
 
             // Instantiate an info window to hold step text.
-
             stepDisplay = new google.maps.InfoWindow();
+
+            //Evento de arrastrar el marcador
             google.maps.event.addListener(marker, 'dragend', function (evt) {
                 $scope.sumideroForm.ubicacionSumidero = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
                 $scope.viviendaForm.ubicacionVivienda = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
                 
-            });
-            
+            });            
         }
-
         google.maps.event.addDomListener(window, 'load', initialize);
-
-
 
     };
 
-    //Funcion que envia los datos que no puedieron enviarse
-    $scope.sincronizar=function(){
-        var dataToSend=JSON.parse(window.localStorage.getItem("syncData"));
-        var successSend=[];
-        dataToSend.forEach(function(data,index){
-            switch(data.servicio){
-                case 'modInfoGeneral':
-                     $http.post(ip+'/webApi.php?val=modInfoGeneral',data).success(function(data) {
-                        }).error(function(data) {
+    //Funcion que envia los datos que no pudieron enviarse
+    $scope.sincronizar = function () {
+        var dataToSend = JSON.parse(window.localStorage.getItem("syncData"));
+        dataToSend.forEach(function (jsonData) {
+            if (!dataToSend.enviado) {
+                switch (jsonData.servicio) {
+                    case 'modInfoGeneral':
+                        $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
+                            jsonData.enviado = true;
+                        }).error(function (data) {
                             alert("No se pudo sincronizar los datos, intente más tarde.");
                         });
-                    break;
+                        break;
 
-                case 'addSumidero':
-                    var sumideros=Number(window.localStorage.getItem("numSumidero"));
-                    $http.post(ip+'/webApi.php?val=addSumidero',data).success(function(data) {
-                        window.localStorage.setItem("numSumidero", sumideros+1);
-                    }).error(function(data) {
-                        alert("No se pudo sincronizar los datos, intente más tarde.");
-                    });
+                    case 'addSumidero':
+                        var sumideros = Number(window.localStorage.getItem("numSumidero"));
+                        $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
+                            window.localStorage.setItem("numSumidero", sumideros + 1);
+                            jsonData.enviado = true;
+                        }).error(function (data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
 
-                    break;
+                        break;
 
-                case 'addVivienda':
-                    var viviendas=Number(window.localStorage.getItem("numVivienda"));
-                    $http.post(ip+'/webApi.php?val=addVivienda',data).success(function(data) {
-                        window.localStorage.setItem("previousPage", "menuTipos.html");
-                        window.localStorage.setItem("numVivienda", viviendas+1);
-                    }).error(function(data) {
-                        alert("No se pudo sincronizar los datos, intente más tarde.");
-                    });
-                    break;
+                    case 'addVivienda':
+                        var viviendas = Number(window.localStorage.getItem("numVivienda"));
+                        $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
+                            window.localStorage.setItem("previousPage", "menuTipos.html");
+                            window.localStorage.setItem("numVivienda", viviendas + 1);
+                            jsonData.enviado = true;
+                        }).error(function (data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
+                        break;
 
-                case 'addCDH':
-                    break;
+                    case 'addCDH':
+                        break;
 
+                }
             }
         });
-        
-        window.localStorage.setItem("syncData",JSON.stringify([]));
+        console.log(dataToSend);
+        window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
     };
 
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
