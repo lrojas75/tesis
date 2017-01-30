@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html ng-app="movilapp">
 
 <head>
@@ -21,6 +21,16 @@
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 
+    <!-- Key de la API de google maps para js -->
+    
+    <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDy6jG-VNXs7cye1yVfK1S2MHvccoyr7EQ">
+    </script>
+
+    <script type="text/javascript">
+
+
+    </script>
 
     <title>Foco de infeccion</title>
 </head>
@@ -38,9 +48,16 @@
         <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info. general</a></li>
     </ul>
 </div>
+<div>
+    <!-- Ng-style para ocultar o mostrar el mapa -->
+
+    <div ng-init="MapaGoogle()" ng-style="showMap && {'z-index':'999','bottom':'0'} || {'z-index':'-1'}" id="map-canvas">
+    </div>
+    <button class="btn btn-primary map-button" ng-style="showMap && {'z-index':'999','top':'25%'} || {'z-index':'-1','top':'none'}" ng-click="toggleMap()">X</button>
+</div>
 
 <div class="col-xs-12" align="center">
-    <div class="tab-content"> 
+    <div class="tab-content">
         <!--...................................................Tab Informacion General .............................................-->
         <br>
         <div class="tab-pane" id="tab_infoGeneral">
@@ -67,7 +84,7 @@
                             <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="editarInfo.barrio">
                         </div>
                     </div>
-                </div>                
+                </div>
 
                 <div class = "col-xs-12">
                     <div class="form-group">
@@ -130,7 +147,7 @@
                             <div class = "col-xs-6" style="text-align: center;">
                                 <md-radio-button value="Seco">Seco</md-radio-button>
                             </div>
-                        </div>   
+                        </div>
                         <div class = "col-xs-12">
                             <div class = "col-xs-6" style="text-align: center;">
                                 <md-radio-button value="Tapado">Tapado</md-radio-button>
@@ -192,9 +209,9 @@
                             <div class = "col-xs-6" style="text-align: center;">
                                 <md-radio-button value="Tratado sin inspeccionar">Tratado sin inspeccionar</md-radio-button>
                             </div>
-                        </div>   
+                        </div>
                     </md-radio-group>
-                    
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <br>
@@ -209,26 +226,28 @@
                                     <option>op3</option>
                                     <option>op4</option>
                                 </select>
-                                <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Grs/ml">  
+                                <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Grs/ml">
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <br>
                             <div class="col-xs-8">
-                                <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>  
+                                <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>
                             </div>
                             <div class="col-xs-3">
                                 <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>                                
                             </div>
                         </div>
                     </div>
+                    
                     <br>
                     <div class = "col-xs-12">
                         <div class="form-group">
-                            <br> 
+                            <br>
                             <div class="col-xs-6" align="right">
                                 <button class="btn btn-primary" ng-click = "agregarSumidero()">Guardar</button>
                             </div>
@@ -242,7 +261,7 @@
             </div> <!-- ....FIN FORMULARIO SUMIDERO.... -->
 
             <div class="col-xs-12" ng-if = "mostrar('Vivienda')">  <!-- ....INICIO FORMULARIO VIVIENDA.... -->
-                <form ng-submit="" class="form-horizontal" ng-controller="focoController">
+                <form ng-submit="" class="form-horizontal">
                     <div class = "col-xs-12" align="center">
                         <br><h4>Datos de la vivienda:</h4>
                     </div>
@@ -280,7 +299,7 @@
                         </div>
                     </div>
 
-                    
+
 
                     <div class = "col-xs-12">
                         <div class="form-group">
@@ -338,7 +357,7 @@
                             <div class = "col-xs-4">
                                 <input type="number" ng-model = "viviendaForm.P" class="form-control" ng-readonly = "!viviendaForm.tieneAgua">
                             </div>
-                            
+
                         </div>
                     </div>
 
@@ -372,7 +391,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <div class = "col-xs-5">
@@ -383,7 +402,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <div class = "col-xs-5">
@@ -398,17 +417,18 @@
                     <div class = "col-xs-12" align="center">
                         <div class="form-group">
                             <div class="col-xs-9">
-                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>  
+                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>
                             </div>
                             <div class="col-xs-3">
                                 <button type="button" class="btn btn-primary btn-block btn-xs" ng-click ="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
                             </div>
                         </div>
                     </div>
                     <br>
                     <div class = "col-xs-12">
                         <div class="form-group">
-                            <br> 
+                            <br>
                             <div class="col-xs-6" align="right">
                                 <button type="submit" ng-click="agregarVivienda()" class="btn btn-primary">Guardar</button>
                             </div>
@@ -422,7 +442,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src=js/controllers.js></script>
+<script type="text/javascript" src="js/controllers.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 </body>
 </html>

@@ -184,22 +184,28 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
         window.localStorage.setItem("syncData",JSON.stringify(newData));
     };
 
-    $scope.activeSync=function(){
-        dataToSync=window.localStorage.getItem("syncData");
-        if (dataToSync.length>0) {
-            return false;
-        }else{            
+    //Habilita el boton de sincronizar cuando haya algo para sincronizar
+    $scope.activeSync = function () {
+        dataToSync = window.localStorage.getItem("syncData");
+        if (dataToSync) {
+            if (dataToSync.length > 0) {
+                return false;
+            } else {
+                return true
+            }
+        } else {
             return true;
         }
     };
-
 
 }]);
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana de Focos de infeccion-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
-app.controller("focoController", ['$scope', '$http', function($scope, $http){
+app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
+    $scope.showMap = false;//Mostrar mapa
+
     $scope.municipios = [
         { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
         { municipio: "Palmira", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "14", "15", "16"]},
@@ -227,6 +233,10 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
     $scope.mostrar = function(tipoEscogido){
         return $scope.tipo===tipoEscogido;
     };
+
+    $scope.toggleMap = function () {
+        $scope.showMap = !$scope.showMap;
+    }
 
     $scope.changeView = function(nextPage,currentPage){
         window.localStorage.setItem("previousPage", currentPage);
@@ -395,7 +405,64 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         }
     };
 
+    $scope.MapaGoogle = function () {
+        var rendererOptions = {
 
+            draggable: true
+
+        };
+
+        var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);;
+
+        var directionsService = new google.maps.DirectionsService();
+
+        var map;
+
+        var stepDisplay;
+
+        var markerArray = [];
+
+        var myLatlng = { lat: 3.42, lng: -76.52 };
+
+        function initialize() {
+
+            var mapOptions = {
+                center: myLatlng,
+                zoom:14
+            };
+
+            var marker = new google.maps.Marker({
+                position: myLatlng,
+                draggable: true,
+                title: "Tú posición"
+            });
+
+            map = new google.maps.Map(document.getElementById('map-canvas'),
+			    mapOptions);
+
+            marker.setMap(map);
+            // Create a renderer for directions and bind it to the map.
+
+            directionsDisplay.setMap(map);
+
+            // Instantiate an info window to hold step text.
+
+            stepDisplay = new google.maps.InfoWindow();
+            google.maps.event.addListener(marker, 'dragend', function (evt) {
+                $scope.sumideroForm.ubicacionSumidero = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
+                $scope.viviendaForm.ubicacionVivienda = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
+                
+            });
+            
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
+    };
+
+    //Funcion que envia los datos que no puedieron enviarse
     $scope.sincronizar=function(){
         var dataToSend=JSON.parse(window.localStorage.getItem("syncData"));
         var successSend=[];
@@ -437,6 +504,7 @@ app.controller("focoController", ['$scope', '$http', function($scope, $http){
         window.localStorage.setItem("syncData",JSON.stringify([]));
     };
 
+    //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync=function(){
         dataToSync=window.localStorage.getItem("syncData");
         if (dataToSync) {
