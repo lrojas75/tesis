@@ -165,7 +165,46 @@ h4 {
 }
 .material-icons {vertical-align: middle;}
 
+#map-canvas{
+    position:fixed!important;
+    top:0;    
+    left:0;
+    right:0;    
+    margin:auto;
+    width:80%;
+    height:50%;
+}
 
+.map-button{
+    position:fixed;        
+    right:10%;    
+    margin: 0 auto;
+    width:11%;
+}
+
+.recentTable{
+    width:90%;
+    margin: 0 auto;
+}
+
+.recentTable th{
+    text-align: center;
+    padding:10px;    
+}
+
+.recentTable td{
+    text-align:center;
+    padding:10px;
+    border-top: 1px solid rgba(235, 235, 235, 0.5);
+}
+
+.recentTable tbody{
+    border-bottom: 1px solid rgba(235, 235, 235, 0.5);
+}
+
+.recentTable thead{
+    border-top: 1px solid rgba(235, 235, 235, 0.5);
+}
 /* -------------- menuTipos.html ---------------*/
 
 /* ----------------   Sumidero.html ------*/

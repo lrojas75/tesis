@@ -44,14 +44,15 @@
     <!-- MENU DE INICIO - NAVIGATION TABS -->
     <div class="col-xs-12 has-header">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_datos" data-toggle="pill">Datos <br>Foco infección</a></li>
-        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info. general</a></li>
+        <li class="active"><a href="#tab_datos" data-toggle="pill">Foco <br> infección</a></li>
+        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info.</a></li>
+        <li><a href="#tab_listareciente" data-toggle="pill">Reciente</a></li>
     </ul>
 </div>
 <div>
     <!-- Ng-style para ocultar o mostrar el mapa -->
 
-    <div ng-init="MapaGoogle()" ng-style="showMap && {'z-index':'999','bottom':'0'} || {'z-index':'-1'}" id="map-canvas">
+    <div ng-init="MapaGoogle()" ng-style="showMap && {'z-index':'999','bottom':'0'} || {'z-index':'-1','top':'-1000px'}" id="map-canvas">
     </div>
     <button class="btn btn-primary map-button" ng-style="showMap && {'z-index':'999','top':'25%'} || {'z-index':'-1','top':'none'}" ng-click="toggleMap()">X</button>
 </div>
@@ -439,6 +440,22 @@
                     </div>
                 </form>
             </div> <!-- ....FIN FORMULARIO VIVIENDA.... -->
+        </div>
+        <div class="tab-pane" id="tab_listareciente">
+            <table class="recentTable">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="reciente in recientes track by $index">
+                        <td>{{reciente.tipo}}</td>
+                        <td>{{reciente.hora}}</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
