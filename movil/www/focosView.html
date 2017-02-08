@@ -235,12 +235,10 @@
                     <div class = "col-xs-12">
                         <div class="form-group">
                             <br>
-                            <div class="col-xs-8">
-                                <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>
-                            </div>
-                            <div class="col-xs-3">
-                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
-                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>                                
+                            <div class="input-container">
+                                <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>            
+                                <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>                                
                             </div>
                         </div>
                     </div>
@@ -279,9 +277,7 @@
                                     <option>Negativa</option>
                                     <option>Positiva</option>
                                     <option>Cerrada</option>
-                                    <option>Renuente</option>
-                                    <option>Tratada</option>
-                                    <option>Inspeccionada</option>
+                                    <option>Renuente</option>                                 
                                 </select>
                             </div>
                         </div>
@@ -416,12 +412,10 @@
                     </div>
                     <div class="col-xs-12" align="center">
                         <div class="form-group">
-                            <div class="col-xs-9">
-                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
-                            </div>
-                            <div class="col-xs-3">
-                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
-                                <button type="button" class="btn btn-primary btn-block btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
+                            <div class="input-container">
+                                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>                            
+                                <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                                <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
                             </div>
                         </div>
                     </div>
@@ -533,13 +527,21 @@
                                     <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.bueno" placeholder="Bueno" />
                                     <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.regular" placeholder="Regular" />
                                     <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.malo" placeholder="Malo" />
-                                    <label class="pair-label">Total</label>
-                                    <label class="pair-label">En Uso</label>
-                                    <input type="number" class="form-control pair-input" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
-                                    <input type="number" class="form-control pair-input" ng-model="toldillo.uso" placeholder="Uso" />
+                                    <label>Total</label>
+                                    <label>En Uso</label>
+                                    <input type="number" class="form-control" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
+                                    <input type="number" class="form-control" ng-model="toldillo.uso" placeholder="Uso" />
+                                    <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deleteToldillo(toldillo.index)"><i class="material-icons">clear</i> </button>
                                 </div>
+                                <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaToldillo()"><i class="material-icons">add box</i> </button>
                             </div>
                         </div>
+                        <div class="input-container">
+                            <input type="text" ng-model="CDHform.ubicacionCDH" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
+                            <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                            <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
+                        </div>                        
+                        
                         <div class="div-cdh" ng-if="CDHform.tipo!=''">
                             <span class="center titulo-bloque">Observaciones</span>
                             <textarea class="observaciones-cdh"> </textarea>

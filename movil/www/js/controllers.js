@@ -436,7 +436,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             uso:0
         }],
         observaciones: '',
-        plazo:0,
+        plazo: 0,
+        ubicacionCDH:'',
         tipo:''
     }
 
@@ -454,7 +455,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
             $scope.sumideroForm.ubicacionSumidero = lat.toFixed(2)+" - "+lon.toFixed(2);
-            $scope.viviendaForm.ubicacionVivienda = lat.toFixed(2)+" - "+lon.toFixed(2);
+            $scope.viviendaForm.ubicacionVivienda = lat.toFixed(2) + " - " + lon.toFixed(2);
+            $scope.CDHform.ubicacionCDH= lat.toFixed(2) + " - " + lon.toFixed(2);
         }
         /*Esta funcion es llamada si existe un error en la geolocation*/
         function onError(error){
@@ -506,6 +508,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             google.maps.event.addListener(marker, 'dragend', function (evt) {
                 $scope.sumideroForm.ubicacionSumidero = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
                 $scope.viviendaForm.ubicacionVivienda = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
+                $scope.CDHform.ubicacionCDH= evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
                 
             });            
         }
@@ -585,6 +588,25 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
     //ELiminar fila potencial
     $scope.deletePotencial= function (index) {
         $scope.CDHform.focosPotenciales.splice(index, 1);
+    };
+
+    //Añadir fila toldillo
+    $scope.filaToldillo = function () {
+        var row = {
+            index: 0,
+            tipo: '',
+            bueno: 0,
+            regular: 0,
+            malo: 0,
+            total: 0,
+            uso: 0
+        };
+
+        $scope.CDHform.toldillos.push(row);
+    };
+    //Eliminar fila toldillo
+    $scope.deleteToldillo = function (index) {
+        $scope.CDHform.toldillos.splice(index, 1);
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync=function(){
