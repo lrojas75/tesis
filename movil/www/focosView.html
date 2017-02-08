@@ -57,7 +57,7 @@
     <button class="btn btn-primary map-button" ng-style="showMap && {'z-index':'999','top':'25%'} || {'z-index':'-1','top':'none'}" ng-click="toggleMap()">X</button>
 </div>
 
-<div class="col-xs-12" align="center">
+<div class="" align="center">
     <div class="tab-content">
         <!--...................................................Tab Informacion General .............................................-->
         <br>
@@ -114,8 +114,8 @@
 
         <!-- ..............................................Tab Datos Foco de Infeccion.................................................... -->
         <div class="tab-pane active" id="tab_datos">
-            <div class = "col-xs-12">
-                <div class="form-group">
+            <div>
+                <div class="form-group col-xs-12">
                     <br>
                     <div class = "col-xs-5" style="text-align: left;">
                         <label>Tipo de factor:</label>
@@ -301,8 +301,6 @@
                             </div>
                         </div>
 
-
-
                         <div class="col-xs-12">
                             <div class="form-group">
                                 <div class="col-xs-5">
@@ -462,7 +460,7 @@
                             </div>
                             <div class="input-container">
                                 <label>Razón Social:</label>
-                                <input ng-model="CDHform.rs" class="form-control" type="text" placeholder="Razón Social" />  
+                                <input ng-model="CDHform.rs" class="form-control" type="text" placeholder="Razón Social" />
                             </div>
                             <div class="input-container">
                                 <label>Tipo:</label>
@@ -472,15 +470,89 @@
                                     <option value="otros">Hospital/Batallón</option>
                                 </select>
                             </div>
-
-                            <div ng-if="CDHform.tipo=='general'">
-                                <span>General</span>
-                            </div>
-                            <div ng-if="CDHform.tipo=='otros'">
-                                <span>Otros</span>
-                            </div>
-
                         </div>
+
+                        <div ng-if="CDHform.tipo=='general'">
+                            <div class="div-cdh">
+                                <span class="center titulo-bloque">Focos Encontrados</span>
+                                <div class="input-container" ng-repeat="foco in CDHform.focosEncontrados">
+                                    <input type="text" class="form-control small-input" ng-model="foco.cantidad" placeholder="Cant." />
+                                    <input type="text" class="form-control" ng-model="foco.lugar" placeholder="Lugar" />
+                                    <select class="form-control" ng-model="foco.tipo">
+                                        <option value="" ng-disabled="true">Foco</option>
+                                        <option>Tanques bajos</option>
+                                        <option>Llantas</option>
+                                        <option>Floreros/Plantas en agua</option>
+                                        <option>Tinas (> 55 gal)</option>
+                                        <option>Tarros-baldes (< 55 gal)</option>
+                                        <option>Criaderos naturales</option>
+                                        <option>Botellas</option>
+                                        <option>Diversos</option>
+                                        <option>Sumidero</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deleteEncontrado(foco.index)"><i class="material-icons">clear</i> </button>
+                                </div>
+
+                                <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaFoco()"><i class="material-icons">add box</i> </button>
+                            </div>
+                            
+                            <div class="div-cdh">
+                                <span class="center titulo-bloque">Focos Potenciales</span>
+                                <div class="input-container" ng-repeat="potencial in CDHform.focosPotenciales">
+                                    <input type="text" class="form-control small-input" ng-model="potencial.cantidad" placeholder="Cant" />
+                                    <input type="text" class="form-control" ng-model="potencial.lugar" placeholder="Lugar" />
+                                    <select class="form-control" ng-model="potencial.tipo">
+                                        <option value="" ng-disabled="true">Foco</option>
+                                        <option>Tanques bajos</option>
+                                        <option>Llantas</option>
+                                        <option>Floreros/Plantas en agua</option>
+                                        <option>Tinas (> 55 gal)</option>
+                                        <option>Tarros-baldes (< 55 gal)</option>
+                                        <option>Criaderos naturales</option>
+                                        <option>Botellas</option>
+                                        <option>Diversos</option>
+                                        <option>Sumidero</option>
+                                    </select>
+                                    <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deletePotencial(potencial.index)"><i class="material-icons">clear</i> </button>
+                                </div>
+                                <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaPotencial()"><i class="material-icons">add box</i> </button>
+                            </div>                            
+                        </div>
+                        <div ng-if="CDHform.tipo=='otros'">
+                            <div class="div-cdh">
+                                <div class="otros-container"  ng-repeat="toldillo in CDHform.toldillos">
+                                    <select class="form-control" style="width:100%;" ng-model="toldillo.tipo">
+                                        <option value="" ng-disabled="true">Tipo</option>
+                                        <option>Adulto</option>
+                                        <option>Pediatrico</option>                                     
+                                    </select>
+                                    <label>Bueno</label>
+                                    <label>Regular</label>
+                                    <label>Malo</label>
+                                    
+                                    <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.bueno" placeholder="Bueno" />
+                                    <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.regular" placeholder="Regular" />
+                                    <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.malo" placeholder="Malo" />
+                                    <label class="pair-label">Total</label>
+                                    <label class="pair-label">En Uso</label>
+                                    <input type="number" class="form-control pair-input" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
+                                    <input type="number" class="form-control pair-input" ng-model="toldillo.uso" placeholder="Uso" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="div-cdh" ng-if="CDHform.tipo!=''">
+                            <span class="center titulo-bloque">Observaciones</span>
+                            <textarea class="observaciones-cdh"> </textarea>
+                        </div>
+                        <div class="form-group">                            
+                            <div class="col-xs-6" align="right">
+                                <button type="submit" ng-click="" class="btn btn-primary">Guardar</button>
+                            </div>
+                            <div class="col-xs-6" style="margin-bottom:10px;">
+                                <button type="button" class="btn btn-primary" ng-click="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
+                            </div>                            
+                        </div>
+
                     </form>
                 </div>   
             </div><!--.............................FIN Tab Datos Foco........................................-->

@@ -405,12 +405,38 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             alert("Revisa que ingresaste la clave y tu ubicación");
         }
     };
-
+    //Informacion CDH
     $scope.CDHform = {
         nombre: '',
         apellido: '',
         cedula: '',
-        rs:'',
+        rs: '',
+        focosEncontrados:
+            [{
+                index:0,
+                cantidad: '',
+                tipo: '',
+                lugar:''
+            }],
+        focosPotenciales:
+            [{
+                index: 0,
+                cantidad: '',
+                tipo: '',
+                lugar: ''
+            }],
+        //centros hospitalarios y batallon
+        toldillos: [{
+            index: 0,
+            tipo: '',
+            bueno: 0,
+            regular: 0,
+            malo: 0,
+            total: 0,
+            uso:0
+        }],
+        observaciones: '',
+        plazo:0,
         tipo:''
     }
 
@@ -530,6 +556,35 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         });
         console.log(dataToSend);
         window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
+    };
+    //Agregar fila encontrado
+    $scope.filaFoco = function () {
+        var newIndex = $scope.CDHform.focosEncontrados.length;
+
+        var row = {
+            index:newIndex-1,
+            cantidad: '',
+            tipo: '',
+            lugar: ''
+        };        
+        $scope.CDHform.focosEncontrados.push(row);
+    };
+    //Eliminar fila encontrado
+    $scope.deleteEncontrado = function (index) {
+        $scope.CDHform.focosEncontrados.splice(index, 1);
+    };
+    //Agregar fila potencial
+    $scope.filaPotencial = function () {
+        var row = {
+            cantidad: '',
+            tipo: '',
+            lugar: ''
+        };
+        $scope.CDHform.focosPotenciales.push(row);
+    };
+    //ELiminar fila potencial
+    $scope.deletePotencial= function (index) {
+        $scope.CDHform.focosPotenciales.splice(index, 1);
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync=function(){

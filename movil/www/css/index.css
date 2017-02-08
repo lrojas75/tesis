@@ -102,6 +102,10 @@ button:disabled{
     }
 }
 
+.small-input{
+    width:20%!important;
+}
+
 h1 {
     font-size:24px;
     font-weight:normal;
@@ -181,7 +185,7 @@ h4 {
     margin: 0 auto;
     width:11%;
 }
-
+/*Tabla de recientes*/
 .recentTable{
     width:90%;
     margin: 0 auto;
@@ -206,6 +210,14 @@ h4 {
     border-top: 1px solid rgba(235, 235, 235, 0.5);
 }
 
+/*Formulario de CDH*/
+.div-cdh{
+    margin:10px auto;
+    border-top: 1px solid;
+    padding: 10px;
+    border-color: rgb(204, 204, 204);
+}
+
 .input-container{
     display:block;
 }
@@ -227,18 +239,57 @@ h4 {
     display:inline-block;
 }
 
+/*Titulo de lo bloques en cdh*/
 .titulo-bloque{
     font-weight:bold;
 }
-/* -------------- menuTipos.html ---------------*/
+/*Boton de añadir fila*/
+.small-button{
+    height:34px;
+    width: 13%;
+    line-height: 14px;
+    text-align: center;
+    padding: 1px 7px;
+    margin: 10px auto;
+    border:none;
 
-/* ----------------   Sumidero.html ------*/
-/*input[type=text], select {
+}
+.btn-cancel{
+    background-color:#d60c0c;
+}
+/*Text area*/
+.observaciones-cdh{
     width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
+    margin: 15px 0px;
+    height: 90px;
+    resize: none;
+    border-color: rgb(204, 204, 204);
     border-radius: 4px;
-    box-sizing: border-box;
-}*/
+}
+
+.otros-container{
+    display:block;
+}
+
+.otros-container label{
+    width:30%;
+    padding-top:5px;
+    display:inline-block;
+}
+
+.otros-container input{
+    width:30%;
+    display:inline-block;
+    margin:10px 0;
+}
+
+.otros-container select{
+    width:100%;    
+}
+
+.otros-container .pair-input{
+    width:45%;
+}
+.otros-container .pair-label{
+    width:45%;
+}
