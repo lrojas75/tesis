@@ -47,7 +47,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             window.localStorage.setItem("numSumidero",0);
             window.localStorage.setItem("numVivienda",0);
             window.localStorage.setItem("numCDH", 0);
-            window.localStorage.setItem("recentList", []);
+            window.localStorage.setItem("recentList", JSON.stringify(new Array()));
             window.location.replace("menuTipos.html");
         }).error(function(data) {
             alert("Error al ingresar los datos");
@@ -405,6 +405,14 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             alert("Revisa que ingresaste la clave y tu ubicación");
         }
     };
+
+    $scope.CDHform = {
+        nombre: '',
+        apellido: '',
+        cedula: '',
+        rs:'',
+        tipo:''
+    }
 
     $scope.agregarCDH = function(){
 

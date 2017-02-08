@@ -205,6 +205,31 @@ h4 {
 .recentTable thead{
     border-top: 1px solid rgba(235, 235, 235, 0.5);
 }
+
+.input-container{
+    display:block;
+}
+
+.input-container label{
+    padding-top:5px;
+    width:30%;
+    display:inline-block;
+}
+.input-container input{
+    width:60%;
+    margin:10px 0;
+    display:inline-block;
+}
+
+.input-container select{
+    width:60%;
+    margin:10px 0;
+    display:inline-block;
+}
+
+.titulo-bloque{
+    font-weight:bold;
+}
 /* -------------- menuTipos.html ---------------*/
 
 /* ----------------   Sumidero.html ------*/
