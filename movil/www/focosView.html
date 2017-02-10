@@ -458,7 +458,7 @@
                             </div>
                             <div class="input-container">
                                 <label>Tipo:</label>
-                                <select class="form-control" ng-model="CDHform.tipo">
+                                <select class="form-control" ng-model="CDHform.tipoCDH">
                                     <option value="" ng-disabled="true">Tipo</option>
                                     <option value="general">General</option>
                                     <option value="otros">Hospital/Batallón</option>
@@ -466,7 +466,7 @@
                             </div>
                         </div>
 
-                        <div ng-if="CDHform.tipo=='general'">
+                        <div ng-if="CDHform.tipoCDH=='general'">
                             <div class="div-cdh">
                                 <span class="center titulo-bloque">Focos Encontrados</span>
                                 <div class="input-container" ng-repeat="foco in CDHform.focosEncontrados">
@@ -512,7 +512,7 @@
                                 <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaPotencial()"><i class="material-icons">add box</i> </button>
                             </div>                            
                         </div>
-                        <div ng-if="CDHform.tipo=='otros'">
+                        <div ng-if="CDHform.tipoCDH=='otros'">
                             <div class="div-cdh">
                                 <div class="otros-container"  ng-repeat="toldillo in CDHform.toldillos">
                                     <select class="form-control" style="width:100%;" ng-model="toldillo.tipo">
@@ -542,13 +542,13 @@
                             <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
                         </div>                        
                         
-                        <div class="div-cdh" ng-if="CDHform.tipo!=''">
+                        <div class="div-cdh">
                             <span class="center titulo-bloque">Observaciones</span>
-                            <textarea class="observaciones-cdh"> </textarea>
+                            <textarea ng-model="CDHform.observaciones" class="observaciones-cdh"> </textarea>
                         </div>
                         <div class="form-group">                            
                             <div class="col-xs-6" align="right">
-                                <button type="submit" ng-click="" class="btn btn-primary">Guardar</button>
+                                <button type="submit" ng-click="agregarCDH()" class="btn btn-primary">Guardar</button>
                             </div>
                             <div class="col-xs-6" style="margin-bottom:10px;">
                                 <button type="button" class="btn btn-primary" ng-click="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>

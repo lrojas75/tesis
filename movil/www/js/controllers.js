@@ -48,6 +48,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             window.localStorage.setItem("numVivienda",0);
             window.localStorage.setItem("numCDH", 0);
             window.localStorage.setItem("recentList", JSON.stringify(new Array()));
+            window.localStorage.setItem("syncData", JSON.stringify(new Array()));
             window.location.replace("menuTipos.html");
         }).error(function(data) {
             alert("Error al ingresar los datos");
@@ -68,6 +69,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
                 window.localStorage.setItem("municipio",data.municipio);                
                 window.localStorage.setItem("previousPage", "index.html");
                 window.location.replace("menuTipos.html");
+                console.log("no hay nada"+data);
             }else{
                 $scope.infoExiste=true;
                 console.log("init");
@@ -168,6 +170,14 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                         break;
 
                     case 'addCDH':
+                        var cdhs = Number(window.localStorage.getItem("numCDH"));
+                        $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
+                            window.localStorage.setItem("previousPage", "menuTipos.html");
+                            window.localStorage.setItem("numCDH", cdhs + 1);
+                            jsonData.enviado = true;
+                        }).error(function (data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
                         break;
                 }
             }
@@ -411,38 +421,80 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         apellido: '',
         cedula: '',
         rs: '',
-        focosEncontrados:
-            [{
-                index:0,
-                cantidad: '',
-                tipo: '',
-                lugar:''
-            }],
-        focosPotenciales:
-            [{
-                index: 0,
-                cantidad: '',
-                tipo: '',
-                lugar: ''
-            }],
+        focosEncontrados:[],
+        focosPotenciales:[],
         //centros hospitalarios y batallon
-        toldillos: [{
-            index: 0,
-            tipo: '',
-            bueno: 0,
-            regular: 0,
-            malo: 0,
-            total: 0,
-            uso:0
-        }],
+        toldillos: [],
         observaciones: '',
         plazo: 0,
         ubicacionCDH:'',
-        tipo:''
+        tipoCDH:''
+        
     }
 
     $scope.agregarCDH = function(){
+        //Fecha usada para obtener la hora
+        var fechaHoras = new Date();
+        //Numero de cdh registrados
+        var numCDH = Number(window.localStorage.getItem("numCDH"));
+        //Id de informacion general
+        var idInfo = window.localStorage.getItem("infoID");
+        //Lista de formularios recientes
+        var recentList = JSON.parse(window.localStorage.getItem("recentList"));
+        //Validacion de campos obligatorios
+        if ($scope.CDHform.nombre != '' && $scope.CDHform.apellido != '' && $scope.CDHform.cedula != '' && $scope.CDHform.rs != '' && $scope.CDHform.ubicacion != '') {
+            //Si hay algun foco la observacion es opcional, si no hay focos debe haber observacion
+            if (($scope.CDHform.tipo != '' && ($scope.CDHform.focosEncontrados.length > 0 || $scope.CDHform.focosPotenciales.length > 0 || $scope.CDHform.toldillos.length > 0)) || $scope.CDHform.observaciones != '') {
+                var jsonData = {
+                    servicio: 'addCDH',
+                    nombre: $scope.CDHform.nombre,
+                    apellido: $scope.CDHform.apellido,
+                    cedula: $scope.CDHform.cedula,
+                    razonsocial: $scope.CDHform.rs,
+                    tipo: $scope.tipo,
+                    tipocdh:$scope.CDHform.tipoCDH,
+                    encontrados: $scope.CDHform.focosEncontrados,
+                    potenciales: $scope.CDHform.focosPotenciales,
+                    toldillos: $scope.CDHform.toldillos,
+                    observacion: $scope.CDHform.observaciones,
+                    ubicacion: $scope.CDHform.ubicacionCDH,
+                    infoID: idInfo,
+                    hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
+                };
+                console.log(JSON.stringify(jsonData.encontrados));
+                console.log(JSON.stringify(jsonData.potenciales));
+                console.log(JSON.stringify(jsonData.toldillos));
+                $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
+                    window.localStorage.setItem("previousPage", "menuTipos.html");
+                    window.localStorage.setItem("numCDH", numCDH + 1);
+                    window.location.reload("focosView.html");
+                }).error(function (data) {
+                    alert("Error al ingresar los datos");
+                    console.log('Error: ' + data);
+                    var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
+                    if (dataSync) {
+                        dataSync.push(jsonData);
+                        window.localStorage.setItem("syncData", JSON.stringify(dataSync));
+                    } else {
+                        window.localStorage.setItem("syncData", JSON.stringify([jsonData]));
+                    }
+                });
 
+                //Lista de recientes así se haya enviado o no
+                if (recentList) {
+                    recentList.push(jsonData);
+                    $scope.recientes = recentList;
+                    window.localStorage.setItem("recentList", JSON.stringify(recentList));
+                } else {
+                    window.localStorage.setItem("recentList", JSON.stringify([jsonData]));
+                }
+
+            } else {
+                alert("No pueden haber campos vacíos");                
+            }
+        } else {
+            alert("No pueden haber campos vacíos");
+        }
     };
 
     //<------------------------------------------FUNCION PARA GEOLOCALIZACION (API GEOLOCATION)--------------------------------->
@@ -553,6 +605,14 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                         break;
 
                     case 'addCDH':
+                        var cdhs = Number(window.localStorage.getItem("numCDH"));
+                        $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
+                            window.localStorage.setItem("previousPage", "menuTipos.html");
+                            window.localStorage.setItem("numCDH", cdhs + 1);
+                            jsonData.enviado = true;
+                        }).error(function (data) {
+                            alert("No se pudo sincronizar los datos, intente más tarde.");
+                        });
                         break;
                 }
             }
@@ -565,7 +625,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         var newIndex = $scope.CDHform.focosEncontrados.length;
 
         var row = {
-            index:newIndex-1,
+            index:newIndex,
             cantidad: '',
             tipo: '',
             lugar: ''
@@ -578,9 +638,12 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
     };
     //Agregar fila potencial
     $scope.filaPotencial = function () {
+        var newIndex = $scope.CDHform.focosPotenciales.length;
+
         var row = {
+            index: newIndex,
             cantidad: '',
-            tipo: '',
+            tipo: 'General',
             lugar: ''
         };
         $scope.CDHform.focosPotenciales.push(row);
@@ -592,14 +655,16 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
 
     //Añadir fila toldillo
     $scope.filaToldillo = function () {
+        var newIndex = $scope.CDHform.toldillos.length;
+
         var row = {
-            index: 0,
-            tipo: '',
+            index: newIndex,
+            tipo: 'Hospital/Batallon',
             bueno: 0,
             regular: 0,
             malo: 0,
             total: 0,
-            uso: 0
+            enuso: 0
         };
 
         $scope.CDHform.toldillos.push(row);
