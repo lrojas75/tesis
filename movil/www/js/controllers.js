@@ -58,25 +58,35 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
 
     $scope.initInfo = function(){
         var user = window.localStorage.getItem("usuario"); 
-        $http.get(ip+'/webApi.php?val=checkInfoGeneral',{
-            params:{
-                usuario:user,
-                fecha:$scope.infoFormData.fecha
+        $http.get(ip + '/webApi.php?val=checkInfoGeneral', {
+            params: {
+                usuario: user,
+                fecha: $scope.infoFormData.fecha
             }
-        }).success(function(data){
-            if (data!=null) {
-                window.localStorage.setItem("infoID",data.id);
-                window.localStorage.setItem("municipio",data.municipio);                
+        }).success(function (data) {
+            if (data != null) {
+                window.localStorage.setItem("infoID", data.id);
+                window.localStorage.setItem("municipio", data.municipio);
                 window.localStorage.setItem("previousPage", "index.html");
-                window.location.replace("menuTipos.html");
-                console.log("no hay nada"+data);
-            }else{
-                $scope.infoExiste=true;
-                console.log("init");
+                window.location.replace("menuTipos.html");                
+            } else {
+                $scope.infoExiste = true;                
             }
-        }).error(function(data){
+        }).error(function (data) {
             alert("Error al consultar los datos");
-        })
+        });
+
+        $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
+            params: {
+                usuario: user,
+                fecha: $scope.infoFormData.fecha
+            }
+        }).success(function (data) {
+            window.localStorage.setItem("insecticidas", JSON.stringify(data));
+            
+        }).error(function (data) {
+            console.log("Al carajo");
+        });
     };
 
 }]);
@@ -274,7 +284,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         pupasSumidero:'',
         tratadoSumidero:'',
         insecticidaSumidero:'',
-        cantInsecticidaSumidero:'',
+        cantInsecticidaSumidero: '',
+        arrayInsecticidas:JSON.parse(window.localStorage.getItem("insecticidas")),
         ubicacionSumidero:''
     }
 

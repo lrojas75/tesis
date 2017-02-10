@@ -220,12 +220,8 @@
                                 <label>Insecticida:</label>
                             </div>
                             <div class="col-xs-8 insecticidad-inputs">
-                                <select class="form-control" ng-model="sumideroForm.insecticidaSumidero" required>
-                                    <option value="">Ninguno</option>
-                                    <option>op1</option>
-                                    <option>op2</option>
-                                    <option>op3</option>
-                                    <option>op4</option>
+                                <select class="form-control" ng-model="sumideroForm.insecticidaSumidero" ng-options="item.Nombre for item in sumideroForm.arrayInsecticidas"  required>
+                                    <option value="">Ninguno</option>                                 
                                 </select>
                                 <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Grs/ml">
                             </div>

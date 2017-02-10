@@ -66,6 +66,16 @@ class WebAPI extends REST {
     }
   }
 
+//<<--------------------------FUNCION PARA OBTENER LOS INSECTICIDAS------------->>
+ private function obtenerInsecticidas(){
+    if ($this->get_request_method () != "GET") {
+      $this->response ( '', 406 );
+    }else{
+      $insecticidas =  new focoInfeccion();
+      $result = $insecticidas->getInsecticidas();
+      $this->response(json_encode($result),200);
+    }
+  }
 
 //<<----------------------------FUNCIONES PARA GUARDAR DATOS DE INFORMACION GENERAL -------------------------------->>
   private function addInfoGeneral(){

@@ -13,7 +13,7 @@ class usuarios extends DB {
 		$contact=$result->fetch_array(MYSQLI_ASSOC);
 		if (!empty($contact)){
 			$pass = $contact["password"];
-			if ($pass === $password){
+			if ($pass === md5($password)){
 				return "yes";
 			} else {
 				return "no";
@@ -29,7 +29,7 @@ class usuarios extends DB {
 		$statement = $this->conn->prepare(self::INSERT_USER);
 		if($statement){
 			if (!is_null($user) && count($user)>0) {
-				$statement->bind_param ("isss", $user['cedula'], $user['nombres'], $user['apellidos'], $user['password']);
+				$statement->bind_param ("isss", $user['cedula'], $user['nombres'], $user['apellidos'], md5($user['password']));
 			}
 			$result = $statement->execute();
 			$statement->close();

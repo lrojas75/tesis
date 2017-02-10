@@ -12,7 +12,7 @@ class focoInfeccion extends DB {
 
 	const LAST_FOCO = "select max(ID) from focoInfeccion where idInfoGeneral=?";
 
-
+	const GET_INSECTICIDAS = "select * from insecticidas";
 	public function agregarSumidero($sumidero){
 		$this->open_connection();
 		$statement = $this->conn->prepare(self::INSERT_SUMIDERO);
@@ -96,11 +96,7 @@ class focoInfeccion extends DB {
 				$statement->bind_param("sssssssi",$cdh['tipo'],$cdh['nombre'],$cdh['apellido'],$cdh['cedula'],$cdh['razonsocial'],$cdh['ubicacion'],$cdh['observacion'],$cdh['infoID']);
 				$result = $statement->execute();
 				$statement->close();
-				$this->close_connection();
-				$resultFocoEncontrado=false;
-				$resultPotencial=false;
-				$resultToldillo=false;
-				
+				$this->close_connection();			
 				if($cdh['tipocdh']=='general'){
 					foreach ($cdh['encontrados'] as $foco) {
 						$resultFocoEncontrado=$this->agregarCDHFoco($foco,$cdh['infoID']);
@@ -120,6 +116,22 @@ class focoInfeccion extends DB {
 		}else{
 			$log->error("Error statement"+$cdh);
 		}
+	}
+
+	public function getInsecticidas(){
+		$this->open_connection();
+		$result = $this->conn->query(self::GET_INSECTICIDAS);
+		$insecticidas=[];
+		if ($result->num_rows > 0){
+			while ($row = $result->fetch_assoc()) {
+				array_push($insecticidas, $row);
+			}
+			return $insecticidas;
+		}
+
+	
+		$this->close_connection();
+		
 	}
 }
 ?>
