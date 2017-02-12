@@ -310,7 +310,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 larvas: $scope.sumideroForm.larvasSumidero,
                 pupas: $scope.sumideroForm.pupasSumidero,
                 tratado: $scope.sumideroForm.tratadoSumidero,
-                insecticida: $scope.sumideroForm.insecticidaSumidero,
+                insecticida: $scope.sumideroForm.insecticidaSumidero.Nombre,
                 cantidadInsecticida: $scope.sumideroForm.cantInsecticidaSumidero,
                 idInfoGeneral: idInfo,
                 ubicacion: $scope.sumideroForm.ubicacionSumidero,
