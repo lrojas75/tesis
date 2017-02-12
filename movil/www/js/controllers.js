@@ -310,12 +310,13 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 larvas: $scope.sumideroForm.larvasSumidero,
                 pupas: $scope.sumideroForm.pupasSumidero,
                 tratado: $scope.sumideroForm.tratadoSumidero,
-                insecticida: $scope.sumideroForm.insecticidaSumidero,
+                insecticida: $scope.sumideroForm.insecticidaSumidero.Nombre,
                 cantidadInsecticida: $scope.sumideroForm.cantInsecticidaSumidero,
                 idInfoGeneral: idInfo,
                 ubicacion: $scope.sumideroForm.ubicacionSumidero,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
             };
+            console.log(jsonData);
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
@@ -337,10 +338,10 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             if (recentList) {
                 recentList.push(jsonData);
                 $scope.recientes = recentList;
-                console.log("Existia");
+                
                 window.localStorage.setItem("recentList", JSON.stringify(recentList));
             } else {
-                console.log("No Existia");
+                
                 window.localStorage.setItem("recentList", JSON.stringify([jsonData]));
             }
 
