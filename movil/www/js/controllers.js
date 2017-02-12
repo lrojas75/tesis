@@ -192,20 +192,21 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                 }
             }
         });
-        console.log(dataToSend);
+        alert("Datos Sincronizados");
         window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync = function () {
-        dataToSync = window.localStorage.getItem("syncData");
-        if (dataToSync) {
-            if (dataToSync.length > 0) {
-                return false;
-            } else {
-                return true
-            }
-        } else {
+        var dataToSync = JSON.parse(window.localStorage.getItem("syncData"));
+        //Si hay algun dato que no se sincronizo el boton se activa
+        //Enviado es cambiado a true cuando se sincroniza correctamente
+        var toSync = dataToSync.filter(function (obj) {
+            return obj.enviado == false;
+        });        
+        if (toSync) {
             return true;
+        } else {
+            return false;
         }
     };
 
@@ -319,9 +320,9 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
                 window.location.reload("focosView.html");
-                
+                alert("Datos guardados");
             }).error(function(data) {
-                alert("Error al ingresar los datos");
+                alert("Error al guardar los datos");
                 console.log('Error: ' + data);
                 var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
 
@@ -401,7 +402,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas+1);
-                window.location.reload("focosView.html");                
+                window.location.reload("focosView.html");
+                alert("Datos guardados");
             }).error(function (data) {
                 alert("Error al ingresar los datos");
                 console.log('Error: ' + data);
@@ -479,6 +481,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
                     window.localStorage.setItem("numCDH", numCDH + 1);
                     window.location.reload("focosView.html");
+                    alert("Datos guardados");
                 }).error(function (data) {
                     alert("Error al ingresar los datos");
                     console.log('Error: ' + data);
@@ -628,7 +631,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 }
             }
         });
-        console.log(dataToSend);
+        alert("Datos Sincronizados");
         window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
     };
     //Agregar fila encontrado
@@ -686,15 +689,16 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync=function(){
-        dataToSync=window.localStorage.getItem("syncData");
-        if (dataToSync) {
-            if(dataToSync.length>0){
-                return false;
-            }else{
-                return true
-            }
-        }else{
+        var dataToSync = JSON.parse(window.localStorage.getItem("syncData"));
+        //Si hay algun datoa que no se sincronizo el boton se activa
+        //Enviado es cambiado a true cuando se sincroniza correctamente
+        var toSync = dataToSync.filter(function (obj) {
+            return obj.enviado == false;
+        });        
+        if (toSync) {
             return true;
+        }else{
+            return false;
         }
     };
 
