@@ -1,5 +1,5 @@
 var app = angular.module('movilapp', []);
-var ip = "http://192.168.0.110:80/server";
+var ip = "http://190.1.219.110";
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
