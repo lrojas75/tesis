@@ -32,7 +32,7 @@
 
     </script>
 
-    <title>Foco de infeccion</title>
+    <title>Foco de infección</title>
 </head>
 
 <body ng-controller="focoController">
@@ -42,13 +42,29 @@
         <button type="button" class="header-button" ng-click ="sincronizar()" ng-disabled="activeSync()"><i class="material-icons">cached</i></button>
     </div>
     <!-- MENU DE INICIO - NAVIGATION TABS -->
+    <style>
+        /*Estilo del Navigation Tab*/
+        .nav-tabs { border-bottom: 2px solid #DDD; text-align: center;}
+        .nav-tabs > li {
+            float:none;
+            display:inline-block;
+            zoom:1;
+        }
+        .nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover { border-width: 0; }
+        .nav-tabs > li > a { border: none; color: #666; }
+        .nav-tabs > li.active > a, .nav-tabs > li > a:hover { border: none; color: #4285F4 !important; background: transparent; }
+        .nav-tabs > li > a::after { content: ""; background: #4285F4; height: 2px; position: absolute; width: 100%; left: 0px; bottom: -1px; transition: all 250ms ease 0s; transform: scale(0); }
+        .nav-tabs > li.active > a::after, .nav-tabs > li:hover > a::after { transform: scale(1); }
+        .tab-nav > li > a::after { background: #21527d none repeat scroll 0% 0%; color: #fff; }
+    </style>
+    
     <div class="col-xs-12 has-header">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_datos" data-toggle="pill">Foco <br> infección</a></li>
         <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Info.</a></li>
         <li><a href="#tab_listareciente" data-toggle="pill">Reciente</a></li>
-    </ul>
-</div>
+        </ul>
+    </div>
 <div>
     <!-- Ng-style para ocultar o mostrar el mapa -->
 
@@ -60,10 +76,10 @@
 <div class="" align="center">
     <div class="tab-content">
         <!--...................................................Tab Informacion General .............................................-->
-        <br>
         <div class="tab-pane" id="tab_infoGeneral">
             <form ng-submit="" class="form-horizontal">
                 <div class = "col-xs-12">
+                    <br />
                     <div class="form-group">
                         <div class = "col-xs-5" style="text-align: left;">
                             <label>Comuna:</label>
@@ -118,7 +134,7 @@
                 <div class="form-group col-xs-12">
                     <br>
                     <div class = "col-xs-5" style="text-align: left;">
-                        <label>Tipo de factor:</label>
+                        <label>Tipo de foco:</label>
                     </div>
                     <div class="col-xs-7">
                         <select class="form-control" ng-model="tipo">
@@ -556,6 +572,7 @@
             </div><!--.............................FIN Tab Datos Foco........................................-->
 
         <div class="tab-pane" id="tab_listareciente">
+            <br />
             <table class="recentTable">
                 <thead>
                     <tr>
