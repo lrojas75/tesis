@@ -1,0 +1,26 @@
+
+  
+<form name = "loginForm" class="form-horizontal">
+  <fieldset>
+    <legend>Inicio de sesión</legend>
+    <div class="row">
+      <div class="large-12 columns">
+          <label>Username</label>
+          <input type="text" required placeholder="Introduce tu usuario" ng-model="usuario">
+      </div>
+      <div class="large-12 columns">
+          <label>Contraseña</label>
+          <input type="password" required placeholder="Introduce tu contraseña" ng-model="contrasena">
+      </div>      
+      <div class="large-12 columns">
+        <label>Seleccione si es coordinador</label>
+        <input type="checkbox" ng-model="coordinador">
+      </div>
+      <span style="color: red;"> {{loginError}} </span>
+
+      <button type="submit" ng-disabled="!loginForm.$valid" ng-click="login()" class="button expand round">Login</button>
+      <button ng-click="changeView('/register')" class="button expand round">Registro</button>      
+
+    </fieldset>
+</form>  
+  
