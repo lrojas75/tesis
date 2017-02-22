@@ -1,5 +1,7 @@
 var app = angular.module('movilapp', []);
-var ip = "http://190.1.219.110";
+var ip = "http://192.168.0.15:80";
+
+
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
@@ -53,4 +55,15 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
         });
     };
 
+    $scope.checkSession = function () {
+        var idInfoGeneral = window.localStorage.getItem("infoID");
+        var usuario = window.localStorage.getItem("usuario");
+        if (typeof idInfoGeneral !== "undefined" && typeof usuario !== "undefined") {
+            window.location.replace("menuTipos.html");
+        } else {
+            console.log(idInfoGeneral);
+            console.log(usuario);
+            window.location.replace("index.html");
+        }
+    }
 }]);

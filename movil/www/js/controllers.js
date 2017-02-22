@@ -1,9 +1,11 @@
 var app = angular.module("movilapp", ['ngMaterial']);
-var ip = "http://190.1.219.110";
+var ip = "http://192.168.0.15:80";
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana de Informacion General-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
+
+
 app.controller("infoController", ['$scope', '$filter', '$http', function($scope, $filter, $http){
     $scope.infoExiste=false;
     $scope.infoFormData={
@@ -442,7 +444,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         observaciones: '',
         plazo: 0,
         ubicacionCDH:'',
-        tipoCDH:''
+        tipoCDH: '',
+        plazo:0
         
     }
 
@@ -457,8 +460,8 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         var recentList = JSON.parse(window.localStorage.getItem("recentList"));
         //Validacion de campos obligatorios
         if ($scope.CDHform.nombre != '' && $scope.CDHform.apellido != '' && $scope.CDHform.cedula != '' && $scope.CDHform.rs != '' && $scope.CDHform.ubicacion != '') {
-            //Si hay algun foco la observacion es opcional, si no hay focos debe haber observacion
-            if (($scope.CDHform.tipo != '' && ($scope.CDHform.focosEncontrados.length > 0 || $scope.CDHform.focosPotenciales.length > 0 || $scope.CDHform.toldillos.length > 0)) || $scope.CDHform.observaciones != '') {
+            //Si hay algun foco la observacion es opcional y debe haber un plazo, si no hay focos debe haber observacion
+            if (($scope.CDHform.tipo != '' && $scope.CDHform.plazo>0 && ($scope.CDHform.focosEncontrados.length > 0 || $scope.CDHform.focosPotenciales.length > 0 || $scope.CDHform.toldillos.length > 0)) || $scope.CDHform.observaciones != '') {
                 var jsonData = {
                     servicio: 'addCDH',
                     nombre: $scope.CDHform.nombre,
@@ -473,11 +476,10 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                     observacion: $scope.CDHform.observaciones,
                     ubicacion: $scope.CDHform.ubicacionCDH,
                     infoID: idInfo,
+                    plazo: $scope.CDHform.plazo,
                     hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
                 };
-                console.log(JSON.stringify(jsonData.encontrados));
-                console.log(JSON.stringify(jsonData.potenciales));
-                console.log(JSON.stringify(jsonData.toldillos));
+                console.log(jsonData);
                 $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
                     window.localStorage.setItem("numCDH", numCDH + 1);
