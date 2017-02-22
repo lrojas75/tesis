@@ -1,21 +1,102 @@
+*{
+  font-family: 'Open Sans', sans-serif!important;
+  background-color: #35434F;
+}
 .body{
 	background-color: gray;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif!important;
 }
-.login-page {
-  width: 360px;
-  padding: 8% 0 0;
-  margin: auto;
+nav a {
+  color:white;
 }
-
-.form {
-  position: relative;
-  z-index: 1;
-  background: #FFFFFF;
-  max-width: 360px;
-  margin: 0 auto 100px;
-  padding: 45px;
+.error-center{
+  width: 60%;
   text-align: center;
-  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+  color: red;
+  background-color: #fff;  
+  margin: 5px auto;
 }
 
+/*-----------------------------LOGIN CLASES----------------------------------*/
+legend{
+  text-align: center;
+  border:none!important;
+  background-color: #FFF;
+  padding-top: 20px !important;
+  margin: 0 !important 
+}
+
+.input-login{
+  width: 80%;
+  margin: 0 auto;
+  color: #566C78!important;
+  background-color: #FFF;
+}
+
+.input-login input{
+  margin: 10px 0;
+  height: 50px;  
+  width: 100%;
+  color: #566C78;
+  border: 1px thin #566C78;
+  font-size: 13px;
+  border-radius: 6px;
+  padding: 0 20px;
+  background-color: #FFF;
+}
+
+.login-radio{
+  display: block;
+  width: 80%;
+  margin: 10px auto; 
+  background-color: #FFF;
+}
+
+.login-radio label{
+  display: inline-block;
+  background-color: #FFF;
+}
+
+.login-button input{
+  display: inline-block;
+}
+
+.login-button{
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+  background-color: #FFF;
+}
+
+    
+.login-button button {
+  background-color: rgb(43, 166, 203);
+  border-color: rgb(43, 166, 203);
+  font-weight: bold;
+  border-bottom-right-radius: 1000px;
+  border-top-right-radius: 1000px;
+  border-bottom-left-radius: 1000px;
+  border-top-left-radius: 1000px;
+  height: 43px;
+  color: #fff;
+  font-size: 16px;
+  line-height: 16px;
+  padding: 12px 24px;
+  display: inline-block;
+  text-align: center;
+}
+
+.login-button button:disabled{
+  background-color: #dddddd;
+  border-color: #dddddd;
+}
+
+fieldset{
+  position: absolute;
+  width: 40%;
+  height: 50%;
+  margin: auto!important;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background-color: #FFF;
+  padding: 20px 0 !important;
+}

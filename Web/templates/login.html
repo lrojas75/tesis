@@ -1,26 +1,56 @@
 
   
-<form name = "loginForm" class="form-horizontal">
+<form name="loginForm" ng-show="showLogin" class="form-horizontal" novalidate>
   <fieldset>
     <legend>Inicio de sesión</legend>
-    <div class="row">
-      <div class="large-12 columns">
-          <label>Username</label>
-          <input type="text" required placeholder="Introduce tu usuario" ng-model="usuario">
+    
+      <div class="input-login">          
+          <input type="text" required placeholder="Introduce tu usuario" ng-model="loginForm.usuario">
       </div>
-      <div class="large-12 columns">
-          <label>Contraseña</label>
-          <input type="password" required placeholder="Introduce tu contraseña" ng-model="contrasena">
+      <div class="input-login">          
+          <input type="password" required placeholder="Introduce tu contraseña" ng-model="loginForm.contrasena">
       </div>      
-      <div class="large-12 columns">
-        <label>Seleccione si es coordinador</label>
-        <input type="checkbox" ng-model="coordinador">
+      <div class="login-radio">
+        <label>¿Es coordinador?</label>
+        <input type="checkbox" ng-model="loginForm.coordinador">
       </div>
-      <span style="color: red;"> {{loginError}} </span>
-
-      <button type="submit" ng-disabled="!loginForm.$valid" ng-click="login()" class="button expand round">Login</button>
-      <button ng-click="changeView('/register')" class="button expand round">Registro</button>      
+      <div class="error-center">
+        <span class="error-center"> {{loginError}} </span>
+      </div>
+      <div class="login-button">
+        <button type="submit" ng-disabled="!loginForm.$valid" ng-click="login()" class="button round">Inicar Sesión</button>
+        <button ng-click="changePage()" class="button round">Registrarse</button>      
 
     </fieldset>
 </form>  
+<!-- FORMULARIO REGISTRO -->
+<form name="registerForm" ng-show="!showLogin" class="form-horizontal" novalidate>
+  <fieldset style="height: 70%"">
+    <legend>Registro</legend>    
+    <div class="input-login">          
+        <input type="text" required placeholder="Nombre" ng-model="registroForm.nombres">
+    </div>
+    <div class="input-login">          
+        <input type="text" required placeholder="Apellidos" ng-model="registroForm.apellidos">
+    </div>
+    <div class="input-login">          
+        <input type="text" required placeholder="Cedula" ng-model="registroForm.cedula">
+    </div>  
+    <div class="input-login">          
+        <input type="password" required placeholder="Contraseña" ng-model="registroForm.contrasena">
+    </div>
+
+    <div class="login-radio">
+      <label>¿Es coordinador?</label>
+      <input type="checkbox" ng-model="registroForm.coordinador">
+    </div>      
+    <div class="error-center">
+      <span> {{registerError}} </span>
+    </div>
+    <div class="login-button">
+      <button type="submit" ng-disabled="!registerForm.$valid" ng-click="register()" class="button round">Registrarse</button>
+      <button ng-click="changePage()" class="button round">Inicio de sesión</button>
+    
+    </fieldset>
+</form>
   

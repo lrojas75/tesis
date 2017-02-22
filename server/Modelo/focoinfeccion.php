@@ -5,7 +5,7 @@ class focoInfeccion extends DB {
 
 	const INSERT_VIVIENDA="insert into focoinfeccion (Tipo,Habitantes,Clave,tipoDeposito,TieneAgua,L,P,Medidatanque,Eliminados,Tratados,Larvicida,Ubicacion,idInfoGeneral) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-	const INSERT_CDH="insert into focoinfeccion(Tipo,Nombre,Apellido,Cedula,RazonSocial,Ubicacion,ObservacionCDH,idInfoGeneral) values (?,?,?,?,?,?,?,?)";
+	const INSERT_CDH="insert into focoinfeccion(Tipo,Nombre,Apellido,Cedula,RazonSocial,Ubicacion,ObservacionCDH,idInfoGeneral,plazo) values (?,?,?,?,?,?,?,?,?)";
 
 	const INSERT_CDHTOLDILLO="insert into fococdh (Tipo,Bueno,Regular,Malo,Total,EnUso,IDFoco) values (?,?,?,?,?,?,?)";
 	const INSERT_CDHFOCO="insert into fococdh (Tipo,Cantidad,Lugar,IDFoco) values (?,?,?,?)";
@@ -93,7 +93,7 @@ class focoInfeccion extends DB {
 		$statement = $this->conn->prepare(self::INSERT_CDH);
 		if($statement){
 			if(!is_null($cdh) && count($cdh)>0){
-				$statement->bind_param("sssssssi",$cdh['tipo'],$cdh['nombre'],$cdh['apellido'],$cdh['cedula'],$cdh['razonsocial'],$cdh['ubicacion'],$cdh['observacion'],$cdh['infoID']);
+				$statement->bind_param("sssssssii",$cdh['tipo'],$cdh['nombre'],$cdh['apellido'],$cdh['cedula'],$cdh['razonsocial'],$cdh['ubicacion'],$cdh['observacion'],$cdh['infoID'],$cdh['plazo']);
 				$result = $statement->execute();
 				$statement->close();
 				$this->close_connection();			
@@ -133,5 +133,6 @@ class focoInfeccion extends DB {
 		$this->close_connection();
 		
 	}
+
 }
 ?>

@@ -33,12 +33,12 @@ app.config(function ($httpProvider,$routeProvider) {
 app.factory("auth", function($cookies,$cookieStore,$location)
 {
     return{
-        login : function(username, password, role)
+        login : function(username, password, rol)
         {
             //creamos la cookie con el nombre que nos han pasado
             $cookies.username = username,
             $cookies.password = password;
-            $cookies.role = role;
+            $cookies.role =JSON.stringify(rol);
             //mandamos a la home
             $location.path("/home");
         },
@@ -86,74 +86,82 @@ app.factory("auth", function($cookies,$cookieStore,$location)
 
 
 
-app.controller("loginController", function($scope, $http, auth){	
-
+app.controller("loginController", function($scope, $http, auth){
+    $scope.coordinador=false;
+    $scope.showLogin=true;
+    $scope.loginForm={
+        usuario:'',
+        contrasena:'',
+        coordinador:false
+    };
+    $scope.registroForm={
+        nombres:'',
+        apellidos:'',
+        cedula:'',
+        contrasena:'',
+        coordinador:false
+    };
 //<--------------------------FUNCION PARA INICIO DE SESION ------------------------------------->
-  $scope.login = function(){ //Funcion para el inicio de sesion
-    var funcion = "loginUsuario";
-    if($scope.coordinador == true){
-    	funcion = "loginCoordinador";
-    }
-    $http.post(ip+'webApi.php?val='+funcion,{
-      username: $scope.usuario,
-      password: $scope.contrasena,
+  $scope.login = function(){
+    $http.post(ip+'webApi.php?val=loginUsuario',{
+      username: $scope.loginForm.usuario,
+      password: $scope.loginForm.contrasena,
     }).success(function(data) {
-       auth.login($scope.usuario, $scope.contrasena,funcion);
+       auth.login($scope.loginForm.usuario, $scope.loginForm.contrasena,$scope.loginForm.coordinador);
     }).error(function(data) {
-      console.log('Error: ' + data);
-      $scope.username="";
-      $scope.password="";
+      console.log('Error: ' + data);      
       $scope.loginError = "Usuario y/o Contraseña invalidos.";
     });
   };
 
-  $scope.changeView= function(view){
-    auth.changeLocation(view);
-  };
-//<-----------------------FUNCION PARA REGISTRAR UN USUARIO NUEVO ------------------------->
-
-
-});
-
-
-app.controller("registerController", function($scope, $http,auth){ 
-    $scope.register = function(){
-    var funcion = "registroUsuario";
-      if($scope.coordinador == true){
-        funcion = "registroCoordinador";
-      }
-      $http.post(ip+'/webApi.php?val='+funcion,{
-        cedula: $scope.cedula,
-        nombres: $scope.nombres,
-        apellidos: $scope.apellidos,
-        password: $scope.contrasena
-
+  $scope.register = function(){    
+      $http.post(ip+'/webApi.php?val=registroUsuario',{
+        cedula: $scope.registroForm.cedula,
+        nombres: $scope.registroForm.nombres,
+        apellidos: $scope.registroForm.apellidos,
+        password: $scope.registroForm.contrasena,
+        rol: JSON.stringify($scope.coordinador)
       }).success(function(data) {
+        console.log(data);
         alert("Usuario registrado con exito!");
-        $scope.cedula = "";
-        $scope.nombres = "";
-        $scope.apellidos = "";
-        $scope.contrasena = "";
-        auth.login($scope.usuario, $scope.contrasena,funcion);
+        auth.login($scope.registroForm.usuario, $scope.registroForm.contrasena,$scope.registroForm.coordinador);
       }).error(function(data) {
         console.log('Error: ' + data);
-        $scope.registerError = "No se pudo registrar al usuario.";
+        if (data=="repetido") {
+            $scope.registerError ="Ya hay un usuario registrado con la cedula No: "+$scope.cedula;            
+        }else{
+            $scope.registerError = "No se pudo registrar al usuario.";
+        }
+        
       });
   };  
 
-});
 
+
+  $scope.changePage=function(){
+    $scope.showLogin=!$scope.showLogin;
+  };
+});
 
 app.controller('homeController', function($scope, $http, auth, $cookies){ 
     //devolvemos a la vista el nombre del usuario
     $scope.usuario = $cookies.username;
     $scope.contrasena = $cookies.password;
+    $scope.rolUsuario = JSON.parse($cookies.role);    
     //la función logout que llamamos en la vista llama a la función
     //logout de la factoria auth
     $scope.logout = function()
     {
         auth.logout();
-    }
+    };
+
+    $scope.esCoordinador=function()
+    {        
+        return $scope.rolUsuario;
+    };
+    $scope.changeView= function(view){
+        auth.changeLocation(view);
+    };
 });
 
 app.run(function($rootScope, auth)
@@ -165,49 +173,4 @@ app.run(function($rootScope, auth)
         //la cuál hemos inyectado en la acción run de la aplicación
         auth.checkStatus();
     })
-})
-
-//-----------------------------Controlador ventana HOME--------------------
-// app.controller("homeController", ['$scope', '$http', '$timeout', '$mdSidenav', '$log' ,function($scope, $http, $timeout, $mdSidenav, $log){
-  
-//   $scope.toggleLeft = buildDelayedToggler('left');
-//   function buildDelayedToggler(navID) {
-//       return debounce(function() {
-//         // Component lookup should always be available since we are not using `ng-if`
-//         $mdSidenav(navID)
-//           .toggle()
-//           .then(function () {
-//             $log.debug("toggle " + navID + " is done");
-//           });
-//       }, 200);
-//     }
-//   function debounce(func, wait, context) {
-//       var timer;
-
-//       return function debounced() {
-//         var context = $scope,
-//             args = Array.prototype.slice.call(arguments);
-//         $timeout.cancel(timer);
-//         timer = $timeout(function() {
-//           timer = undefined;
-//           func.apply(context, args);
-//         }, wait || 10);
-//       };
-//     }
-//     $scope.close = function () {
-//       // Component lookup should always be available since we are not using `ng-if`
-//       $mdSidenav('left').close()
-//         .then(function () {
-//           $log.debug("close LEFT is done");
-//         });
-
-//     };
-
-
-//   $scope.changeView = function(view){ //Funcion para el cambio de ventana
-//       window.location.replace(view);            
-//   }
-  
-// }]);
-
-  
+});
