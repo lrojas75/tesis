@@ -1,13 +1,14 @@
 var app = angular.module('movilapp', []);
+//Ip publica
+//var ip = "http://181.53.57.112:3000/server";
 var ip = "http://192.168.0.15:80";
-
-
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
     $scope.sesion = "";
     $scope.userLogin = "";
     $scope.passLogin = "";
+
     $scope.changeView = function(view){
         window.location.replace(view);            
     };
@@ -41,29 +42,28 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
             cedula: $scope.cedula,
             nombres: $scope.nombres,
             apellidos: $scope.apellidos,
-            password: $scope.passRegistro
-
+            password: $scope.passRegistro,
+            rol: JSON.stringify(false)
         }).success(function(data) {
             alert("Usuario registrado con exito!");
             $scope.cedula = "";
             $scope.nombres = "";
             $scope.apellidos = "";
             $scope.passRegistro = "";
-        }).error(function(data) {
-            console.log('Error: ' + data);
-            $scope.registerError = "No se pudo registrar al usuario.";
+        }).error(function (data) {            
+            if (data == "repetido") {
+                $scope.registerError = "Ya hay un usuario registrado con la cédula: " + $scope.cedula;
+            } else {
+                $scope.registerError = "No se pudo registrar al usuario.";
+            }            
         });
     };
 
     $scope.checkSession = function () {
         var idInfoGeneral = window.localStorage.getItem("infoID");
         var usuario = window.localStorage.getItem("usuario");
-        if (typeof idInfoGeneral !== "undefined" && typeof usuario !== "undefined") {
+        if (idInfoGeneral !== null && usuario !== null) {
             window.location.replace("menuTipos.html");
-        } else {
-            console.log(idInfoGeneral);
-            console.log(usuario);
-            window.location.replace("index.html");
         }
-    }
+    };
 }]);

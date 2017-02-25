@@ -43,7 +43,8 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             actividad: $scope.infoFormData.actividad,
             fecha: $scope.infoFormData.fecha        
         };
-        $http.post(ip+'/webApi.php?val=addInfoGeneral',jsonData).success(function(data) {
+        $http.post(ip + '/webApi.php?val=addInfoGeneral', jsonData).success(function (data) {
+            //Si se agregan se inicializan variables de flujo
             window.localStorage.setItem("previousPage", "infoGeneral.html");
             window.localStorage.setItem("municipio", $scope.infoFormData.municipio);
             window.localStorage.setItem("numSumidero",0);
@@ -56,6 +57,11 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             alert("Error al ingresar los datos");
             console.log('Error: ' + data);
         });
+    };
+
+    $scope.logout = function () {
+        window.localStorage.clear();
+        window.location.replace("index.html")
     };
 
     $scope.initInfo = function(){
@@ -87,7 +93,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             window.localStorage.setItem("insecticidas", JSON.stringify(data));
             
         }).error(function (data) {
-            console.log("Al carajo");
+            alert("Error al consultar los insecticidas");
         });
     };
 
@@ -106,25 +112,29 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 
     $scope.init = function(){
         var user = window.localStorage.getItem("usuario"); 
-        $http.get(ip+'/webApi.php?val=checkInfoGeneral',{
-            params:{
-                usuario:user,
-                fecha:$scope.fecha
+        $http.get(ip + '/webApi.php?val=checkInfoGeneral', {
+            params: {
+                usuario: user,
+                fecha: $scope.fecha
             }
-        }).success(function(data){
-            if (data!=null) {
-                window.localStorage.setItem("infoID",data.id);
-                window.localStorage.setItem("municipio",data.municipio);
-            }else{
-                alert("Error en la conexión");
+        }).success(function (data) {
+            if (data != null) {                
+                window.localStorage.setItem("infoID", data.id);
+                window.localStorage.setItem("municipio", data.municipio);
+            } else {
+                //Si no hay info en data es porque no hay info general o es de otro dia
+                window.location.replace("infoGeneral.html");
             }
-        }).error(function(data){
-            alert("Error al consultar los datos");
-        })
+        }).error(function (data) {            
+            alert("Error en la conexión");
+        });
     };
 
-    //<<-----------------------Funciones para ventana MENU PRINCIPAL ---------------------------------------->>
-    
+    $scope.logout = function () {
+        window.localStorage.clear();
+        window.location.replace("index.html")
+    };
+    //Variables del grafico
     var sumideros = Number(window.localStorage.getItem("numSumidero"));
     var viviendas = Number(window.localStorage.getItem("numVivienda"));
     var cdh = Number(window.localStorage.getItem("numCDH"));
@@ -148,65 +158,73 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
     //Funcion que envia los datos que no pudieron enviarse
     $scope.sincronizar = function () {
         var dataToSend = JSON.parse(window.localStorage.getItem("syncData"));
-        dataToSend.forEach(function (jsonData) {
-            if (!jsonData.enviado) {
-                switch (jsonData.servicio) {
-                    case 'modInfoGeneral':
-                        $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+        if (dataToSend) {
+            dataToSend.forEach(function (jsonData) {
+                if (!jsonData.enviado) {
+                    switch (jsonData.servicio) {
+                        case 'modInfoGeneral':
+                            $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
 
-                    case 'addSumidero':
-                        var sumideros = Number(window.localStorage.getItem("numSumidero"));
-                        $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
-                            window.localStorage.setItem("numSumidero", sumideros + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
+                        case 'addSumidero':
+                            var sumideros = Number(window.localStorage.getItem("numSumidero"));
+                            $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
+                                window.localStorage.setItem("numSumidero", sumideros + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
 
-                        break;
+                            break;
 
-                    case 'addVivienda':
-                        var viviendas = Number(window.localStorage.getItem("numVivienda"));
-                        $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
-                            window.localStorage.setItem("previousPage", "menuTipos.html");
-                            window.localStorage.setItem("numVivienda", viviendas + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+                        case 'addVivienda':
+                            var viviendas = Number(window.localStorage.getItem("numVivienda"));
+                            $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
+                                window.localStorage.setItem("previousPage", "menuTipos.html");
+                                window.localStorage.setItem("numVivienda", viviendas + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
 
-                    case 'addCDH':
-                        var cdhs = Number(window.localStorage.getItem("numCDH"));
-                        $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
-                            window.localStorage.setItem("previousPage", "menuTipos.html");
-                            window.localStorage.setItem("numCDH", cdhs + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+                        case 'addCDH':
+                            var cdhs = Number(window.localStorage.getItem("numCDH"));
+                            $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
+                                window.localStorage.setItem("previousPage", "menuTipos.html");
+                                window.localStorage.setItem("numCDH", cdhs + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
+                    }
                 }
-            }
-        });
-        alert("Datos Sincronizados");
-        window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
+            });
+            alert("Datos Sincronizados");
+            window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
+        } else {
+            alert("No hay datos para sincronizar");
+        }
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
     $scope.activeSync = function () {
         var dataToSync = JSON.parse(window.localStorage.getItem("syncData"));
-        //Si hay algun dato que no se sincronizo el boton se activa
+        //Si hay algun datoa que no se sincronizo el boton se activa
         //Enviado es cambiado a true cuando se sincroniza correctamente
-        var toSync = dataToSync.filter(function (obj) {
-            return obj.enviado == false;
-        });        
-        if (toSync) {
-            return true;
+        if (dataToSync) {
+            var toSync = dataToSync.filter(function (obj) {
+                return obj.enviado == false;
+            });
+            if (toSync) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -225,14 +243,14 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         { municipio: "Palmira", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "14", "15", "16"]},
         { municipio: "Cartago", comunaNum: ["1", "2", "3", "4", "5", "6","7"]}];
     //Valores del formulario de modificar info
-    $scope.editarInfo ={
+    $scope.editarInfo = {
         municipio: window.localStorage.getItem("municipio"),
-        barrio:'',
-        comuna:'',
-        comunas:[],
+        barrio: '',
+        comuna: '',
+        comunas: [],
         actividad: '',
-        
-    }
+
+    };
     //Tipo de sitio que visita
     $scope.tipo='';
     //Comunas de acuerdo al municipio que escogió
@@ -258,6 +276,10 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         window.location.replace(nextPage);
     };
 
+    $scope.logout = function () {
+        window.localStorage.clear();
+        window.location.replace("index.html")
+    };
 
     $scope.modificarInfoGeneral = function () {        
         if ($scope.editarInfo.municipio!='' && $scope.editarInfo.barrio!='' && $scope.editarInfo.comuna!='' && $scope.editarInfo.actividad!='') {
@@ -588,54 +610,58 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
     //Funcion que envia los datos que no pudieron enviarse
     $scope.sincronizar = function () {
         var dataToSend = JSON.parse(window.localStorage.getItem("syncData"));
-        dataToSend.forEach(function (jsonData) {
-            if (!jsonData.enviado) {
-                switch (jsonData.servicio) {
-                    case 'modInfoGeneral':
-                        $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+        if (dataToSend) {
+            dataToSend.forEach(function (jsonData) {
+                if (!jsonData.enviado) {
+                    switch (jsonData.servicio) {
+                        case 'modInfoGeneral':
+                            $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
 
-                    case 'addSumidero':
-                        var sumideros = Number(window.localStorage.getItem("numSumidero"));
-                        $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
-                            window.localStorage.setItem("numSumidero", sumideros + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
+                        case 'addSumidero':
+                            var sumideros = Number(window.localStorage.getItem("numSumidero"));
+                            $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
+                                window.localStorage.setItem("numSumidero", sumideros + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
 
-                        break;
+                            break;
 
-                    case 'addVivienda':
-                        var viviendas = Number(window.localStorage.getItem("numVivienda"));
-                        $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
-                            window.localStorage.setItem("previousPage", "menuTipos.html");
-                            window.localStorage.setItem("numVivienda", viviendas + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+                        case 'addVivienda':
+                            var viviendas = Number(window.localStorage.getItem("numVivienda"));
+                            $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {
+                                window.localStorage.setItem("previousPage", "menuTipos.html");
+                                window.localStorage.setItem("numVivienda", viviendas + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
 
-                    case 'addCDH':
-                        var cdhs = Number(window.localStorage.getItem("numCDH"));
-                        $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
-                            window.localStorage.setItem("previousPage", "menuTipos.html");
-                            window.localStorage.setItem("numCDH", cdhs + 1);
-                            jsonData.enviado = true;
-                        }).error(function (data) {
-                            alert("No se pudo sincronizar los datos, intente más tarde.");
-                        });
-                        break;
+                        case 'addCDH':
+                            var cdhs = Number(window.localStorage.getItem("numCDH"));
+                            $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
+                                window.localStorage.setItem("previousPage", "menuTipos.html");
+                                window.localStorage.setItem("numCDH", cdhs + 1);
+                                jsonData.enviado = true;
+                            }).error(function (data) {
+                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                            });
+                            break;
+                    }
                 }
-            }
-        });
-        alert("Datos Sincronizados");
-        window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
+            });
+            alert("Datos Sincronizados");
+            window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
+        } else {
+            alert("No hay datos para sincronizar");
+        }
     };
     //Agregar fila encontrado
     $scope.filaFoco = function () {
@@ -695,12 +721,16 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         var dataToSync = JSON.parse(window.localStorage.getItem("syncData"));
         //Si hay algun datoa que no se sincronizo el boton se activa
         //Enviado es cambiado a true cuando se sincroniza correctamente
-        var toSync = dataToSync.filter(function (obj) {
-            return obj.enviado == false;
-        });        
-        if (toSync) {
-            return true;
-        }else{
+        if (dataToSync) {
+            var toSync = dataToSync.filter(function (obj) {
+                return obj.enviado == false;
+            });
+            if (toSync) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
             return false;
         }
     };
