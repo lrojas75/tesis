@@ -24,9 +24,25 @@ class WebAPI extends REST {
       $usuario = new usuarios();
       $data = json_decode(file_get_contents('php://input'),true);
       $result=$usuario->login($data["username"],$data["password"]);
-      if ($result=="yes"){
-        $sendData=json_encode($result);
+      if ($result=="yes"){        
         $this->response('', 200 );
+      } else {
+        $this->response('', 400 );
+      }
+    }
+  }
+
+    private function getUserData(){
+    if ($this->get_request_method () != "GET") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario = new usuarios();
+      $user = $_GET['usuario'];      
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result=$usuario->lookUser($user);
+      if ($result){
+        $sendData=json_encode($result);
+        $this->response($sendData, 200 );
       } else {
         $this->response('', 400 );
       }

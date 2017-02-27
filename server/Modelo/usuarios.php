@@ -14,12 +14,12 @@ class usuarios extends DB {
 		if (!empty($contact)){
 			$pass = $contact["password"];
 			if ($pass === md5($password)){
-				return "yes";
+				return $contact;
 			} else {
-				return "no";
+				return false;
 			}
 		} else {
-			return "no";
+			return false;
 		}
 	}
 

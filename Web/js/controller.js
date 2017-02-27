@@ -32,21 +32,17 @@ app.config(function ($httpProvider,$routeProvider) {
 app.factory("auth", function($cookies,$cookieStore,$location)
 {
     return{
-        login : function(username, password, rol)
+        login : function(user)
         {
             //creamos la cookie con el nombre que nos han pasado
-            $cookies.username = username,
-            $cookies.password = password;
-            $cookies.role =JSON.stringify(rol);
+            $cookies.userInfo = JSON.stringify(user);
             //mandamos a la home
             $location.path("/home");
         },
         logout : function()
         {            
             //al hacer logout eliminamos la cookie con $cookieStore.remove
-            $cookieStore.remove("username"),
-            $cookieStore.remove("password");
-            $cookieStore.remove("role");
+            $cookieStore.remove("userInfo"),            
             //mandamos al login
             $location.path("/login");
         },
@@ -57,12 +53,12 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         {
             //creamos un array con las rutas que queremos controlar
             var rutasPrivadas = ["/home","/login","/usuarios"];
-            if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.username) == "undefined")
+            if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.userInfo) == "undefined")
             {
                 $location.path("/login");
             }
             //en el caso de que intente acceder al login y ya haya iniciado sesión lo mandamos a la home
-            if($location.path()=="/login" && typeof($cookies.username) != "undefined")
+            if($location.path()=="/login" && typeof($cookies.userInfo) != "undefined")
             {
                 $location.path("/home");
             }
@@ -104,12 +100,12 @@ app.controller("loginController", function($scope, $http, auth){
 
     $http.post(ip+'webApi.php?val=loginUsuario',{
       username: $scope.loginForm.usuario,
-      password: $scope.loginForm.contrasena,
-    }).success(function(data) {
-       auth.login($scope.loginForm.usuario, $scope.loginForm.contrasena,$scope.loginForm.coordinador);
+      password: $scope.loginForm.contrasena
+    }).success(function(data) {        
+        auth.login(data);        
     }).error(function(data) {
-      console.log('Error: ' + data);      
-      $scope.loginError = "Usuario y/o Contraseña invalidos.";
+      console.log('Error: ' + data);
+      $scope.loginError = "Usuario, Rol y/o Contraseña invalidos.";
     });
   };
 
@@ -128,8 +124,7 @@ app.controller("loginController", function($scope, $http, auth){
             $scope.registerError ="Ya hay un usuario registrado con la cédula: "+$scope.registroForm.cedula;            
         }else{
             $scope.registerError = "No se pudo registrar al usuario.";
-        }
-        
+        }        
       });
   };  
 
@@ -140,9 +135,8 @@ app.controller("loginController", function($scope, $http, auth){
 
 app.controller('homeController', function($scope, $http, auth, $cookies){ 
     //devolvemos a la vista el nombre del usuario
-    $scope.usuario = $cookies.username;
-    $scope.contrasena = $cookies.password;
-    $scope.rolUsuario = JSON.parse($cookies.role);
+    $scope.usuario = JSON.parse($cookies.userInfo);
+
     //la función logout que llamamos en la vista llama a la función
     //logout de la factoria auth
     $scope.logout = function(){
@@ -160,9 +154,7 @@ app.controller('homeController', function($scope, $http, auth, $cookies){
 app.controller('usersController', function($scope, $http, $filter, auth, $cookies){
     var self =this;
     $scope.Usuarios = [];    
-    $scope.usuario = $cookies.username;
-    $scope.contrasena = $cookies.password;
-    $scope.rolUsuario = JSON.parse($cookies.role);
+    $scope.usuario = JSON.parse($cookies.userInfo);
     //Pagina actual
     $scope.paginaActual = 0;
     //Filtro de la info
@@ -226,6 +218,7 @@ app.controller('usersController', function($scope, $http, $filter, auth, $cookie
     $scope.getAllUsers();
 });
 
+//Paginacion inicio
 app.filter('startFrom', function() {
     return function(input, start) {
         start = +start; //parse to int
