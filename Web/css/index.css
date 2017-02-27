@@ -8,6 +8,14 @@
 nav a {
   color:white;
 }
+
+.active-tab{
+  background-color: #eee;
+  color: black;
+}
+.active-tab a{  
+  color: #337ab7;
+}
 .error-center{
   width: 60%;
   text-align: center;

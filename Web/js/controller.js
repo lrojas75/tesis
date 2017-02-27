@@ -143,9 +143,6 @@ app.controller('homeController', function($scope, $http, auth, $cookies){
         auth.logout();
     };
 
-    $scope.esCoordinador=function(){        
-        return $scope.rolUsuario;
-    };
     $scope.changeView= function(view){
         auth.changeLocation(view);
     };
@@ -209,9 +206,6 @@ app.controller('usersController', function($scope, $http, $filter, auth, $cookie
         auth.logout();
     };
 
-    $scope.esCoordinador=function(){
-        return $scope.rolUsuario;
-    };
     $scope.changeView= function(view){
         auth.changeLocation(view);
     };
