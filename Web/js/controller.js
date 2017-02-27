@@ -8,6 +8,7 @@ app.config(function ($httpProvider,$routeProvider) {
   $httpProvider.defaults.headers.post = {};
   $httpProvider.defaults.headers.put = {};
   $httpProvider.defaults.headers.patch = {};
+  
   //Enrutamiento de template y controlador
   $routeProvider.when("/login", {
         controller : "loginController",
@@ -17,12 +18,10 @@ app.config(function ($httpProvider,$routeProvider) {
         controller : "homeController",
         templateUrl : "templates/home.html"
     })
-    .when("/register",{
-        controller : "registerController",
-        templateUrl: "templates/register.html"
+    .when("/usuarios",{
+        controller: "usersController",
+        templateUrl: "templates/usuarios.html"
     })
-    
-
 });
 
 //factory que controla la autentificación, devuelve un objeto
@@ -43,7 +42,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
             $location.path("/home");
         },
         logout : function()
-        {
+        {            
             //al hacer logout eliminamos la cookie con $cookieStore.remove
             $cookieStore.remove("username"),
             $cookieStore.remove("password");
@@ -57,13 +56,13 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         checkStatus : function()
         {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/home","/login"];
+            var rutasPrivadas = ["/home","/login","/usuarios"];
             if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.username) == "undefined")
             {
                 $location.path("/login");
             }
             //en el caso de que intente acceder al login y ya haya iniciado sesión lo mandamos a la home
-            if(this.in_array("/login",rutasPrivadas) && typeof($cookies.username) != "undefined")
+            if($location.path()=="/login" && typeof($cookies.username) != "undefined")
             {
                 $location.path("/home");
             }
@@ -87,7 +86,6 @@ app.factory("auth", function($cookies,$cookieStore,$location)
 
 
 app.controller("loginController", function($scope, $http, auth){
-    $scope.coordinador=false;
     $scope.showLogin=true;
     $scope.loginForm={
         usuario:'',
@@ -103,6 +101,7 @@ app.controller("loginController", function($scope, $http, auth){
     };
 //<--------------------------FUNCION PARA INICIO DE SESION ------------------------------------->
   $scope.login = function(){
+
     $http.post(ip+'webApi.php?val=loginUsuario',{
       username: $scope.loginForm.usuario,
       password: $scope.loginForm.contrasena,
@@ -115,28 +114,24 @@ app.controller("loginController", function($scope, $http, auth){
   };
 
   $scope.register = function(){    
-      $http.post(ip+'/webApi.php?val=registroUsuario',{
+    $http.post(ip+'webApi.php?val=registroUsuario',{
         cedula: $scope.registroForm.cedula,
         nombres: $scope.registroForm.nombres,
         apellidos: $scope.registroForm.apellidos,
         password: $scope.registroForm.contrasena,
-        rol: JSON.stringify($scope.coordinador)
-      }).success(function(data) {
-        console.log(data);
+        rol: JSON.stringify($scope.registroForm.coordinador)        
+      }).success(function(data){        
         alert("Usuario registrado con exito!");
         auth.login($scope.registroForm.usuario, $scope.registroForm.contrasena,$scope.registroForm.coordinador);
-      }).error(function(data) {
-        console.log('Error: ' + data);
+      }).error(function(data) {        
         if (data=="repetido") {
-            $scope.registerError ="Ya hay un usuario registrado con la cedula No: "+$scope.cedula;            
+            $scope.registerError ="Ya hay un usuario registrado con la cédula: "+$scope.registroForm.cedula;            
         }else{
             $scope.registerError = "No se pudo registrar al usuario.";
         }
         
       });
   };  
-
-
 
   $scope.changePage=function(){
     $scope.showLogin=!$scope.showLogin;
@@ -147,22 +142,97 @@ app.controller('homeController', function($scope, $http, auth, $cookies){
     //devolvemos a la vista el nombre del usuario
     $scope.usuario = $cookies.username;
     $scope.contrasena = $cookies.password;
-    $scope.rolUsuario = JSON.parse($cookies.role);    
+    $scope.rolUsuario = JSON.parse($cookies.role);
     //la función logout que llamamos en la vista llama a la función
     //logout de la factoria auth
-    $scope.logout = function()
-    {
+    $scope.logout = function(){
         auth.logout();
     };
 
-    $scope.esCoordinador=function()
-    {        
+    $scope.esCoordinador=function(){        
         return $scope.rolUsuario;
     };
     $scope.changeView= function(view){
         auth.changeLocation(view);
     };
 });
+
+app.controller('usersController', function($scope, $http, $filter, auth, $cookies){
+    var self =this;
+    $scope.Usuarios = [];    
+    $scope.usuario = $cookies.username;
+    $scope.contrasena = $cookies.password;
+    $scope.rolUsuario = JSON.parse($cookies.role);
+    //Pagina actual
+    $scope.paginaActual = 0;
+    //Filtro de la info
+    $scope.filterText='';
+    //Tamano paginacion
+    $scope.tamanoPagina=10;
+    //la función logout que llamamos en la vista llama a la función
+    //logout de la factoria auth
+    $scope.getAllUsers=function(){
+        $http.get(ip + '/webApi.php?val=allUsers', {}).success(function (data) {
+            $scope.Usuarios = data;
+            //Eliminar al usuario activo del array
+            var index = $scope.Usuarios.findIndex(x => x.cedula==parseInt($scope.usuario));
+            $scope.Usuarios.splice(index, 1);            
+        }).error(function (data) {
+            alert("Error al consultar los usuarios");
+        });
+    };
+    //Filtra los datos de acuerdo al input
+    $scope.getData=function() {
+        return $filter('filter')($scope.Usuarios, $scope.filterText);
+    };
+
+    $scope.numeroPaginas=function(){
+        return Math.ceil($scope.getData().length/$scope.tamanoPagina);
+    };
+
+    $scope.cambiarSupervisor=function(usuario){
+        var jsonData = {
+            //Si lo esta supervisando lo deja de supervisar
+            IDSupervisor: usuario.IDSupervisor!=parseInt($scope.usuario) ? parseInt($scope.usuario):0,
+            cedula: usuario.cedula
+        };
+        $http.post(ip+'webApi.php?val=cambiarSupervisor',jsonData).success(function(data){
+            usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario) ? parseInt($scope.usuario):0;
+          }).error(function(data) {
+            alert('No se pudo actualizar el supervisor');
+          });
+    };
+
+    $scope.cambiarRol=function(usuario){
+        $http.post(ip+'webApi.php?val=cambiarRol',{
+            nuevoRol:JSON.stringify(!usuario.rol)
+        }).success(function(data){
+            console.log("Bien");
+          }).error(function(data) {
+            console.log("Mal");
+          });
+    };
+
+    $scope.logout = function(){
+        auth.logout();
+    };
+
+    $scope.esCoordinador=function(){
+        return $scope.rolUsuario;
+    };
+    $scope.changeView= function(view){
+        auth.changeLocation(view);
+    };
+    $scope.getAllUsers();
+});
+
+app.filter('startFrom', function() {
+    return function(input, start) {
+        start = +start; //parse to int
+        return input.slice(start);
+    }
+});
+
 
 app.run(function($rootScope, auth)
 {

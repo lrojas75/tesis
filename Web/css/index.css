@@ -1,10 +1,9 @@
 *{
-  font-family: 'Open Sans', sans-serif!important;
-  background-color: #35434F;
+  font-family: 'Open Sans', sans-serif;  
 }
 .body{
 	background-color: gray;
-  font-family: 'Open Sans', sans-serif!important;
+  font-family: 'Open Sans', sans-serif;
 }
 nav a {
   color:white;
@@ -17,6 +16,17 @@ nav a {
   margin: 5px auto;
 }
 
+.no-list-style{
+  list-style: none;
+}
+
+th{
+  text-align: center!important;
+}
+
+tr{
+  text-align: center
+}
 /*-----------------------------LOGIN CLASES----------------------------------*/
 legend{
   text-align: center;
@@ -99,4 +109,33 @@ fieldset{
   top: 0; left: 0; bottom: 0; right: 0;
   background-color: #FFF;
   padding: 20px 0 !important;
+}
+
+/* PAGINA USUARIOS */
+
+.pagination-button{
+  text-align: right;
+  margin-right: 5px;
+}
+
+.pagination-button button{
+  color: #337ab7;
+  background-color: #FFF;
+  border: 1px solid #ddd;
+  padding: 6px 12px;
+}
+
+.filter-div{
+  margin-left: 10px;
+}
+.filter-div span{
+  font-weight: bold;
+}
+.filter-div input{
+  padding: 6px 12px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 40%;
+  margin-left: 10px;
 }

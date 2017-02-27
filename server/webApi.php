@@ -4,9 +4,6 @@ require_once 'Modelo/usuarios.php';
 require_once 'Modelo/infogeneral.php';
 require_once 'Modelo/focoinfeccion.php';
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 class WebAPI extends REST {
 
@@ -46,9 +43,15 @@ class WebAPI extends REST {
       $data = json_decode(file_get_contents('php://input'),true);
       $result = $usuario->agregarUsuario($data);
       if ($result == "TRUE"){
-        $this->response('', 200 );
+        $this->response($result, 200 );
       } else {
-        $this->response('', 400 );
+        if ($result=="repetido") {
+          $this->response("repetido", 406 );
+          # code...
+        }else{
+          $this->response($result, 400 );
+
+        }
       }
     }
   }
@@ -153,6 +156,27 @@ class WebAPI extends REST {
       } else {
         $this->response($result, 400 );
       }
+    }
+  }
+
+  private function allUsers(){
+    if ($this->get_request_method () != "GET") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario =  new usuarios();
+      $result = $usuario->getUsers();
+      $this->response(json_encode($result),200);      
+    }
+  }
+
+  private function cambiarSupervisor(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario =  new usuarios();
+      $data = json_decode(file_get_contents('php://input'),true);      
+      $result = $usuario->updateSupervisor($data);
+      $this->response($result,200);
     }
   }
 
