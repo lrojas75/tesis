@@ -3,7 +3,9 @@ require_once 'DB/db.php';
 class focoInfeccion extends DB {
 	const INSERT_SUMIDERO="insert into focoinfeccion (Tipo,Estado,Larvas,Pupas,Tratamiento,Insecticida,Cantidad,Ubicacion,idInfoGeneral) values (?,?,?,?,?,?,?,?,?)";
 
-	const INSERT_VIVIENDA="insert into focoinfeccion (Tipo,Habitantes,Clave,tipoDeposito,TieneAgua,L,P,Medidatanque,Eliminados,Tratados,Larvicida,Ubicacion,idInfoGeneral) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+	const INSERT_VIVIENDA="insert into focoinfeccion (Tipo,Habitantes,Nombre,Apellido,Cedula,Clave,Ubicacion,idInfoGeneral) values (?,?,?,?,?,?,?,?)";
+
+	const INSERT_DEPOSITO="insert into depositosvivienda (deposito,tieneAgua,P,L,medidaTanque,eliminado,tratado,larvicida,IDFoco) values (?,?,?,?,?,?,?,?,?)";
 
 	const INSERT_CDH="insert into focoinfeccion(Tipo,Nombre,Apellido,Cedula,RazonSocial,Ubicacion,ObservacionCDH,idInfoGeneral,plazo) values (?,?,?,?,?,?,?,?,?)";
 
@@ -29,22 +31,49 @@ class focoInfeccion extends DB {
 		return $result;
 	}
 
+	public function agregarDeposito($deposito,$id){
+		$arguments=["id"=>$id];
+		$depositoGetID = $this->query(self::LAST_FOCO,$arguments);
+		$depositoID = $depositoGetID->fetch_array(MYSQLI_ASSOC);
+		if(!is_null($depositoID)){			
+			if (!is_null($deposito)) {
+				$this->open_connection();
+				$statement = $this->conn->prepare(self::INSERT_DEPOSITO);
+				if($statement){					
+					$statement->bind_param ("ssiiissii",$deposito['deposito'],$deposito['tieneAgua'],$deposito['P'],$deposito['L'],$deposito['medidaTanque'],$deposito['eliminado'], $deposito['tratado'], $deposito['larvicida'],intval($depositoID['max(ID)']));
+					$result = $statement->execute();
+					$statement->close();
+					$this->close_connection();
+					return $result;
+				}
+			}else{
+				$log->error("Error preparing statement of query".$statement);
+			}			
+		}
+	}
 
 	public function agregarVivienda($vivienda){
 		$this->open_connection();
 		$statement = $this->conn->prepare(self::INSERT_VIVIENDA);
 		if($statement){
-			if (!is_null($vivienda) && count($vivienda)>0) {
-				$statement->bind_param ("sisssiiiiidsi",$vivienda['tipo'], $vivienda['habitantes'], $vivienda['clave'], $vivienda['deposito'], $vivienda['tieneAgua'], $vivienda['L'], $vivienda['P'], $vivienda['medidaTanque'], $vivienda['eliminados'],  $vivienda['tratados'],  $vivienda['larvicida'],  $vivienda['ubicacion'], $vivienda['idInfoGeneral']);
+			if (!is_null($vivienda) && count($vivienda)>0) {				
+				$statement->bind_param ("sisssssi",$vivienda['tipo'], $vivienda['habitantes'], $vivienda['nombres'], $vivienda['apellidos'], $vivienda['cedula'], $vivienda['clave'], $vivienda['ubicacion'], $vivienda['idInfoGeneral']);
 			}
 			$result = $statement->execute();
 			$statement->close();
+			$this->close_connection();
+			if($result && count($vivienda['depositos'])>0){
+				foreach ($vivienda['depositos'] as $deposito) {
+						$resultFocoEncontrado=$this->agregarDeposito($deposito,$vivienda['idInfoGeneral']);
+					}
+			}
 		}else{
 			$log->error("Error preparing statement of query".$statement);
 		}
-		$this->close_connection();
 		return $result;
 	}
+
+
 
 	public function agregarCDHToldillo($foco,$id){
 		$arguments=["id"=>$id];

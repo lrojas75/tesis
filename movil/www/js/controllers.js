@@ -339,8 +339,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 idInfoGeneral: idInfo,
                 ubicacion: $scope.sumideroForm.ubicacionSumidero,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
-            };
-            console.log(jsonData);
+            };            
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
@@ -373,17 +372,13 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             alert("No pueden haber campos vacios.");
         }    
     };
-    $scope.viviendaForm={
+    $scope.viviendaForm = {
+        nombre: '',
+        apellido: '',
+        cedula: '',
         habitantesCasa:0,
         clave:'',
-        depositos:'',
-        tieneAgua:false,
-        P:0,
-        L:0,
-        medidaTanque:0,
-        eliminados:0,
-        tratados:0,
-        larvicida:0,
+        depositos:[],
         ubicacionVivienda:''
     };
 
@@ -391,9 +386,25 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         return $scope.viviendaForm.clave!='' && $scope.viviendaForm.clave!='Renuente';
     }
 
-    $scope.medidaTanque = function(){
-        return $scope.viviendaForm.depositos == "Tanques bajos";
-    }
+    $scope.agregarDeposito = function () {
+        var newIndex = $scope.viviendaForm.depositos.length;
+        var row = {
+            index: newIndex,
+            deposito: '',
+            tieneAgua: '',
+            P: '',
+            L:'',
+            medidaTanque: '',
+            eliminado: '',
+            tratado: '',
+            larvicida:'',
+        };
+        $scope.viviendaForm.depositos.push(row);
+    };
+
+    $scope.eliminarDeposito = function (index) {
+        $scope.viviendaForm.depositos.splice(index, 1);
+    };
 
     $scope.agregarVivienda = function () {
         //Fecha usada para obtener la hora
@@ -411,19 +422,16 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 tipo: $scope.tipo,
                 enviado: false,//si se envia no se agrega a la lista de sincronizar                
                 clave:$scope.viviendaForm.clave,
-                habitantes:$scope.viviendaForm.habitantesCasa,
-                deposito:$scope.viviendaForm.depositos,
-                medidaTanque:$scope.viviendaForm.medidaTanque,
-                tieneAgua:$scope.viviendaForm.tieneAgua,
-                P:$scope.viviendaForm.P,
-                L:$scope.viviendaForm.L,
-                eliminados:$scope.viviendaForm.eliminados,
-                tratados:$scope.viviendaForm.tratados,
-                larvicida:$scope.viviendaForm.larvicida,
-                idInfoGeneral: idInfo,                
+                habitantes: $scope.viviendaForm.habitantesCasa,
+                nombres: $scope.viviendaForm.nombre,
+                apellidos: $scope.viviendaForm.apellido,
+                cedula: $scope.viviendaForm.cedula,
+                depositos:$scope.viviendaForm.depositos,
+                idInfoGeneral: idInfo,
                 ubicacion: $scope.viviendaForm.ubicacionVivienda,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes()+'m'
             };
+            console.log(jsonData);
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas+1);
@@ -450,7 +458,7 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             }
             
         }else{
-            alert("Revisa que ingresaste la clave y tu ubicación");
+            alert("Revisa que ingresaste la clave y tu ubicación.");
         }
     };
     //Informacion CDH
