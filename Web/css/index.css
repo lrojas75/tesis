@@ -1,3 +1,4 @@
+/*Clases generales*/
 *{
   font-family: 'Open Sans', sans-serif;  
 }
@@ -35,6 +36,14 @@ th{
 tr{
   text-align: center
 }
+
+.white-button{
+  color: #337ab7;
+  background-color: #FFF;
+  border: 2px solid #ddd;
+  padding: 6px 12px;
+}
+
 /*-----------------------------LOGIN CLASES----------------------------------*/
 legend{
   text-align: center;
@@ -135,6 +144,8 @@ fieldset{
 
 .filter-div{
   margin-left: 10px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 .filter-div span{
   font-weight: bold;

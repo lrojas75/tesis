@@ -161,10 +161,14 @@ app.controller('usersController', function($scope, $http, $filter, auth, $cookie
     //la función logout que llamamos en la vista llama a la función
     //logout de la factoria auth
     $scope.getAllUsers=function(){
-        $http.get(ip + '/webApi.php?val=allUsers', {}).success(function (data) {
+        $http.get(ip + '/webApi.php?val=allUsers', {
+            params:{
+                usuario:$scope.usuario.cedula
+            }
+        }).success(function (data) {
             $scope.Usuarios = data;
             //Eliminar al usuario activo del array
-            var index = $scope.Usuarios.findIndex(x => x.cedula==parseInt($scope.usuario));
+            var index = $scope.Usuarios.findIndex(x => x.cedula==parseInt($scope.usuario.cedula));            
             $scope.Usuarios.splice(index, 1);            
         }).error(function (data) {
             alert("Error al consultar los usuarios");
@@ -182,26 +186,30 @@ app.controller('usersController', function($scope, $http, $filter, auth, $cookie
     $scope.cambiarSupervisor=function(usuario){
         var jsonData = {
             //Si lo esta supervisando lo deja de supervisar
-            IDSupervisor: usuario.IDSupervisor!=parseInt($scope.usuario) ? parseInt($scope.usuario):0,
+            IDSupervisor: usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):0,
             cedula: usuario.cedula
-        };
+        };        
         $http.post(ip+'webApi.php?val=cambiarSupervisor',jsonData).success(function(data){
-            usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario) ? parseInt($scope.usuario):0;
+            usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):0;
           }).error(function(data) {
             alert('No se pudo actualizar el supervisor');
           });
     };
 
-    $scope.cambiarRol=function(usuario){
+    $scope.cambiarRol=function(usuario){        
         $http.post(ip+'webApi.php?val=cambiarRol',{
-            nuevoRol:JSON.stringify(!usuario.rol)
+            nuevoRol:JSON.stringify(!JSON.parse(usuario.rolUsuario)),
+            cedula: usuario.cedula            
         }).success(function(data){
-            console.log("Bien");
+            usuario.rolUsuario=JSON.stringify(!JSON.parse(usuario.rolUsuario));            
           }).error(function(data) {
-            console.log("Mal");
+            alert('No se pudo actualizar el rol del usuario');
           });
     };
 
+    $scope.usuariosSupervisados=function(){
+        $scope.filterText=$scope.usuario.cedula;
+    };
     $scope.logout = function(){
         auth.logout();
     };

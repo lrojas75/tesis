@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2017 at 02:22 AM
+-- Generation Time: Mar 01, 2017 at 03:05 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -80,6 +80,7 @@ INSERT INTO `depositosvivienda` (`ID`, `deposito`, `tieneAgua`, `P`, `L`, `medid
 --
 
 CREATE TABLE `fococdh` (
+  `ID` int(11) NOT NULL,
   `Tipo` varchar(30) NOT NULL,
   `Bueno` int(11) NOT NULL,
   `Regular` int(11) NOT NULL,
@@ -95,16 +96,16 @@ CREATE TABLE `fococdh` (
 -- Dumping data for table `fococdh`
 --
 
-INSERT INTO `fococdh` (`Tipo`, `Bueno`, `Regular`, `Malo`, `Total`, `EnUso`, `Cantidad`, `Lugar`, `IDFoco`) VALUES
-('Toldillo', 12, 31, 21, 45, 21, 0, '', 43),
-('Sumidero', 0, 0, 0, 0, 0, 12, 'fasd', 82),
-('Floreros/Plantas en agua', 0, 0, 0, 0, 0, 12, 'dasda', 84),
-('Llantas', 0, 0, 0, 0, 0, 451, 'srae', 84),
-('Adulto', 12, 31, 2, 45, 0, 0, '', 89),
-('Llantas', 0, 0, 0, 0, 0, 12, 'sda', 91),
-('Tanques bajos', 0, 0, 0, 0, 0, 1, 'dasda', 0),
-('Llantas', 0, 0, 0, 0, 0, 1, 'ds', 98),
-('Adulto', 1, 12, 3, 16, 0, 0, '', 4);
+INSERT INTO `fococdh` (`ID`, `Tipo`, `Bueno`, `Regular`, `Malo`, `Total`, `EnUso`, `Cantidad`, `Lugar`, `IDFoco`) VALUES
+(1, 'Toldillo', 12, 31, 21, 45, 21, 0, '', 43),
+(2, 'Sumidero', 0, 0, 0, 0, 0, 12, 'fasd', 82),
+(3, 'Floreros/Plantas en agua', 0, 0, 0, 0, 0, 12, 'dasda', 84),
+(4, 'Llantas', 0, 0, 0, 0, 0, 451, 'srae', 84),
+(5, 'Adulto', 12, 31, 2, 45, 0, 0, '', 89),
+(6, 'Llantas', 0, 0, 0, 0, 0, 12, 'sda', 91),
+(7, 'Tanques bajos', 0, 0, 0, 0, 0, 1, 'dasda', 0),
+(8, 'Llantas', 0, 0, 0, 0, 0, 1, 'ds', 98),
+(9, 'Adulto', 1, 12, 3, 16, 0, 0, '', 4);
 
 -- --------------------------------------------------------
 
@@ -181,6 +182,7 @@ INSERT INTO `informaciongeneral` (`ID`, `ID_Usuario`, `Municipio`, `Fecha`) VALU
 --
 
 CREATE TABLE `insecticidas` (
+  `ID` int(11) NOT NULL,
   `Nombre` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -188,9 +190,9 @@ CREATE TABLE `insecticidas` (
 -- Dumping data for table `insecticidas`
 --
 
-INSERT INTO `insecticidas` (`Nombre`) VALUES
-('Op1'),
-('Op2');
+INSERT INTO `insecticidas` (`ID`, `Nombre`) VALUES
+(1, 'Op1'),
+(2, 'Op2');
 
 -- --------------------------------------------------------
 
@@ -204,7 +206,7 @@ CREATE TABLE `usuario` (
   `apellidos` varchar(20) NOT NULL,
   `password` varchar(255) NOT NULL,
   `rolUsuario` varchar(30) NOT NULL,
-  `IDSupervisor` int(11) DEFAULT NULL
+  `IDSupervisor` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -213,7 +215,7 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`cedula`, `nombres`, `apellidos`, `password`, `rolUsuario`, `IDSupervisor`) VALUES
 (1, 'adsa', 'dasda', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
-(11, 'us', 'us', '6512bd43d9caa6e02c990b0a82652dca', 'true', NULL),
+(11, 'us', 'us', '6512bd43d9caa6e02c990b0a82652dca', 'true', 0),
 (12, 'Probando', 'Ret', '12', '', 0),
 (13, 'ab', 'cd', '13', '', 0),
 (90, 'probando', 'probando', '99', '', 0),
@@ -224,8 +226,10 @@ INSERT INTO `usuario` (`cedula`, `nombres`, `apellidos`, `password`, `rolUsuario
 (81900, '91782', '9as', '6512bd43d9caa6e02c990b0a82652dca', 'false', 11),
 (90181, 'Debe Ir', 'Con Null', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
 (120981, 'Poto', 'Pato', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(131231, 'ProbandoID', 'Otra vez', '8d4646eb2d7067126eb08adb0672f7bb', 'false', 0),
 (132987, 'Aaay Pa2', 'Carajito', '9996535e07258a7bbfd8b132435c5962', 'false', 0),
 (231312, 'dasd', 'asdas12', '7b354881033eaad8e420662a1e3ce30e', 'false', 0),
+(987651, 'ProbandoID', 'Supervisor', '36290c4064073ec57141d6ce1389316f', 'false', 0),
 (1283791, 'Poto', 'Pito', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
 (12345678, 'Wiily', 'Rex', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
 (12837912, 'Pata', 'Pita', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
@@ -252,6 +256,12 @@ ALTER TABLE `depositosvivienda`
   ADD PRIMARY KEY (`ID`);
 
 --
+-- Indexes for table `fococdh`
+--
+ALTER TABLE `fococdh`
+  ADD PRIMARY KEY (`ID`);
+
+--
 -- Indexes for table `focoinfeccion`
 --
 ALTER TABLE `focoinfeccion`
@@ -261,6 +271,12 @@ ALTER TABLE `focoinfeccion`
 -- Indexes for table `informaciongeneral`
 --
 ALTER TABLE `informaciongeneral`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `insecticidas`
+--
+ALTER TABLE `insecticidas`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -284,6 +300,11 @@ ALTER TABLE `comunaxbarrio`
 ALTER TABLE `depositosvivienda`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `fococdh`
+--
+ALTER TABLE `fococdh`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+--
 -- AUTO_INCREMENT for table `focoinfeccion`
 --
 ALTER TABLE `focoinfeccion`
@@ -293,6 +314,11 @@ ALTER TABLE `focoinfeccion`
 --
 ALTER TABLE `informaciongeneral`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+--
+-- AUTO_INCREMENT for table `insecticidas`
+--
+ALTER TABLE `insecticidas`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

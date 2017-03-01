@@ -24,31 +24,13 @@ class WebAPI extends REST {
       $usuario = new usuarios();
       $data = json_decode(file_get_contents('php://input'),true);
       $result=$usuario->login($data["username"],$data["password"]);
-      if ($result=="yes"){        
-        $this->response('', 200 );
+      if ($result){        
+        $this->response(json_encode($result), 200 );
       } else {
         $this->response('', 400 );
       }
     }
   }
-
-    private function getUserData(){
-    if ($this->get_request_method () != "GET") {
-      $this->response ( '', 406 );
-    }else{
-      $usuario = new usuarios();
-      $user = $_GET['usuario'];      
-      $data = json_decode(file_get_contents('php://input'),true);
-      $result=$usuario->lookUser($user);
-      if ($result){
-        $sendData=json_encode($result);
-        $this->response($sendData, 200 );
-      } else {
-        $this->response('', 400 );
-      }
-    }
-  }
-
     //<--------FUNCION PARA AGREGAR UN USUARIO NUEVO------------------>
   private function registroUsuario(){
     if ($this->get_request_method () != "POST") {
@@ -92,7 +74,11 @@ class WebAPI extends REST {
     }else{
       $insecticidas =  new focoInfeccion();
       $result = $insecticidas->getInsecticidas();
-      $this->response(json_encode($result),200);
+      if ($result) {
+        $this->response(json_encode($result),200);
+      }else{
+        $this->response('',400);
+      }      
     }
   }
 
@@ -150,7 +136,7 @@ class WebAPI extends REST {
       $focoinfeccion = new focoInfeccion();
       $data = json_decode(file_get_contents('php://input'),true);
       $result = $focoinfeccion->agregarVivienda($data);
-      if ($result == "TRUE"){
+      if ($result){
         echo $result;
         $this->response('', 200 );
       } else {
@@ -161,7 +147,7 @@ class WebAPI extends REST {
 
   private function addCDH(){
     if ($this->get_request_method () != "POST") {
-      $this->response ( 'Metodo', 406 );
+      $this->response ( '', 406 );
     }else{
       $focoinfeccion = new focoInfeccion();
       $data = json_decode(file_get_contents('php://input'),true);
@@ -174,14 +160,21 @@ class WebAPI extends REST {
       }
     }
   }
+//<<----------------------------FUNCIONES PARA MMODIFICAR USUARIOS -------------------------------->>
 
   private function allUsers(){
     if ($this->get_request_method () != "GET") {
       $this->response ( '', 406 );
     }else{
       $usuario =  new usuarios();
-      $result = $usuario->getUsers();
-      $this->response(json_encode($result),200);      
+      $user = $_GET['usuario'];      
+      $result = $usuario->getUsers($user);
+      if ($result) {
+        $this->response(json_encode($result),200);        
+      }else{
+        $this->response('',400);        
+      }
+      
     }
   }
 
@@ -190,9 +183,29 @@ class WebAPI extends REST {
       $this->response ( '', 406 );
     }else{
       $usuario =  new usuarios();
-      $data = json_decode(file_get_contents('php://input'),true);      
+      $data = json_decode(file_get_contents('php://input'),true);
       $result = $usuario->updateSupervisor($data);
-      $this->response($result,200);
+      if ($result) {
+        $this->response($result,200);
+      }else{
+        $this->response('',400);
+      }     
+      
+    }
+  }
+
+  private function cambiarRol(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario =  new usuarios();
+      $data = json_decode(file_get_contents('php://input'),true);      
+      $result = $usuario->updateRol($data);
+      if ($result) {
+        $this->response('',200);
+      }else{
+        $this->response('',400);
+      }
     }
   }
 

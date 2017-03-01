@@ -1,10 +1,11 @@
 <?php
 require_once 'DB/db.php';
-class usuarios extends DB {
-	const ALL_USERS = "select * from usuario";
+class usuarios extends DB {	
+	const ALL_USERS = "select * from usuario WHERE IDSupervisor=0 or IDSupervisor=?";//Con supervisor o supervisados por el usuario
 	const LOOK_USER = "select * FROM usuario WHERE cedula=?";
 	const INSERT_USER = "insert into usuario (cedula,nombres,apellidos,password,rolUsuario) values (?,?,?,?,?)";
 	const UPDATE_SUPERVISOR = "update usuario set IDSupervisor=? where cedula=?";
+	const UPDATE_ROL = "update usuario set rolUsuario=? where cedula=?";
 //--------FUNCION PARA INICIAR SESION (RETORNA "SI", SI LOS DATOS SON CORRECTOS)------------------>>>
 
 	public function login($username,$password){
@@ -48,9 +49,6 @@ class usuarios extends DB {
 
 	public function updateSupervisor($data){
 		$this->open_connection();
-		// $arguments = ["IDSupervisor"=>$data['IDSupervisor'],"cedula"=>$data['cedula']];
-		// $query = $this->query(self::UPDATE_SUPERVISOR,$arguments);
-		// return $query;
 		$statement = $this->conn->prepare(self::UPDATE_SUPERVISOR);		
 		if($statement){
 			if(!is_null($data) && count($data)>0){
@@ -65,9 +63,26 @@ class usuarios extends DB {
 		}
 	}
 
-	public function getUsers(){
+	public function updateRol($data){
 		$this->open_connection();
-		$statement = $this->query(self::ALL_USERS);		
+		$statement = $this->conn->prepare(self::UPDATE_ROL);		
+		if($statement){
+			if(!is_null($data) && count($data)>0){
+				$statement->bind_param("si",$data['nuevoRol'],$data['cedula']);				
+			}
+			$result = $statement->execute();
+			$statement->close();
+			$this->close_connection();
+			return $result;
+		}else{
+			return false;
+		}
+	}
+
+	public function getUsers($cedula){
+		$arguments = ["username"=>$cedula];
+		$this->open_connection();
+		$statement = $this->query(self::ALL_USERS,$arguments);
 		$allUsers=[];
 		if ($statement->num_rows > 0){
 			while ($row = $statement->fetch_assoc()) {
