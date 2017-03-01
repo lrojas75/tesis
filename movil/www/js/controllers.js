@@ -382,9 +382,9 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         ubicacionVivienda:''
     };
 
-    $scope.viviendaNoRenuente = function(){
-        return $scope.viviendaForm.clave!='' && $scope.viviendaForm.clave!='Renuente';
-    }
+    $scope.viviendaNoRenuente = function () {
+        return $scope.viviendaForm.clave != '' && $scope.viviendaForm.clave != 'Renuente' && $scope.viviendaForm.clave != 'Cerrada';
+    };
 
     $scope.agregarDeposito = function () {
         var newIndex = $scope.viviendaForm.depositos.length;
@@ -431,7 +431,6 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 ubicacion: $scope.viviendaForm.ubicacionVivienda,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes()+'m'
             };
-            console.log(jsonData);
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas+1);
