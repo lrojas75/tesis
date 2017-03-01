@@ -1,0 +1,429 @@
+<div>
+    <!-- Ng-style para ocultar o mostrar el mapa -->
+
+    <div ng-init="MapaGoogle()" ng-style="showMap && {'z-index':'999','bottom':'0'} || {'z-index':'-1','top':'-1000px'}" id="map-canvas">
+    </div>
+    <button class="btn btn-primary map-button" ng-style="showMap && {'z-index':'999','top':'25%'} || {'z-index':'-1','top':'none'}" ng-click="toggleMap()">X</button>
+</div>
+     <!--...................................................Tab Informacion General .............................................-->
+
+<div class="tab-pane" id="tab_infoGeneral">
+    <form ng-submit="" class="form-horizontal">
+        <div class = "col-xs-12">
+            <div class="form-group">
+                <div class = "col-xs-5" style="text-align: left;">
+                    <label>Comuna:</label>
+                </div>
+                <div class="col-xs-7">
+                    <select ng-model="editarInfo.comuna" ng-options="item for item in editarInfo.comunas" class="form-control">
+                        <option ng-disabled="true"  ng-selected="true" value="">Escoger comuna</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class = "col-xs-12">
+            <div class="form-group">
+                <div class = "col-xs-5" style="text-align: left;">
+                    <label>Barrio:</label>
+                </div>
+                <div class="col-xs-7">
+                    <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="editarInfo.barrio">
+                </div>
+            </div>
+        </div>
+
+        <div class = "col-xs-12">
+            <div class="form-group">
+                <div class = "col-xs-5" style="text-align: left;">
+                    <label>Actividad:</label>
+                </div>
+                <div class="col-xs-7">
+                    <select class="form-control" ng-model="editarInfo.actividad">
+                        <option value="" ng-disabled="true">Escoja una actividad</option>
+                        <option>Encuesta larvaria</option>
+                        <option>Control larvario</option>
+                        <option>Evaluación de control</option>
+                        <option>Supervisión</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class = "col-xs-12">
+            <br>
+            <div class="form-group">
+                <button class="btn btn-primary" ng-click="modificarInfoGeneral()">Aceptar</button>
+            </div>
+        </div>
+    </form>
+</div> <!--.............................FIN Tab Informacion General........................................-->
+
+<!-- ..............................................Tab Datos Foco de Infeccion.................................................... -->
+<div class="tab-pane active" id="tab_datos">
+    <div>
+        <div class="form-group col-xs-12">
+            <br>
+            <div class = "col-xs-5" style="text-align: left;">
+                <label>Tipo de factor:</label>
+            </div>
+            <div class="col-xs-7">
+                <select class="form-control" ng-model="tipo">
+                    <option value="">Escoja un tipo</option>
+                    <option>Vivienda</option>
+                    <option>Sumidero</option>
+                    <option>CDH</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12" ng-if = "mostrar('Sumidero')"> <!-- ....INICIO FORMULARIO SUMIDERO.... -->
+        <form ng-submit="" class="form-horizontal" >
+            <div class = "col-xs-12" align="center">
+                <br><h4>Datos del sumidero:</h4><br>
+            </div>
+
+            <div class = "col-xs-12" style="text-align: left;">
+                <label>Estado del sumidero:</label>
+            </div>
+
+            <md-radio-group ng-model="sumideroForm.estadoSumidero">
+                <div class = "col-xs-12">
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="Ninguno" class="md-primary">Ninguno</md-radio-button>
+                    </div>
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="Seco">Seco</md-radio-button>
+                    </div>
+                </div>
+                <div class = "col-xs-12">
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="Tapado">Tapado</md-radio-button>
+                    </div>
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="Con aceite">Con Aceite</md-radio-button>
+                    </div>
+                </div>
+            </md-radio-group>
+
+            <div class = "col-xs-12" ng-show = "sumideroForm.estadoSumidero == 'Ninguno'">
+                <div class="form-group">
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Larvas:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control" ng-model = "sumideroForm.larvasSumidero">
+                            <option value="">N/A</option>
+                            <option>Aedex</option>
+                            <option>Culex</option>
+                            <option>Mixto</option>
+                            <option>Sin Larvas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12" ng-show = "sumideroForm.estadoSumidero == 'Ninguno'">
+                <div class="form-group">
+                    <div class = "col-xs-5" style="text-align: left;">
+                        <label>Pupas:</label>
+                    </div>
+                    <div class="col-xs-7">
+                        <select class="form-control" ng-model="sumideroForm.pupasSumidero">
+                            <option value="">N/A</option>
+                            <option>Aedex</option>
+                            <option>Culex</option>
+                            <option>Mixto</option>
+                            <option>Sin Larvas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12" align="center">
+                <div class="form-group">
+                    <br>
+                    <h4>Control:</h4>
+                    <div class="separadorDos"></div>
+                    <div class="separadorDos"></div>
+                </div>
+            </div>
+
+            <md-radio-group ng-model="sumideroForm.tratadoSumidero">
+                <div class = "col-xs-12">
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="tratado" class="md-primary">Tratado</md-radio-button>
+                    </div>
+                    <div class = "col-xs-6" style="text-align: center;">
+                        <md-radio-button value="Tratado sin inspeccionar">Tratado sin inspeccionar</md-radio-button>
+                    </div>
+                </div>
+            </md-radio-group>
+
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <br>
+                    <div class = "col-xs-4" style="text-align: left;">
+                        <label>Insecticida:</label>
+                    </div>
+                    <div class="col-xs-8 insecticidad-inputs">
+                        <select class="form-control" ng-model="sumideroForm.insecticidaSumidero" ng-options="item.Nombre for item in sumideroForm.arrayInsecticidas"  required>
+                            <option value="">Ninguno</option>                                 
+                        </select>
+                        <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Grs/ml">
+                    </div>
+                </div>
+            </div>
+
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <br>
+                    <div class="input-container">
+                        <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>            
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>                                
+                    </div>
+                </div>
+            </div>
+            
+            <br>
+            <div class = "col-xs-12">
+                <div class="form-group">
+                    <br>
+                    <div class="col-xs-6" align="right">
+                        <button class="btn btn-primary" ng-click = "agregarSumidero()">Guardar</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-primary" ng-click ="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div> <!-- ....FIN FORMULARIO SUMIDERO.... -->
+
+    <div class="col-xs-12" ng-if="mostrar('Vivienda')">
+        <!-- ....INICIO FORMULARIO VIVIENDA.... -->
+        <form ng-submit="" class="form-horizontal">
+            <div class="div-clave">
+                <span class="center titulo-bloque">Datos de la vivienda:</span>                        
+                <br />
+                <div class="input-container">
+                    <label> Clave:</label>
+                    <select class="form-control" ng-model="viviendaForm.clave" required>
+                        <option value="" ng-disabled="true">Escoja una clave</option>
+                        <option>Negativa</option>
+                        <option>Positiva</option>
+                        <option>Cerrada</option>
+                        <option>Renuente</option>
+                    </select>
+                </div>                        
+            </div>
+
+            <div ng-show="viviendaNoRenuente()">
+                <div class="info-representante">
+                    <span class="center titulo-bloque">Representate Legal</span>
+                    <br />
+                    <div class="input-container">
+                        <label> Nombre:</label>
+                        <input ng-model="viviendaForm.nombre" class="form-control" type="text" placeholder="Nombre" />
+                    </div>
+                    <div class="input-container">
+                        <label>Apellido:</label>
+                        <input ng-model="viviendaForm.apellido" class="form-control" type="text" placeholder="Apellido" />
+                    </div>
+                    <div class="input-container">
+                        <label>Cedula:</label>
+                        <input ng-model="viviendaForm.cedula" class="form-control" type="text" placeholder="Cedula" />
+                    </div>
+                    <div class="input-container">
+                        <label>Habitantes:</label>
+                        <input type="number" ng-model="viviendaForm.habitantesCasa" class="form-control">
+                    </div>
+                </div>
+
+                <div class="div-cdh">
+                    <span class="center titulo-bloque">Depositos</span>
+                    <div class="input-container" ng-repeat="deposito in viviendaForm.depositos">
+                        <select class="form-control select-vivienda" ng-model="deposito.deposito">
+                            <option value="" ng-disabled="true">Tipo Deposito</option>
+                            <option value="Tanques Bajos">Tanques bajos</option>
+                            <option value="Llantas">Llantas</option>
+                            <option value="Floreros/Plantas en agua">Floreros/Plantas en agua</option>
+                            <option value="Tinas (> 55 gal)">Tinas (> 55 gal)</option>
+                            <option value="Tarros-baldes (< 55 gal)">Tarros-baldes (< 55 gal)</option>
+                            <option value="Criaderos naturales">Criaderos naturales</option>
+                            <option value="Botellas">Botellas</option>
+                            <option value="Diversos">Diversos</option>
+                        </select>
+                        <input type="number" ng-if="deposito.deposito=='Tanques Bajos'" placeholder="Medida Tanque" ng-model="deposito.medidaTanque" class="form-control medium-input">
+                        <select class="form-control select-vivienda" ng-model="deposito.tieneAgua" required>
+                            <option value="" ng-disabled="true">¿Tiene Agua?</option>
+                            <option value="True">Sí</option>
+                            <option value="False">No</option>
+                        </select>
+                        <input type="number" ng-model="deposito.L" placeholder="L" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False'" required>
+                        <input type="number" ng-model="deposito.P" placeholder="P" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False'" required>
+                        <select class="form-control select-vivienda" ng-model="deposito.eliminado" required>
+                            <option value="" ng-disabled="true">¿Eliminado?</option>
+                            <option value="True">Sí</option>
+                            <option value="False">No</option>
+                        </select>
+                        <select class="form-control select-vivienda" ng-model="deposito.tratado" required>
+                            <option value="" ng-disabled="true">¿Tratado?</option>
+                            <option value="True">Sí</option>
+                            <option value="False">No</option>
+                        </select>
+                        <input type="number" placeholder="Larvicida (gr/ml)" ng-model="deposito.larvicida" class="form-control medium-input" required>
+                        <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="eliminarDeposito(deposito.index)"><i class="material-icons">clear</i> </button>
+                    </div>
+
+                    <button class="btn btn-primary btn-xs btn-block small-button" ng-click="agregarDeposito()"><i class="material-icons">add box</i> </button>
+                </div>
+            </div>
+            <div class="input-container">
+                <input type="text" ng-model="viviendaForm.ubicacionVivienda" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
+            </div>   
+            <div class="col-xs-12">
+                <div class="form-group">
+                    <br>
+                    <div class="col-xs-6" align="right">
+                        <button type="submit" ng-click="agregarVivienda()" class="btn btn-primary">Guardar</button>
+                    </div>
+                    <div class="col-xs-6">
+                        <button type="button" class="btn btn-primary" ng-click="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div> <!-- ....FIN FORMULARIO VIVIENDA.... -->
+    <!-- ....INICIO FORMULARIO CDH.... -->
+
+    <div ng-if="mostrar('CDH')">
+        <form>
+            <div class="info-representante">
+                <span class="center titulo-bloque">Representate Legal</span>
+                <br />
+                <div class="input-container">
+                    <label> Nombre:</label>
+                    <input ng-model="CDHform.nombre" class="form-control" type="text" placeholder="Nombre" />
+                </div>
+                <div class="input-container">
+                    <label>Apellido:</label>
+                    <input ng-model="CDHform.apellido" class="form-control" type="text" placeholder="Apellido" />
+                </div>
+                <div class="input-container">
+                    <label>Cedula:</label>
+                    <input ng-model="CDHform.cedula" class="form-control" type="text" placeholder="Cedula" />
+                </div>
+                <div class="input-container">
+                    <label>Razón Social:</label>
+                    <input ng-model="CDHform.rs" class="form-control" type="text" placeholder="Razón Social" />
+                </div>
+                <div class="input-container">
+                    <label>Tipo:</label>
+                    <select class="form-control" ng-model="CDHform.tipoCDH">
+                        <option value="" ng-disabled="true">Tipo</option>
+                        <option value="general">General</option>
+                        <option value="otros">Hospital/Batallón</option>
+                    </select>
+                </div>
+            </div>
+
+            <div ng-if="CDHform.tipoCDH=='general'">
+                <div class="div-cdh">
+                    <span class="center titulo-bloque">Focos Encontrados</span>
+                    <div class="input-container" ng-repeat="foco in CDHform.focosEncontrados">
+                        <input type="text" class="form-control small-input" ng-model="foco.cantidad" placeholder="Cant." />
+                        <input type="text" class="form-control" ng-model="foco.lugar" placeholder="Lugar" />
+                        <select class="form-control" ng-model="foco.tipo">
+                            <option value="" ng-disabled="true">Foco</option>
+                            <option>Tanques bajos</option>
+                            <option>Llantas</option>
+                            <option>Floreros/Plantas en agua</option>
+                            <option>Tinas (> 55 gal)</option>
+                            <option>Tarros-baldes (< 55 gal)</option>
+                            <option>Criaderos naturales</option>
+                            <option>Botellas</option>
+                            <option>Diversos</option>
+                            <option>Sumidero</option>
+                        </select>
+                        <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deleteEncontrado(foco.index)"><i class="material-icons">clear</i> </button>
+                    </div>
+
+                    <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaFoco()"><i class="material-icons">add box</i> </button>
+                </div>
+
+                <div class="div-cdh">
+                    <span class="center titulo-bloque">Focos Potenciales</span>
+                    <div class="input-container" ng-repeat="potencial in CDHform.focosPotenciales">
+                        <input type="text" class="form-control small-input" ng-model="potencial.cantidad" placeholder="Cant" />
+                        <input type="text" class="form-control" ng-model="potencial.lugar" placeholder="Lugar" />
+                        <select class="form-control" ng-model="potencial.tipo">
+                            <option value="" ng-disabled="true">Foco</option>
+                            <option>Tanques bajos</option>
+                            <option>Llantas</option>
+                            <option>Floreros/Plantas en agua</option>
+                            <option>Tinas (> 55 gal)</option>
+                            <option>Tarros-baldes (< 55 gal)</option>
+                            <option>Criaderos naturales</option>
+                            <option>Botellas</option>
+                            <option>Diversos</option>
+                            <option>Sumidero</option>
+                        </select>
+                        <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deletePotencial(potencial.index)"><i class="material-icons">clear</i> </button>
+                    </div>
+                    <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaPotencial()"><i class="material-icons">add box</i> </button>
+                </div>                            
+            </div>
+            <div ng-if="CDHform.tipoCDH=='otros'">
+                <div class="div-cdh">
+                    <div class="otros-container"  ng-repeat="toldillo in CDHform.toldillos">
+                        <select class="form-control" style="width:100%;" ng-model="toldillo.tipo">
+                            <option value="" ng-disabled="true">Tipo</option>
+                            <option>Adulto</option>
+                            <option>Pediatrico</option>                                     
+                        </select>
+                        <label>Bueno</label>
+                        <label>Regular</label>
+                        <label>Malo</label>
+
+                        <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.bueno" placeholder="Bueno" />
+                        <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.regular" placeholder="Regular" />
+                        <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.malo" placeholder="Malo" />
+                        <label>Total</label>
+                        <label>En Uso</label>
+                        <input type="number" class="form-control" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
+                        <input type="number" class="form-control" ng-model="toldillo.uso" placeholder="Uso" />
+                        <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deleteToldillo(toldillo.index)"><i class="material-icons">clear</i> </button>
+                    </div>
+                    <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaToldillo()"><i class="material-icons">add box</i> </button>
+                </div>
+            </div>
+            <div class="input-container">
+                <input type="text" ng-model="CDHform.ubicacionCDH" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
+                <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
+            </div>                        
+            <div class="input-container">
+                <span class="center titulo-bloque">Plazo en días:</span>
+                <input type="number" ng-model="CDHform.plazo" class="form-control" placeholder="Plazo" style="text-align: center" required>
+            </div>
+
+            <div class="div-cdh">
+                <span class="center titulo-bloque">Observaciones</span>
+                <textarea ng-model="CDHform.observaciones" class="observaciones-cdh"> </textarea>
+            </div>
+            <div class="form-group">                            
+                <div class="col-xs-6" align="right">
+                    <button type="submit" ng-click="agregarCDH()" class="btn btn-primary">Guardar</button>
+                </div>
+                <div class="col-xs-6" style="margin-bottom:10px;">
+                    <button type="button" class="btn btn-primary" ng-click="changeView('menuTipos.html','infoGeneral.html')">Cancelar</button>
+                </div>                            
+            </div>
+
+        </form>
+    </div>   
+</div>
