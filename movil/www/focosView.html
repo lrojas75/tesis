@@ -271,10 +271,10 @@
                             <label> Clave:</label>
                             <select class="form-control" ng-model="viviendaForm.clave" required>
                                 <option value="" ng-disabled="true">Escoja una clave</option>
-                                <option>Negativa</option>
-                                <option>Positiva</option>
-                                <option>Cerrada</option>
-                                <option>Renuente</option>
+                                <option value="Negativa">Negativa</option>
+                                <option value="Positiva">Positiva</option>
+                                <option value="Cerrada">Cerrada</option>
+                                <option value="Renuente">Renuente</option>
                             </select>
                         </div>                        
                     </div>
@@ -321,17 +321,19 @@
                                     <option value="True">Sí</option>
                                     <option value="False">No</option>
                                 </select>
-                                <input type="number" ng-model="deposito.L" placeholder="L" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False'" required>
-                                <input type="number" ng-model="deposito.P" placeholder="P" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False'" required>
+                                <input type="number" ng-model="deposito.I" placeholder="I" class="form-control small-input" required>
+
+                                <input type="number" ng-model="deposito.L" placeholder="L" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False' || viviendaForm.clave=='Negativa'" required>
+                                <input type="number" ng-model="deposito.P" placeholder="P" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False' || viviendaForm.clave=='Negativa'" required>
                                 <select class="form-control select-vivienda" ng-model="deposito.eliminado" required>
                                     <option value="" ng-disabled="true">¿Eliminado?</option>
                                     <option value="True">Sí</option>
                                     <option value="False">No</option>
                                 </select>
-                                <select class="form-control select-vivienda" ng-model="deposito.tratado" required>
-                                    <option value="" ng-disabled="true">¿Tratado?</option>
-                                    <option value="True">Sí</option>
-                                    <option value="False">No</option>
+                                <select class="form-control select-vivienda" ng-model="deposito.tratado" required ng-disabled="true">
+                                    <option value="" ng-disabled="true" selected>¿Tratado?</option>
+                                    <option value="True" ng-selected="deposito.eliminado=='False'">Sí</option>
+                                    <option value="False" ng-selected="deposito.eliminado=='True'">No</option>
                                 </select>
                                 <input type="number" placeholder="Larvicida (gr/ml)" ng-model="deposito.larvicida" class="form-control medium-input" required>
                                 <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="eliminarDeposito(deposito.index)"><i class="material-icons">clear</i> </button>

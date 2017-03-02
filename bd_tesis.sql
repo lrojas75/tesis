@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 01, 2017 at 03:05 AM
+-- Generation Time: Mar 02, 2017 at 02:04 AM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -45,7 +45,8 @@ INSERT INTO `comunaxbarrio` (`ID`, `ID_InfoGeneral`, `Comuna`, `Barrio`, `Activi
 (47, 21, '20', 'fds', 'Encuesta larvaria'),
 (48, 22, '21', 'wdefs', 'Encuesta larvaria'),
 (49, 23, '2', 'dsadas', 'Control larvario'),
-(50, 24, '21', '12', 'Encuesta larvaria');
+(50, 24, '21', '12', 'Encuesta larvaria'),
+(51, 25, '1', 'sada', 'Encuesta larvaria');
 
 -- --------------------------------------------------------
 
@@ -57,6 +58,7 @@ CREATE TABLE `depositosvivienda` (
   `ID` int(11) NOT NULL,
   `deposito` varchar(50) NOT NULL,
   `tieneAgua` varchar(30) NOT NULL,
+  `I` int(11) NOT NULL DEFAULT '0',
   `P` int(11) NOT NULL DEFAULT '0',
   `L` int(11) NOT NULL DEFAULT '0',
   `medidaTanque` int(11) NOT NULL DEFAULT '0',
@@ -70,8 +72,10 @@ CREATE TABLE `depositosvivienda` (
 -- Dumping data for table `depositosvivienda`
 --
 
-INSERT INTO `depositosvivienda` (`ID`, `deposito`, `tieneAgua`, `P`, `L`, `medidaTanque`, `eliminado`, `tratado`, `larvicida`, `IDFoco`) VALUES
-(4, 'Tanques Bajos', 'True', 3, 1, 23, 'False', 'True', 40, 9);
+INSERT INTO `depositosvivienda` (`ID`, `deposito`, `tieneAgua`, `I`, `P`, `L`, `medidaTanque`, `eliminado`, `tratado`, `larvicida`, `IDFoco`) VALUES
+(4, 'Tanques Bajos', 'True', 0, 3, 1, 23, 'False', 'True', 40, 9),
+(5, 'Llantas', 'True', 12, 0, 0, 0, 'True', '', 12, 14),
+(6, 'Tanques Bajos', 'False', 41, 0, 0, 12, 'False', '', 51, 14);
 
 -- --------------------------------------------------------
 
@@ -147,7 +151,12 @@ INSERT INTO `focoinfeccion` (`ID`, `Tipo`, `Estado`, `Tratamiento`, `Larvas`, `P
 (6, 'Vivienda', NULL, '', NULL, NULL, 1, 'Cerrada', '', NULL, 24, 'No se', 'Yo', 'Tu', '1231231', NULL, NULL, 0),
 (7, 'Vivienda', NULL, '', NULL, NULL, 0, 'Renuente', '', NULL, 24, '43.47 - -80.52', '', '', '', NULL, NULL, 0),
 (8, 'Vivienda', NULL, '', NULL, NULL, 0, 'Renuente', '', NULL, 24, '43.47 - -80.52', '', '', '', NULL, NULL, 0),
-(9, 'Vivienda', NULL, '', NULL, NULL, 12, 'Positiva', '', NULL, 24, '43.47 - -80.52', 'Pedro', 'Perez', '109237', NULL, NULL, 0);
+(9, 'Vivienda', NULL, '', NULL, NULL, 12, 'Positiva', '', NULL, 24, '43.47 - -80.52', 'Pedro', 'Perez', '109237', NULL, NULL, 0),
+(10, 'Sumidero', 'Tapado', 'tratado', '', '', NULL, NULL, 'Op2', 80, 24, '3.43 - -76.52', NULL, NULL, NULL, NULL, NULL, 0),
+(11, 'Vivienda', NULL, '', NULL, NULL, 0, 'Renuente', '', NULL, 24, '3.42 - -76.52', 'Ter', '', '', NULL, NULL, 0),
+(12, 'Vivienda', NULL, '', NULL, NULL, 0, 'Renuente', '', NULL, 25, '43.47 - -80.52', '', '', '', NULL, NULL, 0),
+(13, 'Vivienda', NULL, '', NULL, NULL, 4, 'Negativa', '', NULL, 25, '43.47 - -80.52', 'Abcde', 'Fghi', '198219', NULL, NULL, 0),
+(14, 'Vivienda', NULL, '', NULL, NULL, 4, 'Negativa', '', NULL, 25, '43.47 - -80.52', 'Probando', 'Depositos', '1092831', NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -173,7 +182,8 @@ INSERT INTO `informaciongeneral` (`ID`, `ID_Usuario`, `Municipio`, `Fecha`) VALU
 (21, 11, 'Cali', '21-02-2017'),
 (22, 11, 'Cali', '25-02-2017'),
 (23, 11, 'Palmira', '27-02-2017'),
-(24, 11, 'Cali', '28-02-2017');
+(24, 11, 'Cali', '28-02-2017'),
+(25, 11, 'Palmira', '01-03-2017');
 
 -- --------------------------------------------------------
 
@@ -293,12 +303,12 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT for table `comunaxbarrio`
 --
 ALTER TABLE `comunaxbarrio`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 --
 -- AUTO_INCREMENT for table `depositosvivienda`
 --
 ALTER TABLE `depositosvivienda`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `fococdh`
 --
@@ -308,12 +318,12 @@ ALTER TABLE `fococdh`
 -- AUTO_INCREMENT for table `focoinfeccion`
 --
 ALTER TABLE `focoinfeccion`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `informaciongeneral`
 --
 ALTER TABLE `informaciongeneral`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT for table `insecticidas`
 --

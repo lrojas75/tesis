@@ -5,7 +5,7 @@ class focoInfeccion extends DB {
 
 	const INSERT_VIVIENDA="insert into focoinfeccion (Tipo,Habitantes,Nombre,Apellido,Cedula,Clave,Ubicacion,idInfoGeneral) values (?,?,?,?,?,?,?,?)";
 
-	const INSERT_DEPOSITO="insert into depositosvivienda (deposito,tieneAgua,P,L,medidaTanque,eliminado,tratado,larvicida,IDFoco) values (?,?,?,?,?,?,?,?,?)";
+	const INSERT_DEPOSITO="insert into depositosvivienda (deposito,tieneAgua,I,P,L,medidaTanque,eliminado,tratado,larvicida,IDFoco) values (?,?,?,?,?,?,?,?,?,?)";
 
 	const INSERT_CDH="insert into focoinfeccion(Tipo,Nombre,Apellido,Cedula,RazonSocial,Ubicacion,ObservacionCDH,idInfoGeneral,plazo) values (?,?,?,?,?,?,?,?,?)";
 
@@ -40,7 +40,7 @@ class focoInfeccion extends DB {
 				$this->open_connection();
 				$statement = $this->conn->prepare(self::INSERT_DEPOSITO);
 				if($statement){					
-					$statement->bind_param ("ssiiissii",$deposito['deposito'],$deposito['tieneAgua'],$deposito['P'],$deposito['L'],$deposito['medidaTanque'],$deposito['eliminado'], $deposito['tratado'], $deposito['larvicida'],intval($depositoID['max(ID)']));
+					$statement->bind_param ("ssiiiissii",$deposito['deposito'],$deposito['tieneAgua'],$deposito['I'],$deposito['P'],$deposito['L'],$deposito['medidaTanque'],$deposito['eliminado'], $deposito['tratado'], $deposito['larvicida'],intval($depositoID['max(ID)']));
 					$result = $statement->execute();
 					$statement->close();
 					$this->close_connection();
