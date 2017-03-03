@@ -6,13 +6,13 @@ var ip = window.localStorage.getItem("ipServer");
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 
 
-app.controller("infoController", ['$scope', '$filter', '$http', function($scope, $filter, $http){
-    $scope.infoExiste=false;
-    $scope.infoFormData={
-        municipio:'',
-        barrio:'',
-        comuna:'',
-        actividad:'',
+app.controller("infoController", ['$scope', '$filter', '$http', '$sce', function ($scope, $filter, $http, $sce) {
+    $scope.modalMessage = '';
+    $scope.infoFormData = {
+        municipio: '',
+        barrio: '',
+        comuna: '',
+        actividad: '',
         fecha: $filter('date')(Date.now(), 'dd-MM-yyyy')
     };
     $scope.changeView = function(nextPage,currentPage){
@@ -20,10 +20,6 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
         window.location.replace(nextPage);
     };
 
-    $scope.backNavigation = function() {
-        var previousPage = window.localStorage.getItem("previousPage");    
-        window.location.replace(previousPage);    
-    };
 //<<--------------------- Funciones para ventana INFORMACION GENERAL ----------------------------------------->>
     $scope.opciones = [
     { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
@@ -54,8 +50,11 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
             window.localStorage.setItem("syncData", JSON.stringify(new Array()));
             window.location.replace("menuTipos.html");
         }).error(function(data) {
-            alert("Error al ingresar los datos");
-            console.log('Error: ' + data);
+            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error al enviar los datos. <br> Intente más tarde. </p>");
+            $("#infoGeneralModal").modal();
+            setTimeout(function () {
+                $("#infoGeneralModal").modal("hide");
+            }, 3000);            
         });
     };
 
@@ -77,24 +76,31 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
                 window.localStorage.setItem("municipio", data.municipio);
                 window.localStorage.setItem("previousPage", "index.html");
                 window.location.replace("menuTipos.html");                
-            } else {
-                $scope.infoExiste = true;                
             }
+            $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
+                params: {
+                    usuario: user,
+                    fecha: $scope.infoFormData.fecha
+                }
+            }).success(function (data) {
+                window.localStorage.setItem("insecticidas", JSON.stringify(data));
+
+            }).error(function (data) {
+                $scope.modalMessage = "Error al consultar los datos.";
+                $("#infoGeneralModal").modal();
+                setTimeout(function () {
+                    $("#infoGeneralModal").modal("hide");
+                }, 3000);
+            });
         }).error(function (data) {
-            alert("Error al consultar los datos");
+            $scope.modalMessage = "Error al consultar los datos.";
+            $("#infoGeneralModal").modal();
+            setTimeout(function () {
+                $("#infoGeneralModal").modal("hide");
+            }, 3000);
         });
 
-        $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
-            params: {
-                usuario: user,
-                fecha: $scope.infoFormData.fecha
-            }
-        }).success(function (data) {
-            window.localStorage.setItem("insecticidas", JSON.stringify(data));
-            
-        }).error(function (data) {
-            alert("Error al consultar los insecticidas");
-        });
+        
     };
 
 }]);
@@ -102,7 +108,8 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana del Menu principal-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
-app.controller("menuController", ['$scope','$filter', '$http', function($scope, $filter,$http){
+app.controller("menuController", ['$scope','$filter', '$http','$sce', function($scope, $filter,$http,$sce){    
+    $scope.modalMessage = '';
     $scope.ipActual = ip;
     $scope.backNavigation = function() {
         var previousPage = window.localStorage.getItem("previousPage");    
@@ -126,7 +133,11 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                 window.location.replace("infoGeneral.html");
             }
         }).error(function (data) {            
-            alert("Error en la conexión");
+            $scope.modalMessage = $sce.trustAsHtml("<p> Error en la conexión. </p>");
+            $("#menuErrorModal").modal();
+            setTimeout(function () {
+                $("#menuErrorModal").modal("hide");
+            }, 3000);            
         });
     };
 
@@ -166,7 +177,11 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#menuErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#menuErrorModal").modal("hide");
+                                }, 3000);                                
                             });
                             break;
 
@@ -176,7 +191,11 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                                 window.localStorage.setItem("numSumidero", sumideros + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#menuErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#menuErrorModal").modal("hide");
+                                }, 3000);
                             });
 
                             break;
@@ -188,7 +207,11 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                                 window.localStorage.setItem("numVivienda", viviendas + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#menuErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#menuErrorModal").modal("hide");
+                                }, 3000);
                             });
                             break;
 
@@ -199,16 +222,28 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
                                 window.localStorage.setItem("numCDH", cdhs + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#menuErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#menuErrorModal").modal("hide");
+                                }, 3000);
                             });
                             break;
                     }
                 }
             });
-            alert("Datos Sincronizados");
+            $scope.modalMessage = $sce.trustAsHtml("<p> Datos sincronizados. </p>");
+            $("#menuSuccessModal").modal();
+            setTimeout(function () {
+                $("#menuSuccessModal").modal("hide");
+            }, 3000);
             window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
         } else {
-            alert("No hay datos para sincronizar");
+            $scope.modalMessage = $sce.trustAsHtml("<p> No hay datos para sincronizar. </p>");
+            $("#menuSuccessModal").modal();
+            setTimeout(function () {
+                $("#menuSuccessModal").modal("hide");
+            }, 3000);
         }
     };
     //Habilita el boton de sincronizar cuando haya algo para sincronizar
@@ -235,7 +270,8 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana de Focos de infeccion-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
-app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
+app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
+    $scope.modalMessage = '';
     $scope.ipActual = ip;
     $scope.showMap = false;//Mostrar mapa
     $scope.recientes = JSON.parse(localStorage.getItem("recentList"));
@@ -293,10 +329,20 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 actividad: $scope.editarInfo.actividad                
             };
             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
+                $scope.modalMessage = $sce.trustAsHtml("<p> Datos Guardados. </p>");
+                $("#focoSuccessModal").modal();
+                setTimeout(function () {
+                    $("#focoSuccessModal").modal("hide");
+                }, 3000);
                 jsonData.enviado = true;
                 window.location.reload("focosView.html");
+                
             }).error(function(data) {
-                alert("Error al actualizar los datos");                
+                $scope.modalMessage = $sce.trustAsHtml("<p> Error en la conexión. </p>");
+                $("#focoErrorModal").modal();
+                setTimeout(function () {
+                    $("#focoErrorModal").modal("hide");
+                }, 3000);
                 console.log('Error: ' + data);
             });
         }
@@ -344,11 +390,23 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
-                window.location.reload("focosView.html");
-                alert("Datos guardados");
+                window.location.reload("focosView.html");                
             }).error(function(data) {
-                alert("Error al guardar los datos");
-                console.log('Error: ' + data);
+                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                $("#focoErrorModal").modal();
+                setTimeout(function () {
+                    $("#focoErrorModal").modal("hide");
+                }, 5000);
+                $scope.sumideroForm = {
+                    estadoSumidero: '',
+                    larvasSumidero: '',
+                    pupasSumidero: '',
+                    tratadoSumidero: '',
+                    insecticidaSumidero: '',
+                    cantInsecticidaSumidero: '',
+                    arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
+                    ubicacionSumidero: ''
+                }                
                 var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
 
                 if (dataSync) {
@@ -370,7 +428,11 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             }
 
         } else {
-            alert("No pueden haber campos vacios.");
+            $scope.modalMessage = $sce.trustAsHtml("<p> No pueden haber campos vacíos. </p>");
+            $("#focoErrorModal").modal();
+            setTimeout(function () {
+                $("#focoErrorModal").modal("hide");
+            }, 3000);
         }    
     };
     $scope.viviendaForm = {
@@ -435,12 +497,23 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
             };
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
-                window.localStorage.setItem("numVivienda", viviendas+1);
+                window.localStorage.setItem("numVivienda", viviendas + 1);
                 window.location.reload("focosView.html");
-                alert("Datos guardados");
             }).error(function (data) {
-                alert("Error al ingresar los datos");
-                console.log('Error: ' + data);
+                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                $("#focoErrorModal").modal();
+                setTimeout(function () {
+                    $("#focoErrorModal").modal("hide");
+                }, 5000);
+                $scope.viviendaForm = {
+                    nombre: '',
+                    apellido: '',
+                    cedula: '',
+                    habitantesCasa: 0,
+                    clave: '',
+                    depositos: [],
+                    ubicacionVivienda: ''
+                };
                 var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
                 if (dataSync) {
                     dataSync.push(jsonData);
@@ -458,8 +531,12 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 window.localStorage.setItem("recentList", JSON.stringify([jsonData]));
             }
             
-        }else{
-            alert("Revisa que ingresaste la clave y tu ubicación.");
+        } else {
+            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Revisa que ingresaste la clave <br> y tu ubicación.</p>");            
+            $("#focoErrorModal").modal();
+            setTimeout(function () {
+                $("#focoErrorModal").modal("hide");
+            }, 3000);            
         }
     };
     //Informacion CDH
@@ -468,17 +545,17 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
         apellido: '',
         cedula: '',
         rs: '',
-        focosEncontrados:[],
-        focosPotenciales:[],
+        focosEncontrados: [],
+        focosPotenciales: [],
         //centros hospitalarios y batallon
         toldillos: [],
         observaciones: '',
         plazo: 0,
-        ubicacionCDH:'',
+        ubicacionCDH: '',
         tipoCDH: '',
-        plazo:0
-        
-    }
+        plazo: 0
+
+    };
 
     $scope.agregarCDH = function(){
         //Fecha usada para obtener la hora
@@ -515,10 +592,33 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
                     window.localStorage.setItem("numCDH", numCDH + 1);
                     window.location.reload("focosView.html");
-                    alert("Datos guardados");
+                    $scope.modalMessage = $sce.trustAsHtml("<p> Datos Guardados. </p>");
+                    $("#focoSuccessModal").modal();
+                    setTimeout(function () {
+                        $("#focoSuccessModal").modal("hide");
+                    }, 3000);
                 }).error(function (data) {
-                    alert("Error al ingresar los datos");
-                    console.log('Error: ' + data);
+                    $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                    $("#focoErrorModal").modal();
+                    setTimeout(function () {
+                        $("#focoErrorModal").modal("hide");
+                    }, 5000);
+                    $scope.CDHform = {
+                        nombre: '',
+                        apellido: '',
+                        cedula: '',
+                        rs: '',
+                        focosEncontrados: [],
+                        focosPotenciales: [],
+                        //centros hospitalarios y batallon
+                        toldillos: [],
+                        observaciones: '',
+                        plazo: 0,
+                        ubicacionCDH: '',
+                        tipoCDH: '',
+                        plazo: 0
+
+                    };
                     var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
                     if (dataSync) {
                         dataSync.push(jsonData);
@@ -538,10 +638,18 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                 }
 
             } else {
-                alert("No pueden haber campos vacíos");                
+                $scope.modalMessage = $sce.trustAsHtml("<p> No pueden haber campos vacíos. </p>");
+                $("#focoErrorModal").modal();
+                setTimeout(function () {
+                    $("#focoErrorModal").modal("hide");
+                }, 3000);
             }
         } else {
-            alert("No pueden haber campos vacíos");
+            $scope.modalMessage = $sce.trustAsHtml("<p> No pueden haber campos vacíos. </p>");
+            $("#focoErrorModal").modal();
+            setTimeout(function () {
+                $("#focoErrorModal").modal("hide");
+            }, 3000);
         }
     };
 
@@ -590,13 +698,13 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
 
             var marker = new google.maps.Marker({
                 position: myLatlng,
-                draggable: true,
+                draggable: true,                
                 title: "Tú posición"
             });
 
             map = new google.maps.Map(document.getElementById('map-canvas'),
 			    mapOptions);
-
+            marker.setAnimation(google.maps.Animation.BOUNCE);
             marker.setMap(map);
             // Create a renderer for directions and bind it to the map.
             directionsDisplay.setMap(map);
@@ -627,7 +735,11 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#focoErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#focoErrorModal").modal("hide");
+                                }, 3000);
                             });
                             break;
 
@@ -637,7 +749,11 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                                 window.localStorage.setItem("numSumidero", sumideros + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#focoErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#focoErrorModal").modal("hide");
+                                }, 3000);
                             });
 
                             break;
@@ -649,7 +765,11 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                                 window.localStorage.setItem("numVivienda", viviendas + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#focoErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#focoErrorModal").modal("hide");
+                                }, 3000);
                             });
                             break;
 
@@ -660,16 +780,28 @@ app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
                                 window.localStorage.setItem("numCDH", cdhs + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                alert("No se pudo sincronizar los datos, intente más tarde.");
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                $("#focoErrorModal").modal();
+                                setTimeout(function () {
+                                    $("#focoErrorModal").modal("hide");
+                                }, 3000);
                             });
                             break;
                     }
                 }
             });
-            alert("Datos Sincronizados");
+            $scope.modalMessage = $sce.trustAsHtml("<p> Datos sincronizados. </p>");
+            $("#focoSuccessModal").modal();
+            setTimeout(function () {
+                $("#focoSuccessModal").modal("hide");
+            }, 3000);
             window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
         } else {
-            alert("No hay datos para sincronizar");
+            $scope.modalMessage = $sce.trustAsHtml("<p> No hay datos para sincronizar. </p>");
+            $("#focoSuccessModal").modal();
+            setTimeout(function () {
+                $("#focoSuccessModal").modal("hide");
+            }, 3000);
         }
     };
     //Agregar fila encontrado

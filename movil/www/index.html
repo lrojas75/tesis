@@ -7,6 +7,9 @@
     <meta name="msapplication-tap-highlight" content="no" />
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width" />
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
     <link rel="stylesheet" type="text/css" href="css/index.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -35,113 +38,53 @@
       <!-- ..............................................Tab Inicio.................................................... -->
             <div class="tab-pane active" id="tab_Inicio">
                 <h4>Iniciar sesión</h4><br>
-
                 <form name = "loginForm" class="form-horizontal" >
-                    <div class = "col-xs-12">
-                        <div class="form-group">
-                            <div class = "col-xs-5" style="text-align: left;">
-                                <label>Usuario:</label>
-                            </div>
-                            <div class="col-xs-7">
-                                <input type="text" class="form-control" placeholder="Usuario" ng-model="userLogin" required>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="input-container">
+                        <input type="number" class="form-control" placeholder="Cédula" ng-model="userLogin" required>
+                        <input type="password" class="form-control" placeholder="Contraseña" ng-model="passLogin" required>
 
-                    <div class = "col-xs-12">
-                        <div class="form-group">
-                            <div class = "col-xs-5" style="text-align: left;">
-                                <label>Contraseña:</label>
-                            </div>
-                            <div class="col-xs-7">
-                                <input type="password" class="form-control" placeholder="Contraseña" ng-model="passLogin" required>
-                            </div>
-                        </div>
-                    </div>
+                    </div>                        
 
                     <div style="color: red;"> {{loginError}} </div>
 
-                    <div class = "col-xs-12">
-                        <br>
-                        <div class="form-group">
-                            <button class="btn btn-primary" ng-click = "login()">Aceptar</button>
-                        </div>
+                    <div class="col-xs-12">
+                        <br>                        
+                        <button class="btn btn-primary" ng-click="login()">Aceptar</button>                        
                     </div>
                 </form>
             </div> <!-- Cierra Tab inicio -->
 
         <!-- ......................................... Tab Registro................................................. -->
             <div class="tab-pane" id="tab_Registro">
-                <div class="col-xs-12" align="center">
-                    <h4>Registro</h4><br>
+                <h4>Registro</h4><br>
 
-                    <form name = "registroForm" class="form-horizontal" ng-controller="inicioController">
-                        <div class = "col-xs-12">
-                            <div class="form-group">
-                                <div class = "col-xs-5" style="text-align: left;">
-                                    <label>Nombres:</label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <input type="text" name="nombres" class="form-control" placeholder="Nombres" ng-model = "nombres" required>
-                                </div>
-                            </div>
-                        </div>
+                <form name = "registroForm" class="form-horizontal" ng-controller="inicioController">
+                    <div class="input-container">
+                        <input type="text" name="nombres" class="form-control" placeholder="Nombres" ng-model="nombres" required>
+                        <input type="text" name="apellidos" class="form-control" placeholder="Apellidos" ng-model="apellidos" required>
+                        <input type="number" name="cedula" class="form-control" placeholder="Cédula" ng-model="cedula" required>
+                        <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="passRegistro" required>
 
-                        <div class = "col-xs-12">
-                            <div class="form-group">
-                                <div class = "col-xs-5" style="text-align: left;">
-                                    <label>Apellidos:</label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <input type="text" name="apellidos" class="form-control" placeholder="Apellidos" ng-model = "apellidos" required>
-                                </div>
-                            </div>
-                        </div>
-                  
-                        <div class = "col-xs-12">
-                            <div class="form-group">
-                                <div class = "col-xs-5" style="text-align: left;">
-                                    <label>Cédula:</label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <input type="text" name="cedula" class="form-control" placeholder="Cedula" ng-model="cedula" required>
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div style="color: red;"> {{registerError}} </div>
 
-                        <div class = "col-xs-12">
-                            <div class="form-group">
-                                <div class = "col-xs-5" style="text-align: left;">
-                                    <label>Contraseña:</label>
-                                </div>
-                                <div class="col-xs-7">
-                                    <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="passRegistro" required>
-                                </div>
-                            </div>
-                        </div>
-                  
-                        <div style="color: red;"> {{registerError}} </div>
-
-                        <div class = "col-xs-12">
-                            <div class="form-group">
-                                <br><button class="btn btn-primary" ng-click="registro()">Registrarse</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+                    <div class = "col-xs-12">                            
+                        <br><button class="btn btn-primary" ng-click="registro()">Registrarse</button>
+                    </div>
+                </form>
             </div> <!-- Cierra Tab Registro -->
 
         <!-- Tab Ayuda -->
             <div class="tab-pane" id="tab_Ayuda">
                 <h4>Ayuda</h4>
 
-                <p align="justify">
+                <p class="justify-text">
                     Bienvenido a la aplicación SAFI movil.(Sistema de Análisis de Focos de Infección).<br /><br />
                     Para empezar, regístrese seleccionando la opcion "Registrarse" y llenando los datos del formulario.<br />
                     Si ya está registrado, ingrese a través de la opcion "Inicio" e inicie sesión usando su numero de cedula
                     y contraseña ingresados durante el registro.
                 </p>
-                <p align="justify">
+                <p class="justify-text">
                     Desarrollada por Luis Felipe Rojas Hernandez.<br />
                     Ingenieria de Sistemas y Computacion.<br />
                     Pontificia Universidad Javeriana Cali
@@ -167,9 +110,31 @@
 
         </div> <!-- Division de contenido, Tab-content -->
 
+    <div class="container">        
+        <!-- Modal -->
+        <div class="modal fade" id="registerModal" role="dialog">
+            <div class="modal-dialog modal-sm">
+                <!-- Modal content-->
+                <div class="modal-content">                    
+                    <div class="modal-body"> 
+                        <div class="modal-success">
+                            <i class="material-icons">done</i>
+                        </div>
+                        <div class="modal-text">
+                            <p>Usuario registrado con éxito</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
   <script type="text/javascript" src="js/userController.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
   
 </body>
+
+
 
 </html>

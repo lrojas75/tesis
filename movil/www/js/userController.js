@@ -1,14 +1,13 @@
 var app = angular.module('movilapp', []);
 //Ip publica
 //var ip = "http://181.53.57.112:3000/server";
-var ip = "http://192.168.0.7:3000/server";
+var ip = "http://192.168.0.15";
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
     $scope.sesion = "";
     $scope.userLogin = "";
-    $scope.passLogin = "";
-
+    $scope.passLogin = "";    
     $scope.changeView = function(view){
         window.location.replace(view);            
     };
@@ -32,8 +31,7 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
                 username: $scope.userLogin,
                 password: $scope.passLogin
             }).success(function(data) {
-                window.localStorage.setItem("usuario", $scope.userLogin);
-                window.localStorage.setItem("previousPage", "index.html");
+                window.localStorage.setItem("usuario", $scope.userLogin);                
                 window.location.replace("infoGeneral.html");
             }).error(function(data) {
                 console.log('Error: ' + data);
@@ -56,8 +54,11 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
             apellidos: $scope.apellidos,
             password: $scope.passRegistro,
             rol: JSON.stringify(false)
-        }).success(function(data) {
-            alert("Usuario registrado con exito!");
+        }).success(function (data) {            
+            $("#registerModal").modal();
+            setTimeout(function () {
+                $("#registerModal").modal("hide");
+            }, 3000);
             $scope.cedula = "";
             $scope.nombres = "";
             $scope.apellidos = "";
@@ -71,9 +72,10 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
         });
     };
 
-    $scope.checkSession = function () {
+    $scope.checkSession = function () {        
         var idInfoGeneral = window.localStorage.getItem("infoID");
         var usuario = window.localStorage.getItem("usuario");
+
         if (idInfoGeneral !== null && usuario !== null) {
             window.location.replace("menuTipos.html");
         }
