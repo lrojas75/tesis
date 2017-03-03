@@ -134,7 +134,34 @@
         <!-- Tab Ayuda -->
             <div class="tab-pane" id="tab_Ayuda">
                 <h4>Ayuda</h4>
-                <p>Texto ayuda</p>
+
+                <p align="justify">
+                    Bienvenido a la aplicación SAFI movil.(Sistema de Análisis de Focos de Infección).<br /><br />
+                    Para empezar, regístrese seleccionando la opcion "Registrarse" y llenando los datos del formulario.<br />
+                    Si ya está registrado, ingrese a través de la opcion "Inicio" e inicie sesión usando su numero de cedula
+                    y contraseña ingresados durante el registro.
+                </p>
+                <p align="justify">
+                    Desarrollada por Luis Felipe Rojas Hernandez.<br />
+                    Ingenieria de Sistemas y Computacion.<br />
+                    Pontificia Universidad Javeriana Cali
+                </p>
+                <br />
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <div class="col-xs-5" style="text-align: left;">
+                            <label>IP servidor:</label>
+                        </div>
+                        <div class="col-xs-7">
+                            <input type="text" name="ip" class="form-control" placeholder="IP servidor" ng-model="ipServer">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <br><button class="btn btn-primary" ng-click="cambioIP()">Aceptar</button>
+                    </div>
+                </div>
             </div>
         </div><!-- tab content -->
 

@@ -1,5 +1,5 @@
 var app = angular.module("movilapp", ['ngMaterial']);
-var ip = "http://192.168.0.15:80";
+var ip = window.localStorage.getItem("ipServer");
 
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana de Informacion General-------------------------------------------->>
@@ -103,7 +103,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', function($scope,
 //<<-------------------------------------------- Controlador para ventana del Menu principal-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("menuController", ['$scope','$filter', '$http', function($scope, $filter,$http){
-
+    $scope.ipActual = ip;
     $scope.backNavigation = function() {
         var previousPage = window.localStorage.getItem("previousPage");    
         window.location.replace(previousPage);    
@@ -236,6 +236,7 @@ app.controller("menuController", ['$scope','$filter', '$http', function($scope, 
 //<<-------------------------------------------- Controlador para ventana de Focos de infeccion-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("focoController", ['$scope', '$http', function ($scope, $http) {
+    $scope.ipActual = ip;
     $scope.showMap = false;//Mostrar mapa
     $scope.recientes = JSON.parse(localStorage.getItem("recentList"));
     $scope.municipios = [
