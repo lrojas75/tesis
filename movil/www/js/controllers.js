@@ -350,16 +350,16 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
 
 
     //Valores para el formulario de sumideros
-    $scope.sumideroForm={
-        estadoSumidero:'',
-        larvasSumidero:'',
-        pupasSumidero:'',
-        tratadoSumidero:'',
-        insecticidaSumidero:'',
+    $scope.sumideroForm = {
+        estadoSumidero: '',
+        larvasSumidero: '',
+        pupasSumidero: '',
+        tratadoSumidero: '',
+        insecticidaSumidero: '',
         cantInsecticidaSumidero: '',
-        arrayInsecticidas:JSON.parse(window.localStorage.getItem("insecticidas")),
-        ubicacionSumidero:''
-    }
+        arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
+        ubicacionSumidero: ''
+    };
 
     $scope.agregarSumidero = function () {
         //Fecha para obtener la hora
@@ -386,27 +386,33 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 idInfoGeneral: idInfo,
                 ubicacion: $scope.sumideroForm.ubicacionSumidero,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
-            };            
+            };
+            $scope.tipo = '';
+            $scope.sumideroForm = {
+                estadoSumidero: '',
+                larvasSumidero: '',
+                pupasSumidero: '',
+                tratadoSumidero: '',
+                insecticidaSumidero: '',
+                cantInsecticidaSumidero: '',
+                arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
+                ubicacionSumidero: ''
+            };
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
-                window.location.reload("focosView.html");                
+                $scope.modalMessage = $sce.trustAsHtml("<p> Datos Guardados. </p>");
+                $("#focoSuccessModal").modal();
+                setTimeout(function () {
+                    $("#focoSuccessModal").modal("hide");
+                }, 3000);
             }).error(function(data) {
                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
                 $("#focoErrorModal").modal();
                 setTimeout(function () {
                     $("#focoErrorModal").modal("hide");
                 }, 5000);
-                $scope.sumideroForm = {
-                    estadoSumidero: '',
-                    larvasSumidero: '',
-                    pupasSumidero: '',
-                    tratadoSumidero: '',
-                    insecticidaSumidero: '',
-                    cantInsecticidaSumidero: '',
-                    arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
-                    ubicacionSumidero: ''
-                }                
+                               
                 var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
 
                 if (dataSync) {
@@ -495,25 +501,31 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 ubicacion: $scope.viviendaForm.ubicacionVivienda,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes()+'m'
             };
+            $scope.tipo = '';
+            $scope.viviendaForm = {
+                nombre: '',
+                apellido: '',
+                cedula: '',
+                habitantesCasa: 0,
+                clave: '',
+                depositos: [],
+                ubicacionVivienda: ''
+            };
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas + 1);
-                window.location.reload("focosView.html");
+                $scope.modalMessage = $sce.trustAsHtml("<p> Datos Guardados. </p>");
+                $("#focoSuccessModal").modal();
+                setTimeout(function () {
+                    $("#focoSuccessModal").modal("hide");
+                }, 3000);
             }).error(function (data) {
                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
                 $("#focoErrorModal").modal();
                 setTimeout(function () {
                     $("#focoErrorModal").modal("hide");
                 }, 5000);
-                $scope.viviendaForm = {
-                    nombre: '',
-                    apellido: '',
-                    cedula: '',
-                    habitantesCasa: 0,
-                    clave: '',
-                    depositos: [],
-                    ubicacionVivienda: ''
-                };
+                
                 var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
                 if (dataSync) {
                     dataSync.push(jsonData);
@@ -587,11 +599,25 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     plazo: $scope.CDHform.plazo,
                     hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
                 };
-                console.log(jsonData);
+                $scope.tipo = '';
+                $scope.CDHform = {
+                    nombre: '',
+                    apellido: '',
+                    cedula: '',
+                    rs: '',
+                    focosEncontrados: [],
+                    focosPotenciales: [],
+                    //centros hospitalarios y batallon
+                    toldillos: [],
+                    observaciones: '',
+                    plazo: 0,
+                    ubicacionCDH: '',
+                    tipoCDH: '',
+                    plazo: 0
+                };                
                 $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
-                    window.localStorage.setItem("numCDH", numCDH + 1);
-                    window.location.reload("focosView.html");
+                    window.localStorage.setItem("numCDH", numCDH + 1);                    
                     $scope.modalMessage = $sce.trustAsHtml("<p> Datos Guardados. </p>");
                     $("#focoSuccessModal").modal();
                     setTimeout(function () {
@@ -602,23 +628,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     $("#focoErrorModal").modal();
                     setTimeout(function () {
                         $("#focoErrorModal").modal("hide");
-                    }, 5000);
-                    $scope.CDHform = {
-                        nombre: '',
-                        apellido: '',
-                        cedula: '',
-                        rs: '',
-                        focosEncontrados: [],
-                        focosPotenciales: [],
-                        //centros hospitalarios y batallon
-                        toldillos: [],
-                        observaciones: '',
-                        plazo: 0,
-                        ubicacionCDH: '',
-                        tipoCDH: '',
-                        plazo: 0
-
-                    };
+                    }, 5000);                    
                     var dataSync = JSON.parse(window.localStorage.getItem("syncData"));
                     if (dataSync) {
                         dataSync.push(jsonData);

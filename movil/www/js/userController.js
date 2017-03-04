@@ -1,7 +1,7 @@
 var app = angular.module('movilapp', []);
 //Ip publica
 //var ip = "http://181.53.57.112:3000/server";
-var ip = "http://192.168.0.7:3000/server";
+var ip = "http://192.168.0.15";
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.existe = "";
@@ -26,7 +26,7 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
 
 //<-----------------------FUNCION PARA INICIAR SESION ------------------------->
     $scope.login = function () {
-        if ($scope.userLogin.trim()!='' && $scope.passLogin.trim()!=''){
+        if ($scope.userLogin.toString().trim()!='' && $scope.passLogin.trim()!=''){
             $http.post(ip+'/webApi.php?val=loginUsuario',{
                 username: $scope.userLogin,
                 password: $scope.passLogin
