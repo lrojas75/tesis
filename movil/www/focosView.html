@@ -51,8 +51,7 @@
     <div class="col-xs-12 has-header">
       <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_datos" data-toggle="pill">Foco <br> infección.</a></li>
-        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Recorrido.</a></li>
-        <li><a href="#tab_listareciente" data-toggle="pill">Focos <br> Recientes.</a></li>
+        <li><a href="#tab_infoGeneral" data-toggle="pill">Editar<br> Recorrido.</a></li>        
     </ul>
 </div>
 <div>
@@ -108,7 +107,7 @@
             <div class="input-container">
                 <label>Tipo de factor:</label>
                 <select class="form-control" ng-model="tipo">
-                    <option value="">Escoja un tipo</option>
+                    <option value="" ng-disabled="true">Escoja un tipo</option>
                     <option>Vivienda</option>
                     <option>Sumidero</option>
                     <option>CDH</option>
@@ -119,76 +118,60 @@
                 <form ng-submit="" class="form-horizontal" >
                     <span class="center titulo-bloque">Datos del sumidero:</span>
 
-                    <md-radio-group ng-model="sumideroForm.estadoSumidero">
-                        <div class = "col-xs-12">
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="Ninguno" class="md-primary">Ninguno</md-radio-button>
-                            </div>
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="Seco">Seco</md-radio-button>
-                            </div>
-                        </div>
-                        <div class = "col-xs-12">
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="Tapado">Tapado</md-radio-button>
-                            </div>
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="Con aceite">Con Aceite</md-radio-button>
-                            </div>
-                        </div>
-                    </md-radio-group>
-
                     <div class="input-container">
-                        <label>Larvas:</label>
-
-                        <select class="form-control" ng-model="sumideroForm.larvasSumidero">
-                            <option value="">N/A</option>
-                            <option>Aedex</option>
-                            <option>Culex</option>
-                            <option>Mixto</option>
-                            <option>Sin Larvas</option>
+                        <label>Estado:</label>
+                        <select class="form-control" ng-model="sumideroForm.estadoSumidero">
+                            <option value="" ng-disabled="true">Escoja un estado</option>
+                            <option value="Ninguno">Ninguno</option>
+                            <option value="Seco">Seco</option>
+                            <option value="Tapado">Tapado</option>
+                            <option value="Con aceite">Con aceite</option>
                         </select>
                     </div>
-
-                    <div class="input-container">
-                        <label>Pupas:</label>
-                        <select class="form-control" ng-model="sumideroForm.pupasSumidero">
-                            <option value="">N/A</option>
-                            <option>Aedex</option>
-                            <option>Culex</option>
-                            <option>Mixto</option>
-                            <option>Sin Larvas</option>
-                        </select>
-                    </div>
-
-                    
-                    <span class="center titulo-bloque">Control:</span>
-
-                    <md-radio-group ng-model="sumideroForm.tratadoSumidero">
-                        <div class = "col-xs-12">
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="tratado" class="md-primary">Tratado</md-radio-button>
-                            </div>
-                            <div class = "col-xs-6" style="text-align: center;">
-                                <md-radio-button value="Tratado sin inspeccionar">Tratado sin inspeccionar</md-radio-button>
-                            </div>
+                    <div class="control-info" ng-show="sumideroForm.estadoSumidero=='Ninguno'">
+                        <div class="input-container">
+                            <label>Larvas:</label>
+                            <select class="form-control" ng-model="sumideroForm.larvasSumidero">
+                                <option value="">N/A</option>
+                                <option>Aedex</option>
+                                <option>Culex</option>
+                                <option>Mixto</option>
+                                <option>Sin Larvas</option>
+                            </select>
                         </div>
-                    </md-radio-group>
 
-                   
-                    <div class="input-container">
-                        <label>Insecticida:</label>
-                        <select class="form-control" ng-model="sumideroForm.insecticidaSumidero" ng-options="item.Nombre for item in sumideroForm.arrayInsecticidas" required>
-                            <option value="">Ninguno</option>
-                        </select>
-                        <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Insecticida Grs/ml">
+                        <div class="input-container">
+                            <label>Pupas:</label>
+                            <select class="form-control" ng-model="sumideroForm.pupasSumidero">
+                                <option value="">N/A</option>
+                                <option>Aedex</option>
+                                <option>Culex</option>
+                                <option>Mixto</option>
+                                <option>Sin Larvas</option>
+                            </select>
+                        </div>
+
+                        <div class="input-container">
+                            <label>Control:</label>
+                            <select class="form-control" ng-model="sumideroForm.tratadoSumidero">
+                                <option value="" ng-disabled="true">¿Tratado?</option>
+                                <option value="Tratado">Tratado</option>
+                                <option value="Tratado sin inspeccionar">Tratado sin inspeccionar</option>
+                            </select>
+                        </div>
+
+                        <div class="input-container">
+                            <label>Insecticida:</label>
+                            <select class="form-control" ng-model="sumideroForm.insecticidaSumidero" ng-options="item.Nombre for item in sumideroForm.arrayInsecticidas" required>
+                                <option value="">Ninguno</option>
+                            </select>
+                            <input type="text" ng-model="sumideroForm.cantInsecticidaSumidero" name="cantInsecticida" class="form-control" placeholder="Insecticida Grs/ml">
+                        </div>
                     </div>
-
-                    
                     <div class="input-container">
                         <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>            
                         <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
-                        <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>                                
+                        <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>  
                     </div>
                     
                     <br>
@@ -436,22 +419,6 @@
             </div>   
         </div><!--.............................FIN Tab Datos Foco........................................-->
 
-        <div class="tab-pane" id="tab_listareciente">
-            <table class="recentTable">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Hora</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr ng-repeat="reciente in recientes track by $index">
-                        <td>{{reciente.tipo}}</td>
-                        <td>{{reciente.hora}}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
     </div>
 </div>
     <!-- MODALES  -->

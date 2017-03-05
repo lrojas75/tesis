@@ -110,6 +110,8 @@ app.controller("infoController", ['$scope', '$filter', '$http', '$sce', function
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("menuController", ['$scope','$filter', '$http','$sce', function($scope, $filter,$http,$sce){    
     $scope.modalMessage = '';
+    $scope.hayConexion = false;
+    $scope.recientes = JSON.parse(localStorage.getItem("recentList"));
     $scope.ipActual = ip;
     $scope.backNavigation = function() {
         var previousPage = window.localStorage.getItem("previousPage");    
@@ -125,6 +127,7 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                 fecha: $scope.fecha
             }
         }).success(function (data) {
+            $scope.hayConexion = true;
             if (data != null) {                
                 window.localStorage.setItem("infoID", data.id);
                 window.localStorage.setItem("municipio", data.municipio);
@@ -274,7 +277,6 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
     $scope.modalMessage = '';
     $scope.ipActual = ip;
     $scope.showMap = false;//Mostrar mapa
-    $scope.recientes = JSON.parse(localStorage.getItem("recentList"));
     $scope.municipios = [
         { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
         { municipio: "Palmira", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "14", "15", "16"]},
