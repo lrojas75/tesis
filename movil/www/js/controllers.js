@@ -50,7 +50,7 @@ app.controller("infoController", ['$scope', '$filter', '$http', '$sce', function
             window.localStorage.setItem("syncData", JSON.stringify(new Array()));
             window.location.replace("menuTipos.html");
         }).error(function(data) {
-            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error al enviar los datos. <br> Intente más tarde. </p>");
+            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error al enviar los datos. Intente más tarde. </p>");
             $("#infoGeneralModal").modal();
             setTimeout(function () {
                 $("#infoGeneralModal").modal("hide");
@@ -73,25 +73,24 @@ app.controller("infoController", ['$scope', '$filter', '$http', '$sce', function
         }).success(function (data) {
             if (data != null) {
                 window.localStorage.setItem("infoID", data.id);
-                window.localStorage.setItem("municipio", data.municipio);
-                window.localStorage.setItem("previousPage", "index.html");
-                window.location.replace("menuTipos.html");                
-            }
-            $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
-                params: {
-                    usuario: user,
-                    fecha: $scope.infoFormData.fecha
-                }
-            }).success(function (data) {
-                window.localStorage.setItem("insecticidas", JSON.stringify(data));
+                window.localStorage.setItem("municipio", data.municipio);                
+                window.location.replace("menuTipos.html");
+                $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
+                    params: {
+                        usuario: user,
+                        fecha: $scope.infoFormData.fecha
+                    }
+                }).success(function (data) {
+                    window.localStorage.setItem("insecticidas", JSON.stringify(data));
 
-            }).error(function (data) {
-                $scope.modalMessage = "Error al consultar los datos.";
-                $("#infoGeneralModal").modal();
-                setTimeout(function () {
-                    $("#infoGeneralModal").modal("hide");
-                }, 3000);
-            });
+                }).error(function (data) {
+                    $scope.modalMessage = "Error al consultar los datos.";
+                    $("#infoGeneralModal").modal();
+                    setTimeout(function () {
+                        $("#infoGeneralModal").modal("hide");
+                    }, 3000);
+                });
+            }            
         }).error(function (data) {
             $scope.modalMessage = "Error al consultar los datos.";
             $("#infoGeneralModal").modal();
@@ -131,6 +130,22 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
             if (data != null) {                
                 window.localStorage.setItem("infoID", data.id);
                 window.localStorage.setItem("municipio", data.municipio);
+                $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
+                    params: {
+                        usuario: user,
+                        fecha: $scope.fecha
+                    }
+                }).success(function (data) {
+                    window.localStorage.setItem("insecticidas", JSON.stringify(data));
+
+                }).error(function (data) {
+                    $scope.modalMessage = "Error al consultar los datos.";
+                    $("#infoGeneralModal").modal();
+                    setTimeout(function () {
+                        $("#infoGeneralModal").modal("hide");
+                    }, 3000);
+                });
+
             } else {
                 //Si no hay info en data es porque no hay info general o es de otro dia
                 window.location.replace("infoGeneral.html");
@@ -170,7 +185,7 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
     };
 
     //Funcion que envia los datos que no pudieron enviarse
-    $scope.sincronizar = function () {
+    $scope.sincronizar = function () {        
         var dataToSend = JSON.parse(window.localStorage.getItem("syncData"));
         if (dataToSend) {
             dataToSend.forEach(function (jsonData) {
@@ -180,11 +195,12 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#menuErrorModal").modal();
                                 setTimeout(function () {
                                     $("#menuErrorModal").modal("hide");
-                                }, 3000);                                
+                                }, 3000);
                             });
                             break;
 
@@ -194,7 +210,8 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                                 window.localStorage.setItem("numSumidero", sumideros + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#menuErrorModal").modal();
                                 setTimeout(function () {
                                     $("#menuErrorModal").modal("hide");
@@ -210,7 +227,8 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                                 window.localStorage.setItem("numVivienda", viviendas + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#menuErrorModal").modal();
                                 setTimeout(function () {
                                     $("#menuErrorModal").modal("hide");
@@ -225,7 +243,8 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                                 window.localStorage.setItem("numCDH", cdhs + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#menuErrorModal").modal();
                                 setTimeout(function () {
                                     $("#menuErrorModal").modal("hide");
@@ -235,17 +254,12 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                     }
                 }
             });
-            $scope.modalMessage = $sce.trustAsHtml("<p> Datos sincronizados. </p>");
-            $("#menuSuccessModal").modal();
-            setTimeout(function () {
-                $("#menuSuccessModal").modal("hide");
-            }, 3000);
             window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
         } else {
-            $scope.modalMessage = $sce.trustAsHtml("<p> No hay datos para sincronizar. </p>");
+            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No hay datos para sincronizar. </p>");
             $("#menuSuccessModal").modal();
             setTimeout(function () {
-                $("#menuSuccessModal").modal("hide");
+               $("#menuSuccessModal").modal("hide");
             }, 3000);
         }
     };
@@ -373,8 +387,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         //Contiene todos los formularios que han sido enviados exitosamente y los que no
         //Se utiliza en el metodo de sincronizar y es la lista de recientes
         var recentList = JSON.parse(window.localStorage.getItem("recentList"));
-
-        if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.tratadoSumidero!='' && $scope.sumideroForm.insecticidaSumidero!='' && $scope.sumideroForm.cantInsecticidaSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
+        console.log(JSON.stringify( $scope.sumideroForm));
+        if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
             var jsonData = {
                 servicio:'addSumidero',                
                 tipo: $scope.tipo,
@@ -399,7 +413,9 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 cantInsecticidaSumidero: '',
                 arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
                 ubicacionSumidero: ''
-            };
+            };            
+            $scope.viviendaForm.ubicacionVivienda = '';
+            $scope.CDHform.ubicacionCDH = '';
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
@@ -409,7 +425,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     $("#focoSuccessModal").modal("hide");
                 }, 3000);
             }).error(function(data) {
-                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No hay conexión. Puede reenviar los datos en la opción sincronizar.</p>");
                 $("#focoErrorModal").modal();
                 setTimeout(function () {
                     $("#focoErrorModal").modal("hide");
@@ -513,6 +529,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 depositos: [],
                 ubicacionVivienda: ''
             };
+            $scope.sumideroForm.ubicacionSumidero = '';            
+            $scope.CDHform.ubicacionCDH = '';
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas + 1);
@@ -522,7 +540,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     $("#focoSuccessModal").modal("hide");
                 }, 3000);
             }).error(function (data) {
-                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No hay conexión. Puede reenviar los datos en la opción sincronizar.</p>");
                 $("#focoErrorModal").modal();
                 setTimeout(function () {
                     $("#focoErrorModal").modal("hide");
@@ -546,7 +564,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
             }
             
         } else {
-            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Revisa que ingresaste la clave <br> y tu ubicación.</p>");            
+            $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Revisa que ingresaste la clave y tu ubicación.</p>");            
             $("#focoErrorModal").modal();
             setTimeout(function () {
                 $("#focoErrorModal").modal("hide");
@@ -616,7 +634,9 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     ubicacionCDH: '',
                     tipoCDH: '',
                     plazo: 0
-                };                
+                };
+                $scope.sumideroForm.ubicacionSumidero = '';
+                $scope.viviendaForm.ubicacionVivienda = '';                
                 $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
                     window.localStorage.setItem("numCDH", numCDH + 1);                    
@@ -626,7 +646,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                         $("#focoSuccessModal").modal("hide");
                     }, 3000);
                 }).error(function (data) {
-                    $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> Error en la conexión. Puede reenviar <br>  los datos en la opción sincronizar.</p>");
+                    $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No hay conexión. Puede reenviar los datos en la opción sincronizar.</p>");
                     $("#focoErrorModal").modal();
                     setTimeout(function () {
                         $("#focoErrorModal").modal("hide");
@@ -737,7 +757,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
     };
     
     //Funcion que envia los datos que no pudieron enviarse
-    $scope.sincronizar = function () {
+    $scope.sincronizar = function () {        
         var dataToSend = JSON.parse(window.localStorage.getItem("syncData"));
         if (dataToSend) {
             dataToSend.forEach(function (jsonData) {
@@ -747,7 +767,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
                                     $("#focoErrorModal").modal("hide");
@@ -761,7 +782,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                                 window.localStorage.setItem("numSumidero", sumideros + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
                                     $("#focoErrorModal").modal("hide");
@@ -777,7 +799,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                                 window.localStorage.setItem("numVivienda", viviendas + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
                                     $("#focoErrorModal").modal("hide");
@@ -792,7 +815,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                                 window.localStorage.setItem("numCDH", cdhs + 1);
                                 jsonData.enviado = true;
                             }).error(function (data) {
-                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. <br> Intente más tarde. </p>");
+                                allSent = false;
+                                $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
                                     $("#focoErrorModal").modal("hide");
@@ -802,11 +826,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     }
                 }
             });
-            $scope.modalMessage = $sce.trustAsHtml("<p> Datos sincronizados. </p>");
-            $("#focoSuccessModal").modal();
-            setTimeout(function () {
-                $("#focoSuccessModal").modal("hide");
-            }, 3000);
+            
             window.localStorage.setItem("syncData", JSON.stringify(dataToSend));
         } else {
             $scope.modalMessage = $sce.trustAsHtml("<p> No hay datos para sincronizar. </p>");
