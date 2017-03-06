@@ -140,7 +140,7 @@ button:disabled{
    border-bottom: 2px solid #DDD;
 }
 
-.nav-tabs li{
+.nav-tabs .couple-tabs{
     width:50%;
 }
 
