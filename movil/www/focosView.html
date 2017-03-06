@@ -249,8 +249,7 @@
                                     <option value="" ng-disabled="true">¿Tiene Agua?</option>
                                     <option value="True">Sí</option>
                                     <option value="False">No</option>
-                                </select>
-                                <input type="number" ng-model="deposito.I" placeholder="I" class="form-control small-input" required>
+                                </select>                                
 
                                 <input type="number" ng-model="deposito.L" placeholder="L" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False' || viviendaForm.clave=='Negativa'" required>
                                 <input type="number" ng-model="deposito.P" placeholder="P" class="form-control small-input" ng-readonly="deposito.tieneAgua=='False' || viviendaForm.clave=='Negativa'" required>
