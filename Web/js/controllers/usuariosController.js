@@ -1,5 +1,8 @@
 angular.module('app').controller('usersController', function($scope, $http, $filter, auth, $cookies){
-    $scope.Usuarios = [];    
+    $scope.Usuarios = [];
+
+    $scope.modalMessage='';
+
     $scope.usuario = JSON.parse($cookies.userInfo);
     //Pagina actual
     $scope.paginaActual = 0;
@@ -16,6 +19,7 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
             }
         }).success(function (data) {
             $scope.Usuarios = data;
+            $scope.cambioDeDatos();
             //Eliminar al usuario activo del array
             var index = $scope.Usuarios.findIndex(x => x.cedula==parseInt($scope.usuario.cedula));
             $scope.Usuarios.splice(index, 1);
@@ -23,6 +27,21 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
             alert("Error al consultar los usuarios");
         });
     };
+    //Funcion para cambiar los valores y que se filtren correctamente
+    $scope.cambioDeDatos=function(){
+        $scope.Usuarios.forEach(function (user) {
+            if(user.rolUsuario == 'true'){
+                user.rolUsuario="Supervisor"
+            }else{
+                user.rolUsuario="Trabajador"
+            }
+
+            if(user.IDSupervisor=='0'){
+                user.IDSupervisor="No tiene supervisor";
+            }
+        });
+    };
+
     //Filtra los datos de acuerdo al input
     $scope.getData=function() {
         return $filter('filter')($scope.Usuarios, $scope.filterText);
@@ -39,20 +58,28 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
             cedula: usuario.cedula
         };        
         $http.post(ip+'webApi.php?val=cambiarSupervisor',jsonData).success(function(data){
-            usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):0;
+            usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):'No tiene supervisor';
           }).error(function(data) {
-            alert('No se pudo actualizar el supervisor');
+            $scope.modalMessage = "No se pudo actualizar el supervisor.";
+            $("#usuariosErrorModal").modal();
+            setTimeout(function () {
+                $("#usuariosErrorModal").modal("hide");
+            }, 3000);
           });
     };
 
     $scope.cambiarRol=function(usuario){
         $http.post(ip+'webApi.php?val=cambiarRol',{
-            nuevoRol:JSON.stringify(!JSON.parse(usuario.rolUsuario)),
+            nuevoRol:usuario.rolUsuario=='Supervisor' ? 'false':'true',
             cedula: usuario.cedula
         }).success(function(data){
-            usuario.rolUsuario=JSON.stringify(!JSON.parse(usuario.rolUsuario));
+            usuario.rolUsuario= usuario.rolUsuario=='Supervisor' ? 'Trabajador' : 'Supervisor';
           }).error(function(data) {
-            alert('No se pudo actualizar el rol del usuario');
+            $scope.modalMessage = "No se pudo actualizar el rol del usuario.";
+            $("#usuariosErrorModal").modal();
+            setTimeout(function () {
+                $("#usuariosErrorModal").modal("hide");
+            }, 3000);            
           });
     };
 

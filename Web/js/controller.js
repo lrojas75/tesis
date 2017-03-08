@@ -22,6 +22,10 @@ app.config(function ($httpProvider,$routeProvider) {
         controller: "usersController",
         templateUrl: "templates/usuarios.html"
     })
+    .when("/capturaDeDatos",{
+        controller: "focosController",
+        templateUrl: "templates/capturaDeDatos.html"
+    }).otherwise({redirectTo:'/home'})
 });
 
 //factory que controla la autentificación, devuelve un objeto
@@ -78,6 +82,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         }
     }
 });
+
 
 //Paginacion inicio
 app.filter('startFrom', function() {

@@ -288,6 +288,8 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
 //<<-------------------------------------------- Controlador para ventana de Focos de infeccion-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $http, $sce) {
+    //Ubicacion de la persona
+    $scope.ubicacionActual = '0,0';
     $scope.modalMessage = '';
     $scope.ipActual = ip;
     $scope.showMap = false;//Mostrar mapa
@@ -373,8 +375,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         tratadoSumidero: '',
         insecticidaSumidero: '',
         cantInsecticidaSumidero: '',
-        arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
-        ubicacionSumidero: ''
+        arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas"))        
     };
 
     $scope.agregarSumidero = function () {
@@ -387,8 +388,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         //Contiene todos los formularios que han sido enviados exitosamente y los que no
         //Se utiliza en el metodo de sincronizar y es la lista de recientes
         var recentList = JSON.parse(window.localStorage.getItem("recentList"));
-        console.log(JSON.stringify( $scope.sumideroForm));
-        if ($scope.sumideroForm.estadoSumidero!='' && $scope.sumideroForm.ubicacionSumidero!='') {
+        
+        if ($scope.sumideroForm.estadoSumidero!='' && $scope.ubicacionActual != '0,0') {
             var jsonData = {
                 servicio:'addSumidero',                
                 tipo: $scope.tipo,
@@ -400,10 +401,11 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 insecticida: $scope.sumideroForm.insecticidaSumidero.Nombre,
                 cantidadInsecticida: $scope.sumideroForm.cantInsecticidaSumidero,
                 idInfoGeneral: idInfo,
-                ubicacion: $scope.sumideroForm.ubicacionSumidero,
+                ubicacion: $scope.ubicacionActual,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
             };
             $scope.tipo = '';
+            $scope.ubicacionActual = '0,0';
             $scope.sumideroForm = {
                 estadoSumidero: '',
                 larvasSumidero: '',
@@ -411,11 +413,8 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 tratadoSumidero: '',
                 insecticidaSumidero: '',
                 cantInsecticidaSumidero: '',
-                arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),
-                ubicacionSumidero: ''
-            };            
-            $scope.viviendaForm.ubicacionVivienda = '';
-            $scope.CDHform.ubicacionCDH = '';
+                arrayInsecticidas: JSON.parse(window.localStorage.getItem("insecticidas")),                
+            };
             $http.post(ip+'/webApi.php?val=addSumidero',jsonData).success(function(data) {
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numSumidero", sumideros+1);
@@ -465,8 +464,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         cedula: '',
         habitantesCasa:0,
         clave:'',
-        depositos:[],
-        ubicacionVivienda:''
+        depositos:[]        
     };
 
     $scope.viviendaNoRenuente = function () {
@@ -503,7 +501,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         //Lista de formularios recientes
         var recentList = JSON.parse(window.localStorage.getItem("recentList"));        
         
-        if ($scope.viviendaForm.ubicacionVivienda!='' && $scope.viviendaForm.clave!='' ) {
+        if ($scope.ubicacionActual != '0,0' && $scope.viviendaForm.clave!='' ) {
             var jsonData = {
                 servicio:'addVivienda',
                 tipo: $scope.tipo,
@@ -515,21 +513,19 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                 cedula: $scope.viviendaForm.cedula,
                 depositos:$scope.viviendaForm.depositos,
                 idInfoGeneral: idInfo,
-                ubicacion: $scope.viviendaForm.ubicacionVivienda,
+                ubicacion: $scope.ubicacionActual,
                 hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes()+'m'
             };
             $scope.tipo = '';
+            $scope.ubicacionActual = '0,0';
             $scope.viviendaForm = {
                 nombre: '',
                 apellido: '',
                 cedula: '',
                 habitantesCasa: 0,
                 clave: '',
-                depositos: [],
-                ubicacionVivienda: ''
-            };
-            $scope.sumideroForm.ubicacionSumidero = '';            
-            $scope.CDHform.ubicacionCDH = '';
+                depositos: []                
+            };            
             $http.post(ip + '/webApi.php?val=addVivienda', jsonData).success(function (data) {                
                 window.localStorage.setItem("previousPage", "menuTipos.html");
                 window.localStorage.setItem("numVivienda", viviendas + 1);
@@ -581,11 +577,9 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         //centros hospitalarios y batallon
         toldillos: [],
         observaciones: '',
-        plazo: 0,
-        ubicacionCDH: '',
+        plazo: 0,        
         tipoCDH: '',
         plazo: 0
-
     };
 
     $scope.agregarCDH = function(){
@@ -598,7 +592,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         //Lista de formularios recientes
         var recentList = JSON.parse(window.localStorage.getItem("recentList"));
         //Validacion de campos obligatorios
-        if ($scope.CDHform.nombre != '' && $scope.CDHform.apellido != '' && $scope.CDHform.cedula != '' && $scope.CDHform.rs != '' && $scope.CDHform.ubicacion != '') {
+        if ($scope.CDHform.nombre != '' && $scope.CDHform.apellido != '' && $scope.CDHform.cedula != '' && $scope.CDHform.rs != '' && $scope.ubicacionActual != '0,0') {
             //Si hay algun foco la observacion es opcional y debe haber un plazo, si no hay focos debe haber observacion
             if (($scope.CDHform.tipo != '' && $scope.CDHform.plazo>0 && ($scope.CDHform.focosEncontrados.length > 0 || $scope.CDHform.focosPotenciales.length > 0 || $scope.CDHform.toldillos.length > 0)) || $scope.CDHform.observaciones != '') {
                 var jsonData = {
@@ -613,12 +607,13 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     potenciales: $scope.CDHform.focosPotenciales,
                     toldillos: $scope.CDHform.toldillos,
                     observacion: $scope.CDHform.observaciones,
-                    ubicacion: $scope.CDHform.ubicacionCDH,
+                    ubicacion: $scope.ubicacionActual,
                     infoID: idInfo,
                     plazo: $scope.CDHform.plazo,
                     hora: fechaHoras.getHours() + 'h' + fechaHoras.getMinutes() + 'm'
                 };
                 $scope.tipo = '';
+                $scope.ubicacionActual = '0,0';
                 $scope.CDHform = {
                     nombre: '',
                     apellido: '',
@@ -629,13 +624,11 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                     //centros hospitalarios y batallon
                     toldillos: [],
                     observaciones: '',
-                    plazo: 0,
-                    ubicacionCDH: '',
+                    plazo: 0,                    
                     tipoCDH: '',
                     plazo: 0
                 };
-                $scope.sumideroForm.ubicacionSumidero = '';
-                $scope.viviendaForm.ubicacionVivienda = '';                
+                
                 $http.post(ip + '/webApi.php?val=addCDH', jsonData).success(function (data) {
                     window.localStorage.setItem("previousPage", "menuTipos.html");
                     window.localStorage.setItem("numCDH", numCDH + 1);                    
@@ -693,9 +686,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         function onSuccess(position){
             var lat = position.coords.latitude;
             var lon = position.coords.longitude;
-            $scope.sumideroForm.ubicacionSumidero = lat.toFixed(2)+" - "+lon.toFixed(2);
-            $scope.viviendaForm.ubicacionVivienda = lat.toFixed(2) + " - " + lon.toFixed(2);
-            $scope.CDHform.ubicacionCDH= lat.toFixed(2) + " - " + lon.toFixed(2);
+            $scope.ubicacionActual = lat + ',' + lon;            
         }
         /*Esta funcion es llamada si existe un error en la geolocation*/
         function onError(error){
@@ -703,12 +694,20 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         }
     };
 
+    //Funcion para mostrar el valor de la ubicacion en el input
+    $scope.showUbicacion = function () {
+        var split = $scope.ubicacionActual.split(",");
+        return parseInt(split[0]).toFixed(2) + "-" + parseInt(split[1]).toFixed(2);
+    };
+
+
+
     $scope.MapaGoogle = function () {
         var rendererOptions = {
             draggable: true
         };
 
-        var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);;
+        var directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
 
         var directionsService = new google.maps.DirectionsService();
 
@@ -745,10 +744,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
 
             //Evento de arrastrar el marcador
             google.maps.event.addListener(marker, 'dragend', function (evt) {
-                $scope.sumideroForm.ubicacionSumidero = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
-                $scope.viviendaForm.ubicacionVivienda = evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
-                $scope.CDHform.ubicacionCDH= evt.latLng.lat().toFixed(2) + " - " + evt.latLng.lng().toFixed(2);
-                
+                $scope.ubicacionActual=evt.latLng.lat() + "," + evt.latLng.lng();
             });            
         }
         google.maps.event.addDomListener(window, 'load', initialize);
@@ -765,8 +761,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                         case 'modInfoGeneral':
                             $http.post(ip + '/webApi.php?val=modInfoGeneral', jsonData).success(function (data) {
                                 jsonData.enviado = true;
-                            }).error(function (data) {
-                                allSent = false;
+                            }).error(function (data) {                                
                                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
@@ -780,8 +775,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                             $http.post(ip + '/webApi.php?val=addSumidero', jsonData).success(function (data) {
                                 window.localStorage.setItem("numSumidero", sumideros + 1);
                                 jsonData.enviado = true;
-                            }).error(function (data) {
-                                allSent = false;
+                            }).error(function (data) {                                
                                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
@@ -797,8 +791,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                                 window.localStorage.setItem("previousPage", "menuTipos.html");
                                 window.localStorage.setItem("numVivienda", viviendas + 1);
                                 jsonData.enviado = true;
-                            }).error(function (data) {
-                                allSent = false;
+                            }).error(function (data) {                                
                                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
@@ -813,8 +806,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
                                 window.localStorage.setItem("previousPage", "menuTipos.html");
                                 window.localStorage.setItem("numCDH", cdhs + 1);
                                 jsonData.enviado = true;
-                            }).error(function (data) {
-                                allSent = false;
+                            }).error(function (data) {                                
                                 $scope.modalMessage = $sce.trustAsHtml("<p class='large-text'> No se pudo sincronizar los datos. Intente más tarde. </p>");
                                 $("#focoErrorModal").modal();
                                 setTimeout(function () {
@@ -858,7 +850,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
         var row = {
             index: newIndex,
             cantidad: '',
-            tipo: 'General',
+            tipo: '',
             lugar: ''
         };
         $scope.CDHform.focosPotenciales.push(row);
@@ -874,7 +866,7 @@ app.controller("focoController", ['$scope', '$http', '$sce', function ($scope, $
 
         var row = {
             index: newIndex,
-            tipo: 'Hospital/Batallon',
+            tipo: '',
             bueno: 0,
             regular: 0,
             malo: 0,

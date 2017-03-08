@@ -45,6 +45,7 @@ angular.module('app').controller("loginController", function($scope, $http, auth
       });
   };  
 
+  //Intercambia entre login y registro
   $scope.changePage=function(){
     $scope.showLogin=!$scope.showLogin;
   };

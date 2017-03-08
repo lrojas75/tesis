@@ -78,7 +78,6 @@
                 <div class="input-container">
                     <label>Barrio:</label>
                     <input type="text" name="nomBarrio" class="form-control" placeholder="Barrio" ng-model="editarInfo.barrio">
-
                 </div>
 
                 <div class="input-container">
@@ -169,7 +168,7 @@
                         </div>
                     </div>
                     <div class="input-container">
-                        <input type="text" ng-model="sumideroForm.ubicacionSumidero" name="campoUbicacion" id = "campoUbic" class="form-control" placeholder="Latitud - Longitud" style = "text-align: center" disabled required>            
+                        <input type="text" value="{{showUbicacion()}}" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled>        
                         <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
                         <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>  
                     </div>
@@ -271,7 +270,7 @@
                         </div>
                     </div>
                     <div class="input-container">
-                        <input type="text" ng-model="viviendaForm.ubicacionVivienda" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
+                        <input type="text" value="{{showUbicacion()}}" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled>
                         <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
                         <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
                     </div>   
@@ -324,7 +323,7 @@
                     <div ng-if="CDHform.tipoCDH=='general'">
                         <div class="div-cdh">
                             <span class="center titulo-bloque">Focos Encontrados</span>
-                            <div class="input-container" ng-repeat="foco in CDHform.focosEncontrados">
+                            <div class="input-container repeat-focos" ng-repeat="foco in CDHform.focosEncontrados">
                                 <input type="text" class="form-control small-input" ng-model="foco.cantidad" placeholder="Cant." />
                                 <input type="text" class="form-control" ng-model="foco.lugar" placeholder="Lugar" />
                                 <select class="form-control" ng-model="foco.tipo">
@@ -347,7 +346,7 @@
                             
                         <div class="div-cdh">
                             <span class="center titulo-bloque">Focos Potenciales</span>
-                            <div class="input-container" ng-repeat="potencial in CDHform.focosPotenciales">
+                            <div class="input-container repeat-focos" ng-repeat="potencial in CDHform.focosPotenciales">
                                 <input type="text" class="form-control small-input" ng-model="potencial.cantidad" placeholder="Cant" />
                                 <input type="text" class="form-control" ng-model="potencial.lugar" placeholder="Lugar" />
                                 <select class="form-control" ng-model="potencial.tipo">
@@ -369,7 +368,8 @@
                     </div>
                     <div ng-if="CDHform.tipoCDH=='otros'">
                         <div class="div-cdh">
-                            <div class="otros-container"  ng-repeat="toldillo in CDHform.toldillos">
+                            <span class="center titulo-bloque">Toldillos</span>
+                            <div class="otros-container repeat-focos"  ng-repeat="toldillo in CDHform.toldillos">
                                 <select class="form-control" style="width:100%;" ng-model="toldillo.tipo">
                                     <option value="" ng-disabled="true">Tipo</option>
                                     <option>Adulto</option>
@@ -382,17 +382,17 @@
                                 <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.bueno" placeholder="Bueno" />
                                 <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.regular" placeholder="Regular" />
                                 <input type="number" class="form-control" ng-blur="toldillo.total=toldillo.bueno+toldillo.malo+toldillo.regular" ng-model="toldillo.malo" placeholder="Malo" />
-                                <label>Total</label>
-                                <label>En Uso</label>
-                                <input type="number" class="form-control" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
-                                <input type="number" class="form-control" ng-model="toldillo.uso" placeholder="Uso" />
+                                <label class="pair-input">Total</label>
+                                <label class="pair-input">En Uso</label>
+                                <input type="number" class="form-control pair-input" ng-disabled="true" ng-model="toldillo.total" placeholder="Total" />
+                                <input type="number" class="form-control pair-input" ng-model="toldillo.uso" placeholder="Uso" />
                                 <button class="btn btn-primary btn-xs btn-cancel small-button" ng-click="deleteToldillo(toldillo.index)"><i class="material-icons">clear</i> </button>
                             </div>
                             <button class="btn btn-primary btn-xs btn-block small-button" ng-click="filaToldillo()"><i class="material-icons">add box</i> </button>
                         </div>
                     </div>
                     <div class="input-container">
-                        <input type="text" ng-model="CDHform.ubicacionCDH" id="campoUbic" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled required>
+                        <input type="text" value="{{showUbicacion()}}" class="form-control" placeholder="Latitud - Longitud" style="text-align: center" disabled>
                         <button type="button" class="btn btn-primary btn-xs" ng-click="geolocation()"><i class="material-icons">my_location</i></button>
                         <button type="button" class="btn btn-primary btn-xs" ng-click="toggleMap()"><i class="material-icons">map</i></button>
                     </div>

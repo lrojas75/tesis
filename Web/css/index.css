@@ -44,6 +44,139 @@ tr{
   padding: 6px 12px;
 }
 
+.div-text-center{
+  width: 100%;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.center-medium-width{
+  width: 70%;
+  margin:  10px auto;
+}
+.input-container{
+    display:block;
+    max-width: 70%;
+    margin: 0 auto;
+    border-radius: 10px;
+    border: 1px solid #FFD2D2;
+    padding: 10px;
+    background: #F5F6FA;
+}
+
+.input-container label{
+    width: 30%;
+    display: inline-block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 100px;
+}
+.input-container input{
+    width: 35%;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 40px;    
+    display: inline-block;
+}
+
+.input-container select{
+    width: 35%;
+    display: inline-block;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    margin-left: 40px;
+    cursor: pointer;
+}
+
+.material-icons{
+  width: 100%;
+}
+/*----------------------------- Modales -------------------------------------*/
+.modal {    
+  text-align: center;
+  padding: 0!important;
+}
+
+.modal-dialog {    
+  text-align: left;
+  display: inline-block;    
+  vertical-align: middle;
+  height: 60px;
+}
+
+.modal:before {
+  content: '';
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  margin-right: -4px;
+}
+
+.modal-text{
+  text-align: center;
+  display: inline-block;
+  padding: 15px 15px;
+  width: 80%;
+  height: 100%;    
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: #fff;
+  border-bottom-right-radius:5px;
+  border-top-right-radius:5px;
+}
+
+.modal-success {
+  color:#fff;
+  padding:0px 10px;    
+  background-color: #5cb85c;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-size:34px;
+  text-align:center;
+  font-weight:normal;
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 20%;
+  height: 100%;
+  margin: auto 0;
+}
+
+.modal-danger {
+  color:#fff;
+    padding:0px 10px;    
+    background-color: #d9534f;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size:34px;
+    text-align:center;
+    font-weight:normal;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20%;
+    height: 100%;
+    margin: auto 0;
+}
+
+#mapModal{
+  width: 80%!important;
+  height: 100%;
+  margin: 0 auto;
+}
+
+#mapModal .modal-dialog {
+    width: 100%;
+    text-align: left;
+    display: inline-block;    
+    vertical-align: middle;
+    height: 400px;
+}
+
 /*-----------------------------LOGIN CLASES----------------------------------*/
 legend{
   text-align: center;
@@ -157,4 +290,89 @@ fieldset{
   border-radius: 4px;
   width: 40%;
   margin-left: 10px;
+}
+
+/*-------------------------------------------- Captura de datos clases ------------------------------------------------*/
+.form-captura{
+  margin:20px 0;
+}
+.titulo-bloque {
+    font-weight: bold;
+    margin: 10px 0;
+    display: block;
+    text-align: center;
+}
+
+.input-trio label{
+  width: 20%;
+}
+
+.input-trio input, .input-trio select{
+  width: 35%;
+}
+
+#map-canvas{
+  width: 100%;  
+  height: 100%;
+}
+
+.div-cdh {
+  text-align: center;
+  margin: 10px auto;
+  padding: 10px;
+}
+
+.repeat-focos{
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: rgb(204, 204, 204);
+}
+
+.btn-cancel {
+    background-color: #d60c0c;
+}
+.small-button{
+  padding: 5px;
+  height: 35px;
+  width: 35px;
+  line-height: 14px;
+  text-align: center;
+  margin: 10px auto;
+  border: none;
+}
+
+/*TextArea*/
+.observaciones-cdh{
+    width: 80%;
+    margin: 15px auto;
+    height: 150px;
+    resize: none;
+    border-color: rgb(204, 204, 204);
+    border-radius: 4px;
+}
+
+.otros-container{
+    display:block;
+}
+
+.otros-container label{
+    width: 25%;    
+    padding-top:5px;
+    display:inline-block;
+    margin: 0 15px;
+}
+
+.otros-container input{
+    width: 25%;
+    display: inline-block;
+    margin: 10px 15px;
+}
+
+.otros-container select{
+    width:80%;
+    margin: 15px auto; 
+}
+
+.otros-container .pair-input{
+    width:45%;
 }

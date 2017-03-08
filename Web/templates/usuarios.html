@@ -4,15 +4,16 @@
           <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-        	<li><a>Analisis de datos</a></li>
-        	<li ng-show="usuario.rolUsuario" class="active-tab"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>        
-			<li class="dropdown">
-	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>	          
-	          <ul class="dropdown-menu">
-	            <li><a href="#">{{usuario.nombres}}</a></li>            
-	            <li><a ng-click="logout()">Cerrar Sesión</a></li>
-	          </ul>
-	        </li>
+            <li><a>Analisis de datos</a></li>
+            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
+            <li class="active-tab"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">{{usuario.nombres}}</a></li>
+                <li><a ng-click="logout()">Cerrar Sesión</a></li>
+              </ul>
+            </li>
         </ul>
     </div>
 </nav>
@@ -54,10 +55,10 @@
 			{{usuario.apellidos}}
 		</td>
 		<td>
-			{{usuario.rolUsuario=='true' && 'Supervisor' || usuario.rolUsuario!='true' && 'Trabajador'}}
+			{{usuario.rolUsuario}}
 		</td>
 		<td>
-			{{usuario.IDSupervisor==0 && 'No tiene supervisor' || usuario.IDSupervisor!=0 && usuario.IDSupervisor}}
+			{{usuario.IDSupervisor}}
 		</td>		
 	</tr>
 </table>
@@ -66,4 +67,19 @@
 	<button ng-disabled="paginaActual==0" ng-click="paginaActual=paginaActual-1"><span class="glyphicon glyphicon-backward"></span></button>
 	<span>Página {{paginaActual+1}} de {{numeroPaginas()}}</span>
 	<button ng-disabled="paginaActual >= getData().length/tamanoPagina - 1" ng-click="paginaActual=paginaActual+1"><span class="glyphicon glyphicon-forward"></span></button>
+</div>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="usuariosErrorModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-danger">
+                <i class="material-icons">error_outline</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>            
+            </div>
+        </div>
+    </div>
 </div>

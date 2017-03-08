@@ -3,12 +3,12 @@
 
 <head>
     <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-    <link href='css/index.css' rel='stylesheet'>
 
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     
     <link rel="stylesheet"; href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+    <link href='css/index.css' rel='stylesheet'>
    <!--  <link rel="stylesheet"  href="css/foundation.css" media="screen" />   --> 
     <!-- Angular Material style sheet -->
     
@@ -19,7 +19,10 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- Angular Material requires Angular.js Libraries -->
     <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
-<!--     
+    <script type="text/javascript"
+        src="http://maps.googleapis.com/maps/api/js?key=AIzaSyDy6jG-VNXs7cye1yVfK1S2MHvccoyr7EQ">
+    </script>
+    <!--     
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-animate.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
@@ -29,7 +32,8 @@
     <title>Foco de infeccion</title>
 </head>
 <!--class = "col-xs-12"-->
-  <body>
+  <body>    
+  
     <div ng-view></div>
     
     <script src="js/controller.js"></script>
