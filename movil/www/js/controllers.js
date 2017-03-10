@@ -107,7 +107,19 @@ app.controller("infoController", ['$scope', '$filter', '$http', '$sce', function
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
 //<<-------------------------------------------- Controlador para ventana del Menu principal-------------------------------------------->>
 //<<---------------------------------------------------------------------------------------------------------------------------------------->>
-app.controller("menuController", ['$scope','$filter', '$http','$sce', function($scope, $filter,$http,$sce){    
+app.controller("menuController", ['$scope', '$filter', '$http', '$sce', function ($scope, $filter, $http, $sce) {
+    //-----------------------Cambio de IP ---------------------------------
+    window.localStorage.setItem("ipServer", ip);
+    $scope.cambioIP = function () {
+        if ($scope.ipServer.trim() != '') {
+            ip = $scope.ipServer;
+            window.localStorage.setItem("ipServer", ip);
+            alert("Se cambió la IP del servidor a: " + ip);
+        } else {
+            alert("El campo esta vacio");
+        }
+    };
+    //--------------------- FIN cambio IP -----------------------------------
     $scope.modalMessage = '';
     $scope.hayConexion = false;
     $scope.recientes = JSON.parse(localStorage.getItem("recentList"));
@@ -127,7 +139,7 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
             }
         }).success(function (data) {
             $scope.hayConexion = true;
-            if (data != null) {                
+            if (data != null) {
                 window.localStorage.setItem("infoID", data.id);
                 window.localStorage.setItem("municipio", data.municipio);
                 $http.get(ip + '/webApi.php?val=obtenerInsecticidas', {
@@ -146,16 +158,23 @@ app.controller("menuController", ['$scope','$filter', '$http','$sce', function($
                     }, 3000);
                 });
 
-            } else {
+            } else {                
                 //Si no hay info en data es porque no hay info general o es de otro dia
                 window.location.replace("infoGeneral.html");
             }
-        }).error(function (data) {            
-            $scope.modalMessage = $sce.trustAsHtml("<p> Error en la conexión. </p>");
-            $("#menuErrorModal").modal();
-            setTimeout(function () {
-                $("#menuErrorModal").modal("hide");
-            }, 3000);            
+        }).error(function (data) {
+            //Si no hay conexion pero ya consulto la info general debe dejar continuar
+            var idInfo = window.localStorage.getItem("infoID");
+            var idMunicipio = window.localStorage.getItem("municipio");
+            if (idInfo != null && idMunicipio != null) {
+                $scope.hayConexion = true;
+            } else {
+                $scope.modalMessage = $sce.trustAsHtml("<p> Error en la conexión. </p>");
+                $("#menuErrorModal").modal();
+                setTimeout(function () {
+                    $("#menuErrorModal").modal("hide");
+                }, 3000);
+            }            
         });
     };
 
