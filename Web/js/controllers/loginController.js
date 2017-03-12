@@ -22,7 +22,7 @@ angular.module('app').controller("loginController", function($scope, $http, auth
         auth.login(data);        
     }).error(function(data) {
       console.log('Error: ' + data);
-      $scope.loginError = "Usuario, Rol y/o Contraseña invalidos.";
+      $scope.loginError = "Usuario y/o Contraseña inválidos.";
     });
   };
 

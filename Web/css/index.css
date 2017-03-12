@@ -6,6 +6,11 @@
 	background-color: gray;
   font-family: 'Open Sans', sans-serif;
 }
+
+nav{
+  background-color: #0000CC!important;  
+}
+
 nav a {
   color:white;
 }
@@ -21,8 +26,8 @@ nav a {
   width: 60%;
   text-align: center;
   color: red;
-  background-color: #fff;  
   margin: 5px auto;
+  font-weight: 800;
 }
 
 .no-list-style{
@@ -92,11 +97,13 @@ tr{
   width: 100%;
 }
 /*----------------------------- Modales -------------------------------------*/
+
 .modal {    
   text-align: center;
   padding: 0!important;
 }
 
+/*Centrar el modal verticalmente*/
 .modal-dialog {    
   text-align: left;
   display: inline-block;    
@@ -127,6 +134,7 @@ tr{
   border-top-right-radius:5px;
 }
 
+/*Color del modal de acuerdo al aviso que despliegue*/
 .modal-success {
   color:#fff;
   padding:0px 10px;    
@@ -178,90 +186,121 @@ tr{
 }
 
 /*-----------------------------LOGIN CLASES----------------------------------*/
-legend{
-  text-align: center;
-  border:none!important;
-  background-color: #FFF;
-  padding-top: 20px !important;
-  margin: 0 !important 
+
+/*Encierra toda la pantalla*/
+.login-body {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;  
 }
 
-.input-login{
-  width: 80%;
+/*Define el ancho maximo, hace que sea responsive*/
+.login-wrapper {
+  display: table;
+  height: 100%;
   margin: 0 auto;
-  color: #566C78!important;
-  background-color: #FFF;
+  max-width: 650px;
+  width: 100%;
 }
 
-.input-login input{
-  margin: 10px 0;
-  height: 50px;  
+/*Contiene los formularios, centra vercalmente*/
+.login-container {
+  display: table-cell;  
+  padding: 20px;
+  position: relative;
+  vertical-align: middle;
+}
+
+/*Banner del formulario, contiene el titulo y el icono*/
+.form-top {
+  overflow: hidden;
+  padding: 15px 50px;
+  background-color: #0000CC;
+  border-radius: 4px 4px 0 0;
+  color: white;
+
+}
+/*Estilo para el titulo y el icono los alinea a la izquierda y derecha*/
+.form-top h3{
+  float: left;
+  font-weight: 500;
+
+}
+.form-top i{
+  float: right;
+  font-size: 55px;
+}
+
+/*Contiene tanto botones como inputs, es del tamaño maximo para que se vea el fondo, centra todo al medio*/
+.form-bottom {
   width: 100%;
-  color: #566C78;
-  border: 1px thin #566C78;
-  font-size: 13px;
-  border-radius: 6px;
+  padding: 25px;
+  background: #eee;
+  -moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
+  text-align: center;
+}
+/*Encierra los inputs y botones para que el ancho de form botton no se afecte por el del contenido*/
+.element-container{
+  width: 100%;
+  margin: 10px 0;
+}
+/*Estilo de los inputs*/
+.login-input {
+  width: 80%;
+  margin: 15px auto;
+  display: block; 
+  height: 50px;  
   padding: 0 20px;
-  background-color: #FFF;
+  vertical-align: middle;
+  background: #f8f8f8;
+  border: 3px solid #ddd;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 50px;
+  color: #888;
+  -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+  -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+/*Estilo de los botones*/
+button.btn {
+  width: 40%;
+  height: 50px;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+  background-color: #0000CC;
+  border: 0;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  font-weight: 200;
+  line-height: 50px;
+  color: #fff;
+  -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius: 4px;
+  text-shadow: none;
+  -moz-box-shadow: none; -webkit-box-shadow: none; box-shadow: none;
+  -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
+}
+
+.btn:hover{ 
+  opacity: 0.6; color: #fff; 
 }
 
 .login-radio{
   display: block;
   width: 80%;
-  margin: 10px auto; 
-  background-color: #FFF;
+  margin: 10px auto;   
 }
 
 .login-radio label{
   display: inline-block;
-  background-color: #FFF;
+  margin-right: 25px;
 }
 
-.login-button input{
-  display: inline-block;
-}
-
-.login-button{
-  width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  background-color: #FFF;
-}
-
-    
-.login-button button {
-  background-color: rgb(43, 166, 203);
-  border-color: rgb(43, 166, 203);
-  font-weight: bold;
-  border-bottom-right-radius: 1000px;
-  border-top-right-radius: 1000px;
-  border-bottom-left-radius: 1000px;
-  border-top-left-radius: 1000px;
-  height: 43px;
-  color: #fff;
-  font-size: 16px;
-  line-height: 16px;
-  padding: 12px 24px;
-  display: inline-block;
-  text-align: center;
-}
-
-.login-button button:disabled{
-  background-color: #dddddd;
-  border-color: #dddddd;
-}
-
-fieldset{
-  position: absolute;
-  width: 40%;
-  height: 50%;
-  margin: auto!important;
-  top: 0; left: 0; bottom: 0; right: 0;
-  background-color: #FFF;
-  padding: 20px 0 !important;
-}
-
-/* PAGINA USUARIOS */
+/*-------------------------------------------- Pagina Usuarios ------------------------------------------------*/
 
 .pagination-button{
   text-align: right;
@@ -341,8 +380,8 @@ fieldset{
   border: none;
 }
 
-/*TextArea*/
-.observaciones-cdh{
+
+.observaciones-cdh{/*TextArea*/
     width: 80%;
     margin: 15px auto;
     height: 150px;
