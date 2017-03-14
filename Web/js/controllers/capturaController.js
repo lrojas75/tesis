@@ -64,6 +64,11 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
         auth.changeLocation(view);
     };
 
+    $scope.logout = function(){
+        auth.logout();
+    };
+
+
     //Opciones de municipio y comuna
 	$scope.opciones = [
 	    { municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
@@ -343,9 +348,9 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
         }else{
             $scope.modalMessage = "Revisa que ingresaste la clave y tu ubicación.";
             $("#capturaErrorModal").modal();
-            setTimeout(function () {
-                $("#capturaErrorModal").modal("hide");
-            }, 3000);
+            // setTimeout(function () {
+            //     $("#capturaErrorModal").modal("hide");
+            // }, 3000);
         }
     };
     
@@ -550,7 +555,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 
 	//Evento para que el mapa espere a que el modal salga para renderizarse
 	$('#mapModal').on('shown.bs.modal', function () {
-		google.maps.event.trigger(map, "resize");		
+		google.maps.event.trigger(map, "resize");
         //HTML5 soporte de ubicacion para ubicar automaticamente
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(function(position) {
@@ -559,7 +564,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	                position: pos,
 	                draggable: true,
 	                title: "Tú posición"
-	            });	            
+	            });
 	            map.setCenter(pos);
 	            marker.setPosition(pos);
             	marker.setMap(map);

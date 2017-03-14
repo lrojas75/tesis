@@ -56,7 +56,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         checkStatus : function()
         {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/home","/login","/usuarios"];
+            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos"];
             if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.userInfo) == "undefined")
             {
                 $location.path("/login");
