@@ -13,6 +13,9 @@ app.config(function ($httpProvider,$routeProvider) {
   $routeProvider.when("/login", {
         controller : "loginController",
         templateUrl : "templates/login.html"
+    }).when("/", {
+        controller : "loginController",
+        templateUrl : "templates/login.html"
     })
     .when("/home", {
         controller : "homeController",
@@ -23,8 +26,12 @@ app.config(function ($httpProvider,$routeProvider) {
         templateUrl: "templates/usuarios.html"
     })
     .when("/capturaDeDatos",{
-        controller: "focosController",
+        controller: "capturaController",
         templateUrl: "templates/capturaDeDatos.html"
+    })
+    .when("/focosDeInfeccion",{
+        controller: "focosController",
+        templateUrl: "templates/focosDeInfeccion.html"
     }).otherwise({redirectTo:'/home'})
 });
 
@@ -56,7 +63,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         checkStatus : function()
         {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos"];
+            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos","/focosDeInfeccion"];
             if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.userInfo) == "undefined")
             {
                 $location.path("/login");

@@ -4,7 +4,7 @@
           <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a>Analisis de datos</a></li>
+            <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
             <li class="active-tab"><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
             <li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
             <li class="dropdown">
@@ -399,7 +399,7 @@
                 <i class="material-icons">error_outline</i>
             </div>
             <div class="modal-text">
-                <p>{{modalMessage}}</p>            
+                <p>{{modalMessage}}</p>
             </div>
         </div>
     </div>

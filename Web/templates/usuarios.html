@@ -4,22 +4,25 @@
           <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
-            <li><a>Analisis de datos</a></li>
-            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
-            <li class="active-tab"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">{{usuario.nombres}}</a></li>
-                <li><a ng-click="logout()">Cerrar Sesión</a></li>
-              </ul>
-            </li>
+            <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
+        	<li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
+        	<li class="active-tab" ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+			<li class="dropdown">
+	          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+	          <ul class="dropdown-menu">
+	            <li><a href="#">{{usuario.nombres}}</a></li>
+	            <li><a ng-click="logout()">Cerrar Sesión</a></li>
+	          </ul>
+	        </li>
         </ul>
     </div>
 </nav>
 
+
 <!-- Input para filtrar -->
 <div class="filter-div">
+    <p>Puede filtrar los usuarios que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los usuarios que se llaman Juan basta con que escriba Juan el campo.</p>
+
 	<span>Filtrar:</span>
 	<input type="text" class="filter-input" ng-model="filterText" placeholder="Cédula-Nombre-Rol-Supervisor">
 	<button class="white-button" ng-click="usuariosSupervisados()">Mis trabajadores</button>
@@ -66,7 +69,7 @@
 <div class="pagination-button">
 	<button ng-disabled="paginaActual==0" ng-click="paginaActual=paginaActual-1"><span class="glyphicon glyphicon-backward"></span></button>
 	<span>Página {{paginaActual+1}} de {{numeroPaginas()}}</span>
-	<button ng-disabled="paginaActual >= getData().length/tamanoPagina - 1" ng-click="paginaActual=paginaActual+1"><span class="glyphicon glyphicon-forward"></span></button>
+	<button ng-disabled="paginaActual >= filtrarDatos().length/tamanoPagina - 1" ng-click="paginaActual=paginaActual+1"><span class="glyphicon glyphicon-forward"></span></button>
 </div>
 
 <div class="container">

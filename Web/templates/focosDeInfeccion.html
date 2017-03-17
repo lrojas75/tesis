@@ -1,0 +1,155 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="active-tab"><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
+            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
+            <li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">{{usuario.nombres}}</a></li>
+                <li><a ng-click="logout()">Cerrar Sesión</a></li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+
+<ul class="nav nav-tabs">
+  <li class="active"><a data-toggle="tab" href="#focosTabla">Listado de focos</a></li>
+  <li><a data-toggle="tab" href="#mapaCalor">Mapa de Calor</a></li>
+</ul>
+
+<div class="tab-content">
+  <div id="focosTabla" class="tab-pane fade in active">
+    <div class="filter-div">
+        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los focos de tipo vivienda basta con que escriba vivienda el input.</p>    
+        <span>Filtrar Focos:</span>
+        <input type="text" class="filter-input" ng-model="filterText" placeholder="Tipo-CC-Municipio...">
+        <button class="white-button" ng-click="focosRegistrados()">Ver mis Focos</button>
+    </div>
+
+    <table class="table" ng-form="tableForm">
+        <tr>
+            <th>Tipo</th>
+            <th>Cédula Trabajador</th>
+            <th>Ubicación</th>
+            <th>Municipio</th>
+            <th>Fecha</th>
+            <th>Clave</th>
+            <th>Estado</th>
+            <th>Tratamiento</th>
+            <th>Habitantes</th>
+            <th>Larvas</th>
+            <th>Pupas</th>
+            <th>Nombre Repr.</th>
+            <th>Apellido Repr.</th>
+            <th>Cédula Repr.</th>
+            <th>Plazo (Días)</th>
+        </tr>
+        <!-- Paginacion y filtro  -->
+        <tr ng-repeat="foco in Focos | filter:filterText | startFrom:paginaActual*tamanoPagina | limitTo:tamanoPagina | orderBy:'Tipo'">
+            <td>
+                {{foco.Tipo}}
+            </td>
+
+            <td>
+                {{foco.cedula}}
+            </td>
+
+            <td>
+                {{fixedUbicacion(foco)}}
+            </td>
+
+            <td>
+                {{foco.Municipio}}
+            </td>
+
+            <td>
+                {{foco.Fecha}}
+            </td>
+
+            <td>
+                {{foco.Clave}}
+            </td>
+
+            <td>
+                {{foco.Estado}}
+            </td>
+            
+            <td>
+                {{foco.Tratamiento}}
+            </td>
+
+            <td>
+                {{foco.Habitantes}}
+            </td>
+
+            <td>
+                {{foco.Larvas}}
+            </td>
+
+            <td>
+                {{foco.Pupas}}
+            </td>
+
+
+            <td>
+                {{foco.Nombre}}
+            </td>
+
+            <td>
+                {{foco.Apellido}}
+            </td>
+
+            <td>
+                {{foco.Cedula}}
+            </td>
+
+            <td>
+                {{foco.Plazo}}
+            </td>
+        </tr>
+    </table>
+
+    <div class="pagination-button">
+        <button ng-disabled="paginaActual==0" ng-click="paginaActual=paginaActual-1"><span class="glyphicon glyphicon-backward"></span></button>
+        <span>Página {{paginaActual+1}} de {{numeroPaginas()}}</span>
+        <button ng-disabled="paginaActual >= filtrarFocos().length/tamanoPagina - 1" ng-click="paginaActual=paginaActual+1"><span class="glyphicon glyphicon-forward"></span></button>
+    </div>
+  </div>
+
+  <div id="mapaCalor" class="tab-pane fade">
+    <div class="filter-div">
+        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los focos de tipo vivienda basta con que escriba vivienda el input y presione el botón.</p>
+        <span>Filtrar Focos:</span>
+        <input type="text" class="filter-input" ng-model="filtroMap" placeholder="Tipo-CC-Municipio...">
+        <button class="white-button" ng-click="mostrarFiltro()">Filtrar</button>
+    </div>
+
+    <div ng-init="initMap()" style="height: 400px; width: 50%; margin: 0 auto" id="heatmap"></div>
+  </div>
+</div>
+
+
+
+<!-- MODAL DE ERROR  -->
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="focosErrorModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-danger">
+                <i class="material-icons">error_outline</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -15,6 +15,9 @@ class focoInfeccion extends DB {
 	const LAST_FOCO = "select max(ID) from focoInfeccion where idInfoGeneral=?";
 
 	const GET_INSECTICIDAS = "select * from insecticidas";
+
+	const GET_FOCOS_SUPERVISOR = "SELECT f.Tipo, f.Tipo, f.Habitantes,f.Nombre,f.Apellido,f.Cedula,f.Clave,f.Ubicacion,f.Plazo,f.Tratamiento,f.Larvas,f.Pupas,f.Estado, u.cedula,i.Fecha,i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on f.idInfoGeneral=i.ID INNER JOIN usuario u on i.ID_Usuario=u.cedula WHERE (u.IDSupervisor=?) or (u.cedula=?)";
+
 	public function agregarSumidero($sumidero){
 		$this->open_connection();
 		$statement = $this->conn->prepare(self::INSERT_SUMIDERO);
@@ -25,7 +28,7 @@ class focoInfeccion extends DB {
 			$result = $statement->execute();
 			$statement->close();
 		}else{
-			$log->error("Error preparing statement of query".$statement);
+			error_log("Error preparing statement of query".$statement);
 		}
 		$this->close_connection();
 		return $result;
@@ -47,7 +50,7 @@ class focoInfeccion extends DB {
 					return $result;
 				}
 			}else{
-				$log->error("Error preparing statement of query".$statement);
+				error_log("Error preparing statement of query".$statement);
 			}			
 		}
 	}
@@ -68,7 +71,7 @@ class focoInfeccion extends DB {
 					}
 			}
 		}else{
-			$log->error("Error preparing statement of query".$statement);
+			error_log("Error preparing statement of query".$statement);
 		}
 		return $result;
 	}
@@ -91,7 +94,7 @@ class focoInfeccion extends DB {
 					return $result;
 				}
 			}else{
-				$log->error("Error preparing statement of query".$statement);
+				error_log("Error preparing statement of query".$statement);
 			}			
 		}
 	}
@@ -112,7 +115,7 @@ class focoInfeccion extends DB {
 					return $result;
 				}
 			}else{
-				$log->error("Error preparing statement of query".$statement);
+				error_log("Error preparing statement of query".$statement);
 			}			
 		}
 	}
@@ -143,7 +146,7 @@ class focoInfeccion extends DB {
 				return $result;
 			}
 		}else{
-			$log->error("Error statement"+$cdh);
+			error_log("Error statement"+$cdh);
 		}
 	}
 
@@ -157,10 +160,26 @@ class focoInfeccion extends DB {
 			}
 			return $insecticidas;
 		}
-
-	
 		$this->close_connection();
-		
+	}
+
+	public function getFocos($IDSupervisor){
+		$this->open_connection();
+		$stmt = $this->conn->prepare(self::GET_FOCOS_SUPERVISOR);
+		$stmt->bind_param("ii", $IDSupervisor,$IDSupervisor);
+		$stmt->execute();
+		$result=$stmt->get_result();
+		$focos=[];
+		if ($result->num_rows > 0){
+			while ($row = $result->fetch_assoc()) {
+				array_push($focos, $row);
+			}
+			return $focos;
+		}else{
+			error_log("Error in result ".$result );
+
+		}
+		$this->close_connection();
 	}
 
 }

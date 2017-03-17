@@ -54,7 +54,7 @@ class infoGeneral extends DB {
 				return $result and $resultComuna;
 			}			
 		}else{
-			$log->error("Error preparing statement of query".$query);
+			error_log("Error preparing statement of query".$query);
 			$this->close_connection();
 			return $result;
 		}		
