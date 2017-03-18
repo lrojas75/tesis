@@ -123,7 +123,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 		$http.get(ip + '/webApi.php?val=obtenerInsecticidas').success(function (data) {
 			$scope.arrayInsecticidas=data;
 		}).error(function (data) {
-			$scope.modalMessage = "Error al consultar los insecticidas.";
+			$scope.modalMessage = "No hay insecticidas registrados.";
 			$("#focosErrorModal").modal();
 			setTimeout(function () {
 				$("#focosErrorModal").modal("hide");
@@ -167,7 +167,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 			idInsecticida:insecticida.ID
 		};
 		$http.post(ip + '/webApi.php?val=deleteinsecticida', jsonData).success(function (data) {
-			$scope.modalMessage = "Datos Guardados.";
+			$scope.modalMessage = "Cambios Guardados.";
 			//Borrar del array
 			var index = $scope.arrayInsecticidas.findIndex(x => x.ID==parseInt(insecticida.ID));
 			$scope.arrayInsecticidas.splice(index, 1);

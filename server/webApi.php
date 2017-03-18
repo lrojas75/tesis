@@ -78,7 +78,8 @@ class WebAPI extends REST {
         $this->response(json_encode($result),200);
       }else{
         $this->response('',400);
-      }      
+      }
+      
     }
   }
 
