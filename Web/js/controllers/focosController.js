@@ -9,15 +9,20 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 
 	//Variable que almacena los focos
 	$scope.Focos = [];
-
+	//Variable que almacena insecticidas
+	$scope.arrayInsecticidas = [];
+	$scope.nombreInsecticida='';
 	//Pagina actual
 	$scope.paginaActual = 0;
+	$scope.paginaActualInsecticida = 0;
 	//Filtro de la info
 	$scope.filterText='';
+	$scope.filterTextInsecticida='';
 	//Filtro de focos para el heat map
 	$scope.filtroMap='';
 	//Tamano paginacion
 	$scope.tamanoPagina=5;
+	$scope.tamanoPaginaInsecticida=5;
 
 	$scope.logout = function(){
 		auth.logout();
@@ -26,7 +31,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	$scope.changeView= function(view){
 		auth.changeLocation(view);
 	};
-
+	//Tabla focos
 	$scope.filtrarFocos=function() {
 		return $filter('filter')($scope.Focos, $scope.filterText);
 	};
@@ -37,6 +42,22 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 
 	$scope.focosRegistrados=function(){
 		$scope.filterText=$scope.usuario.cedula;
+	};
+	//Tabla insecticidas
+	$scope.filtrarInsecticidas=function() {
+		return $filter('filter')($scope.arrayInsecticidas, $scope.filterTextInsecticida);
+	};
+
+	$scope.numeroPaginasInsecticida=function(){
+		return Math.ceil($scope.filtrarInsecticidas().length/$scope.tamanoPaginaInsecticida);
+	};
+
+	$scope.insecticidasRegistrados=function(){
+		$scope.filterTextInsecticida=$scope.usuario.cedula;
+	};
+
+	$scope.insecticidasRegistrados=function(){
+		$scope.filterTextInsecticida=$scope.usuario.cedula;
 	};
 
 	$scope.getAllFocos=function(){
@@ -79,7 +100,7 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 
 	$scope.fixedUbicacion=function(foco){
 		var split = foco.Ubicacion.split(",");
-        return parseInt(split[0]).toFixed(2) + "," + parseInt(split[1]).toFixed(2);
+    	return parseInt(split[0]).toFixed(2) + "," + parseInt(split[1]).toFixed(2);
 	};
 	//Devueve un array que contiene las coordenadas de cada foco
 	$scope.obtenerUbicaciones=function(arrayPuntos){
@@ -98,6 +119,72 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 		return posiciones;
 	};
 
+	$scope.getInsecticidas=function(){
+		$http.get(ip + '/webApi.php?val=obtenerInsecticidas').success(function (data) {
+			$scope.arrayInsecticidas=data;
+		}).error(function (data) {
+			$scope.modalMessage = "Error al consultar los insecticidas.";
+			$("#focosErrorModal").modal();
+			setTimeout(function () {
+				$("#focosErrorModal").modal("hide");
+			}, 3000);
+		});
+	};
+
+	$scope.insertarInsecticida=function(){
+		if ($scope.nombreInsecticida.trim()!='') {
+			var jsonData = {
+				usuario:parseInt($scope.usuario.cedula),
+				nombre:$scope.nombreInsecticida
+			};
+			$http.post(ip + '/webApi.php?val=insertinsecticida', jsonData).success(function (data) {
+				$scope.getInsecticidas();
+				$scope.nombreInsecticida='';
+				$scope.modalMessage = "Datos Guardados.";				
+				$("#focosSuccessModal").modal();
+				setTimeout(function () {
+					$("#focosSuccessModal").modal("hide");
+				}, 3000);
+			}).error(function (data) {
+				$scope.modalMessage = "No hay conexión.";
+				$("#focosErrorModal").modal();
+				setTimeout(function () {
+					$("#focosErrorModal").modal("hide");
+				}, 3000);
+			});
+		}else {
+			$scope.modalMessage = "Debe ingresar un nombre.";
+			$("#focosErrorModal").modal();
+			setTimeout(function () {
+				$("#focosErrorModal").modal("hide");
+			}, 3000);
+		}
+		
+	};
+
+	$scope.deleteInsecticida=function(insecticida){
+		var jsonData = {
+			idInsecticida:insecticida.ID
+		};
+		$http.post(ip + '/webApi.php?val=deleteinsecticida', jsonData).success(function (data) {
+			$scope.modalMessage = "Datos Guardados.";
+			//Borrar del array
+			var index = $scope.arrayInsecticidas.findIndex(x => x.ID==parseInt(insecticida.ID));
+			$scope.arrayInsecticidas.splice(index, 1);
+			$("#focosSuccessModal").modal();
+			setTimeout(function () {
+				$("#focosSuccessModal").modal("hide");
+			}, 3000);
+		}).error(function (data) {
+			$scope.modalMessage = "No hay conexión.";
+			$("#focosErrorModal").modal();
+			setTimeout(function () {
+				$("#focosErrorModal").modal("hide");
+			}, 3000);			
+		});
+	};
+
+	//Solucion al problema de renderizado del mapa causado por el cambio de pantallas
 	jQuery(document).ready(function() {
 	  checkContainer();
 	});
@@ -112,4 +199,5 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	};
 	
 	$scope.getAllFocos();
+	$scope.getInsecticidas();
 });

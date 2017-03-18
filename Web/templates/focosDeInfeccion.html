@@ -22,6 +22,7 @@
 <ul class="nav nav-tabs">
   <li class="active"><a data-toggle="tab" href="#focosTabla">Listado de focos</a></li>
   <li><a data-toggle="tab" href="#mapaCalor">Mapa de Calor</a></li>
+  <li><a data-toggle="tab" href="#insecticidasTabla">Insecticidas</a></li>
 </ul>
 
 <div class="tab-content">
@@ -122,8 +123,9 @@
         <button ng-disabled="paginaActual >= filtrarFocos().length/tamanoPagina - 1" ng-click="paginaActual=paginaActual+1"><span class="glyphicon glyphicon-forward"></span></button>
     </div>
   </div>
+<!-- MAPA DE CALOR  -->
 
-  <div id="mapaCalor" class="tab-pane fade">
+    <div id="mapaCalor" class="tab-pane fade">
     <div class="filter-div">
         <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los focos de tipo vivienda basta con que escriba vivienda el input y presione el botón.</p>
         <span>Filtrar Focos:</span>
@@ -132,16 +134,76 @@
     </div>
 
     <div ng-init="initMap()" style="height: 400px; width: 50%; margin: 0 auto" id="heatmap"></div>
-  </div>
+    </div>
+
+<!-- INSECTICIDAS  -->
+    <div id="insecticidasTabla" class="tab-pane fade">
+        <div class="filter-div">   
+            <span>Filtrar Focos:</span>
+            <input type="text" class="filter-input" ng-model="filterTextInsecticida" placeholder="Nombre-CC">
+            <button class="white-button" ng-click="insecticidasRegistrados()">Ver mis Insecticidas</button>
+            <br>
+            <span>Nombre Insecticida:</span>
+            <input type="text" class="filter-input" ng-model="nombreInsecticida" placeholder="Nuevo insecticida" required>
+            <button class="white-button" ng-click="insertarInsecticida()">Insertar</button>
+        </div>
+
+        <table class="table" ng-form="tableForm">            
+            <tr>
+                <th>Acciones</th>
+                <th>Nombre</th>
+                <th>Agregado por:</th>
+            </tr>
+            <!-- Paginacion y filtro  -->
+            <tr ng-repeat="insecticida in arrayInsecticidas | filter:filterTextInsecticida | startFrom:paginaActualInsecticida*tamanoPaginaInsecticida | limitTo:tamanoPaginaInsecticida | orderBy:'Nombre'">
+                <td>
+                    <li class="dropdown no-list-style">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-option-vertical"></span></a>
+                    
+                      <ul class="dropdown-menu">
+                        <li><a ng-click="deleteInsecticida(insecticida)">Eliminar</a></li>
+                      </ul>
+                    </li>
+                </td>
+                <td>
+                    {{insecticida.Nombre}}
+                </td>
+
+                <td>
+                    {{insecticida.Usuario_Ingresado}}
+                </td>
+            </tr>
+        </table>
+
+        <div class="pagination-button">
+            <button ng-disabled="paginaActualInsecticida==0" ng-click="paginaActualInsecticida=paginaActualInsecticida-1"><span class="glyphicon glyphicon-backward"></span></button>
+            <span>Página {{paginaActualInsecticida+1}} de {{numeroPaginasInsecticida()}}</span>
+            <button ng-disabled="paginaActualInsecticida >= filtrarInsecticidas().length/tamanoPaginaInsecticida - 1" ng-click="paginaActualInsecticida=paginaActualInsecticida+1"><span class="glyphicon glyphicon-forward"></span></button>
+        </div>
+    </div>
 </div>
 
 
-
-<!-- MODAL DE ERROR  -->
+<!-- MODALES  -->
 
 <div class="container">
     <!-- Modal -->
     <div class="modal fade" id="focosErrorModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-danger">
+                <i class="material-icons">error_outline</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="focosSuccessModal" role="dialog">
         <div class="modal-dialog modal-sm">
             <!-- Modal content-->
             <div class="modal-danger">

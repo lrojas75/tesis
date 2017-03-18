@@ -160,7 +160,7 @@ class WebAPI extends REST {
       }
     }
   }
-//<<----------------------------FUNCIONES PARA MMODIFICAR USUARIOS -------------------------------->>
+//<<----------------------------FUNCIONES PARA MODIFICAR USUARIOS -------------------------------->>
 
   private function allUsers(){
     if ($this->get_request_method () != "GET") {
@@ -199,7 +199,7 @@ class WebAPI extends REST {
       $this->response ( '', 406 );
     }else{
       $usuario =  new usuarios();
-      $data = json_decode(file_get_contents('php://input'),true);      
+      $data = json_decode(file_get_contents('php://input'),true);
       $result = $usuario->updateRol($data);
       if ($result) {
         $this->response('',200);
@@ -208,6 +208,54 @@ class WebAPI extends REST {
       }
     }
   }
+
+//<<----------------------------FUNCIONES PARA FOCOS DE INFECCION WEB -------------------------------->>
+  private function allFocos(){
+    if ($this->get_request_method () != "GET") {
+      $this->response ( '', 406 );
+    }else{
+      $focoinfeccion = new focoInfeccion();
+      $user = $_GET['usuario'];
+      $result = $focoinfeccion->getFocos($user);
+      if ($result) {
+        $this->response(json_encode($result),200);
+      }else{
+        $this->response('',400);        
+      }
+    }
+  }
+
+  private function insertinsecticida(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $focoinfeccion =  new focoInfeccion();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $focoinfeccion->insertInsecticida($data['nombre'],$data['usuario']);
+      if ($result) {
+        $this->response('',200);
+      }else{
+        $this->response('',400);
+      }
+    }
+  }
+
+  private function deleteinsecticida(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $focoinfeccion =  new focoInfeccion();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $focoinfeccion->deleteInsecticida($data['idInsecticida']);
+      if ($result) {
+        $this->response('',200);
+      }else{
+        $this->response('',400);
+      }
+    }
+
+  }
+
 
 }
 

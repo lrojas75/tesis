@@ -49,7 +49,7 @@ class usuarios extends DB {
 
 	public function updateSupervisor($data){
 		$this->open_connection();
-		$statement = $this->conn->prepare(self::UPDATE_SUPERVISOR);		
+		$statement = $this->conn->prepare(self::UPDATE_SUPERVISOR);
 		if($statement){
 			if(!is_null($data) && count($data)>0){
 				$statement->bind_param("ii",$data['IDSupervisor'],$data['cedula']);				

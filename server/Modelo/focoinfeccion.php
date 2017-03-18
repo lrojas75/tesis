@@ -15,6 +15,8 @@ class focoInfeccion extends DB {
 	const LAST_FOCO = "select max(ID) from focoInfeccion where idInfoGeneral=?";
 
 	const GET_INSECTICIDAS = "select * from insecticidas";
+	const INSERT_INSECTICIDA ="insert into insecticidas (Nombre, Usuario_Ingresado) values (?,?)";
+	const DELETE_INSECTICIDA ="delete from insecticidas where id=?";
 
 	const GET_FOCOS_SUPERVISOR = "SELECT f.Tipo, f.Tipo, f.Habitantes,f.Nombre,f.Apellido,f.Cedula,f.Clave,f.Ubicacion,f.Plazo,f.Tratamiento,f.Larvas,f.Pupas,f.Estado, u.cedula,i.Fecha,i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on f.idInfoGeneral=i.ID INNER JOIN usuario u on i.ID_Usuario=u.cedula WHERE (u.IDSupervisor=?) or (u.cedula=?)";
 
@@ -161,6 +163,34 @@ class focoInfeccion extends DB {
 			return $insecticidas;
 		}
 		$this->close_connection();
+	}
+
+	public function deleteInsecticida($IDInsecticida){
+		$this->open_connection();
+		$statement = $this->conn->prepare(self::DELETE_INSECTICIDA);
+		if($statement){
+			$statement->bind_param("i",$IDInsecticida);				
+			$result = $statement->execute();
+			$statement->close();
+			$this->close_connection();
+			return $result;
+		}else{
+			return false;
+		}
+	}
+
+	public function insertInsecticida($NombreInsecticida, $IDUsuario){
+		$this->open_connection();
+		$statement = $this->conn->prepare(self::INSERT_INSECTICIDA);
+		if($statement){
+			$statement->bind_param("ss",$NombreInsecticida,$IDUsuario);
+			$result = $statement->execute();
+			$statement->close();
+			$this->close_connection();
+			return $result;
+		}else{
+			return false;
+		}
 	}
 
 	public function getFocos($IDSupervisor){
