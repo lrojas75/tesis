@@ -40,8 +40,8 @@
                 <h4>Iniciar sesión</h4><br>
                 <form name = "loginForm" class="form-horizontal" >
                     <div class="input-container">
-                        <input type="number" class="form-control" placeholder="Cédula" ng-model="userLogin" required>
-                        <input type="password" class="form-control" placeholder="Contraseña" ng-model="passLogin" required>
+                        <input type="number" class="form-control" placeholder="Cédula" ng-model="loginForm.usuario" required>
+                        <input type="password" class="form-control" placeholder="Contraseña" ng-model="loginForm.contrasena" required>
 
                     </div>                        
 
@@ -57,14 +57,13 @@
         <!-- ......................................... Tab Registro................................................. -->
             <div class="tab-pane" id="tab_Registro">
                 <h4>Registro</h4><br>
-
-                <form name = "registroForm" class="form-horizontal" ng-controller="inicioController">
+                <form name = "registerForm" class="form-horizontal">
                     <div class="input-container">
-                        <input type="text" name="nombres" class="form-control" placeholder="Nombres" ng-model="nombres" required>
-                        <input type="text" name="apellidos" class="form-control" placeholder="Apellidos" ng-model="apellidos" required>
-                        <input type="number" name="cedula" class="form-control" placeholder="Cédula" ng-model="cedula" required>
-                        <input type="password" name="password" class="form-control" placeholder="Contraseña" ng-model="passRegistro" required>
-
+                        <input type="text" class="form-control" placeholder="Nombres" ng-model="registroForm.nombres" required>
+                        <input type="text" class="form-control" placeholder="Apellidos" ng-model="registroForm.apellidos" required>
+                        <input type="number" class="form-control" placeholder="Cédula" ng-model="registroForm.cedula" required>
+                        <input type="email" class="form-control" placeholder="Correo" ng-model="registroForm.correo" required>
+                        <input type="password" class="form-control" placeholder="Contraseña" ng-model="registroForm.contrasena" required>
                     </div>
                     <div style="color: red;"> {{registerError}} </div>
 

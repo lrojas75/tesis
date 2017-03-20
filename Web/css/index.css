@@ -47,6 +47,9 @@ tr:hover{
   background-color: #f5f5f5
 }
 
+button:disabled{
+  background-color: gray;
+}
 
 .div-text-center{
   width: 100%;
@@ -199,7 +202,7 @@ tr:hover{
   -o-transition: all .3s; -moz-transition: all .3s; -webkit-transition: all .3s; -ms-transition: all .3s; transition: all .3s;
 }
 
-.btn-safi:hover{ 
+.btn-safi:not([disabled]):hover { 
   opacity: 0.6; color: #fff; 
 }
 

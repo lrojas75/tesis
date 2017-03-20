@@ -9,8 +9,8 @@
 
         <div class="form-bottom">
           <div class="element-container">
-            <input type="text" name="form-username" placeholder="Cédula" class="login-input" id="form-username" ng-model="loginForm.usuario" required>
-            <input type="password" name="form-password" placeholder="Contraseña" class="login-input" id="form-password" ng-model="loginForm.contrasena" required>
+            <input type="text" placeholder="Cédula" class="login-input" id="form-username" ng-model="loginForm.usuario" required>
+            <input type="password" placeholder="Contraseña" class="login-input" id="form-password" ng-model="loginForm.contrasena" required>
           </div>
 
           <div class="error-center">
@@ -34,12 +34,9 @@
           <div class="element-container">
             <input type="text" required placeholder="Nombre" class="login-input" ng-model="registroForm.nombres">
             <input type="text" required placeholder="Apellidos" class="login-input" ng-model="registroForm.apellidos">
-            <input type="text" required placeholder="Cédula" class="login-input" ng-model="registroForm.cedula">
+            <input type="email" required placeholder="Correo" class="login-input" ng-model="registroForm.correo">
+            <input type="number" required placeholder="Cédula" class="login-input" ng-model="registroForm.cedula">
             <input type="password" required placeholder="Contraseña" class="login-input" ng-model="registroForm.contrasena">
-            <div class="login-radio">
-              <label>¿Es supervisor?</label>
-              <input type="checkbox" ng-model="registroForm.coordinador" ng-init="registroForm.coordinador=false">
-            </div>  
           </div>
 
           <div class="error-center">
@@ -57,4 +54,32 @@
 </div>
 
 
-  
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="loginSuccessModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-success">
+                <i class="material-icons">done</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>            
+            </div>
+        </div>
+    </div>
+</div>  
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="loginErrorModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-danger">
+                <i class="material-icons">error_outline</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>            
+            </div>
+        </div>
+    </div>
+</div>  

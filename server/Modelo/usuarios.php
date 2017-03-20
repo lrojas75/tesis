@@ -2,8 +2,9 @@
 require_once 'DB/db.php';
 class usuarios extends DB {	
 	const ALL_USERS = "select * from usuario WHERE IDSupervisor=0 or IDSupervisor=?";//Con supervisor o supervisados por el usuario
-	const LOOK_USER = "select * FROM usuario WHERE cedula=?";
-	const INSERT_USER = "insert into usuario (cedula,nombres,apellidos,password,rolUsuario) values (?,?,?,?,?)";
+	const LOOK_USER = "SELECT * FROM usuario WHERE cedula=?";
+	const LOOK_REGISTER_USER = "SELECT * FROM usuario WHERE cedula=? or correo=?";
+	const INSERT_USER = "insert into usuario (cedula,nombres,apellidos,correo,password,rolUsuario) values (?,?,?,?,?,?)";
 	const UPDATE_SUPERVISOR = "update usuario set IDSupervisor=? where cedula=?";
 	const UPDATE_ROL = "update usuario set rolUsuario=? where cedula=?";
 //--------FUNCION PARA INICIAR SESION (RETORNA "SI", SI LOS DATOS SON CORRECTOS)------------------>>>
@@ -25,23 +26,27 @@ class usuarios extends DB {
 	}
 
 //---------FUNCION PARA AGREGAR UN USUSARIO NUEVO----------------->>>
-	public function agregarUsuario($user) {		
-		$arguments = ["username"=>$user['cedula']];
-		$lookUser = $this->query(self::LOOK_USER,$arguments);
-		$checkUser=$lookUser->fetch_array(MYSQLI_ASSOC);
-		if(is_null($checkUser)){
+	public function agregarUsuario($user) {
+		$this->open_connection();
+		$lookUser = $this->conn->prepare(self::LOOK_REGISTER_USER);
+		$lookUser->bind_param("is",$user['cedula'],$user['correo']);
+		$lookUser->execute();
+		$checkUser=$lookUser->get_result();
+		$this->close_connection();
+		if($checkUser->num_rows==0){
 			$this->open_connection();
 			$statement = $this->conn->prepare(self::INSERT_USER);
 			if($statement){
 				if (!is_null($user) && count($user)>0) {
-					$statement->bind_param ("issss", $user['cedula'], $user['nombres'], $user['apellidos'], md5($user['password']),$user['rol']);										
+					$statement->bind_param ("isssss", $user['cedula'], $user['nombres'], $user['apellidos'],$user['correo'], md5($user['password']),$user['rol']);
 				}
 				$result=$statement->execute();
 				$statement->close();
-				$this->close_connection();
-				return $result;	
-			}
-						
+				return $result;
+				$this->close_connection();				
+			}else{
+				return "No hay statement";
+			}			
 		}else{
 			return "repetido";
 		}

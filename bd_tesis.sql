@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 17, 2017 at 03:01 AM
+-- Generation Time: Mar 20, 2017 at 08:06 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 5.6.28
 
@@ -244,16 +244,16 @@ INSERT INTO `informaciongeneral` (`ID`, `ID_Usuario`, `Municipio`, `Fecha`) VALU
 
 CREATE TABLE `insecticidas` (
   `ID` int(11) NOT NULL,
-  `Nombre` varchar(30) NOT NULL
+  `Nombre` varchar(30) NOT NULL,
+  `Usuario_Ingresado` varchar(30) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `insecticidas`
 --
 
-INSERT INTO `insecticidas` (`ID`, `Nombre`) VALUES
-(1, 'Op1'),
-(2, 'Op2');
+INSERT INTO `insecticidas` (`ID`, `Nombre`, `Usuario_Ingresado`) VALUES
+(5, 'Insecticida 1', '11');
 
 -- --------------------------------------------------------
 
@@ -265,6 +265,7 @@ CREATE TABLE `usuario` (
   `cedula` int(11) NOT NULL,
   `nombres` varchar(20) NOT NULL,
   `apellidos` varchar(20) NOT NULL,
+  `correo` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
   `rolUsuario` varchar(30) NOT NULL,
   `IDSupervisor` int(11) DEFAULT '0'
@@ -274,42 +275,55 @@ CREATE TABLE `usuario` (
 -- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`cedula`, `nombres`, `apellidos`, `password`, `rolUsuario`, `IDSupervisor`) VALUES
-(1, 'adsa', 'dasda', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
-(11, 'us', 'us', '6512bd43d9caa6e02c990b0a82652dca', 'true', 0),
-(12, 'Probando', 'Ret', '12', '', 0),
-(13, 'ab', 'cd', '13', '', 0),
-(90, 'probando', 'probando', '99', '', 0),
-(98, 'Pedro', 'Perez', '6512bd43d9caa6e02c990b0a82652dca', 'true', 0),
-(111, '11', '111', '698d51a19d8a121ce581499d7b701668', 'false', 11),
-(119, 'peter', 'anguila', '6512bd43d9caa6e02c990b0a82652dca', 'true', 11),
-(1234, 'a', 'a', '1234', '', 11),
-(12345, 'Probando', 'TimeOut2', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
-(65783, 'No sale', 'El mensaje', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(81900, '91782', '9as', '6512bd43d9caa6e02c990b0a82652dca', 'false', 11),
-(90181, 'Debe Ir', 'Con Null', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
-(102983, 'Otra', 'Vez', '912e79cd13c64069d91da65d62fbb78c', 'false', 0),
-(120981, 'Poto', 'Pato', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(123456, 'Probando', 'TimeOut', '6f04f0d75f6870858bae14ac0b6d9f73', 'false', 0),
-(131231, 'ProbandoID', 'Otra vez', '8d4646eb2d7067126eb08adb0672f7bb', 'false', 0),
-(132987, 'Aaay Pa2', 'Carajito', '9996535e07258a7bbfd8b132435c5962', 'false', 0),
-(153617, 'MÃ³vil', 'Css', '00c66aaf5f2c3f49946f15c1ad2ea0d3', 'false', 0),
-(167152, 'Probando', 'Estilos', 'ef1dc416e22dd93120421fab1a338f31', 'false', 0),
-(198764, 'Probando', 'Modal', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
-(231312, 'dasd', 'asdas12', '7b354881033eaad8e420662a1e3ce30e', 'false', 0),
-(875471, 'Debe', 'Salir', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(986701, 'Probando Otros', 'Modales', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
-(987651, 'ProbandoID', 'Supervisor', '36290c4064073ec57141d6ce1389316f', 'false', 0),
-(1283791, 'Poto', 'Pito', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(1290371, 'Probando', 'DiseÃ±o', '14cfdb59b5bda1fc245aadae15b1984a', 'false', 0),
-(7861287, 'Centrar', 'Verticalmente', '120705de7e61c5b322ad798b8ef225a7', 'false', 0),
-(12345678, 'Wiily', 'Rex', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(12837912, 'Pata', 'Pita', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(90871296, 'sdas', 'das', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
-(192083109, 'Ayy Pa', 'Null', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
-(1144031675, 'felipe', 'rojas', '1234', '', 0),
-(1290378129, 'Papa', 'Pepe', 'e10adc3949ba59abbe56e057f20f883e', 'false', 0),
-(1878985612, 'Probando', 'Registro', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0);
+INSERT INTO `usuario` (`cedula`, `nombres`, `apellidos`, `correo`, `password`, `rolUsuario`, `IDSupervisor`) VALUES
+(1, 'adsa', 'dasda', '', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(11, 'us', 'us', '', '6512bd43d9caa6e02c990b0a82652dca', 'true', 0),
+(12, 'Probando', 'Ret', '', '12', '', 0),
+(13, 'ab', 'cd', '', '13', '', 0),
+(90, 'probando', 'probando', '', '99', '', 0),
+(98, 'Pedro', 'Perez', '', '6512bd43d9caa6e02c990b0a82652dca', 'true', 0),
+(111, '11', '111', '', '698d51a19d8a121ce581499d7b701668', 'false', 11),
+(119, 'peter', 'anguila', '', '6512bd43d9caa6e02c990b0a82652dca', 'true', 11),
+(1234, 'a', 'a', '', '1234', '', 11),
+(11876, 'adasdasd', 'adasdasda', 'prueba1@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(12345, 'Probando', 'TimeOut2', '', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(31231, 'POsa', 'aÂ´p', 'prueba7@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(65783, 'No sale', 'El mensaje', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(81900, '91782', '9as', '', '6512bd43d9caa6e02c990b0a82652dca', 'false', 11),
+(90181, 'Debe Ir', 'Con Null', '', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
+(102983, 'Otra', 'Vez', '', '912e79cd13c64069d91da65d62fbb78c', 'false', 0),
+(120981, 'Poto', 'Pato', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(123456, 'Probando', 'TimeOut', '', '6f04f0d75f6870858bae14ac0b6d9f73', 'false', 0),
+(131231, 'ProbandoID', 'Otra vez', '', '8d4646eb2d7067126eb08adb0672f7bb', 'false', 0),
+(132987, 'Aaay Pa2', 'Carajito', '', '9996535e07258a7bbfd8b132435c5962', 'false', 0),
+(153617, 'MÃ³vil', 'Css', '', '00c66aaf5f2c3f49946f15c1ad2ea0d3', 'false', 0),
+(167152, 'Probando', 'Estilos', '', 'ef1dc416e22dd93120421fab1a338f31', 'false', 0),
+(198764, 'Probando', 'Modal', '', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
+(231312, 'dasd', 'asdas12', '', '7b354881033eaad8e420662a1e3ce30e', 'false', 0),
+(875471, 'Debe', 'Salir', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(876589, 'Usuario', 'No existe', '123@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(892723, 'No registra', 'No registra', 'prueba4@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(986701, 'Probando Otros', 'Modales', '', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(987651, 'ProbandoID', 'Supervisor', '', '36290c4064073ec57141d6ce1389316f', 'false', 0),
+(1283791, 'Poto', 'Pito', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(1290371, 'Probando', 'DiseÃ±o', '', '14cfdb59b5bda1fc245aadae15b1984a', 'false', 0),
+(7861287, 'Centrar', 'Verticalmente', '', '120705de7e61c5b322ad798b8ef225a7', 'false', 0),
+(12345678, 'Wiily', 'Rex', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(12837912, 'Pata', 'Pita', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(76574123, 'No debe', 'Registrar', 'email@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(90871296, 'sdas', 'das', '', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(98237191, 'Probando', 'correo', 'email@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(123456789, 'Probando', 'Correo', 'prueba@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(172831809, 'NO', 'registre', 'email@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(192083109, 'Ayy Pa', 'Null', '', '827ccb0eea8a706c4c34a16891f84e7b', 'false', 0),
+(785364823, 'No registre', 'No registre', 'email@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(1123456789, 'Probando', 'CorreoMovil', 'prueba@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(1144031675, 'felipe', 'rojas', '', '1234', '', 0),
+(1231231231, 'jjnama', 'asdasd', 'dsadas@gmail.com', '7cafffeaec4b44f40beb99c1db545fb2', 'false', 0),
+(1290378129, 'Papa', 'Pepe', '', 'e10adc3949ba59abbe56e057f20f883e', 'false', 0),
+(1878985612, 'Probando', 'Registro', '', '81dc9bdb52d04dc20036dbd8313ed055', 'false', 0),
+(1879361278, 'probando', 'registro', 'email@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0),
+(2147483647, 'Otro', 'Usuario', 'prueba@gmail.com', '6512bd43d9caa6e02c990b0a82652dca', 'false', 0);
 
 --
 -- Indexes for dumped tables
@@ -390,7 +404,7 @@ ALTER TABLE `informaciongeneral`
 -- AUTO_INCREMENT for table `insecticidas`
 --
 ALTER TABLE `insecticidas`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
