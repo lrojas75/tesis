@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngCookies']);
-var ip = "http://192.168.0.15/";
+var ip = "http://192.168.0.7:3000/server/";
 
 //Config de ruta y de headers
 app.config(function ($httpProvider,$routeProvider) {
@@ -33,6 +33,10 @@ app.config(function ($httpProvider,$routeProvider) {
         controller: "focosController",
         templateUrl: "templates/focosDeInfeccion.html"
     }).otherwise({redirectTo:'/home'})
+    .when("/perfil",{
+        controller: "perfilController",
+        templateUrl: "templates/perfil.html"
+    }).otherwise({redirectTo:'/home'})
 });
 
 //factory que controla la autentificación, devuelve un objeto
@@ -63,7 +67,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         checkStatus : function()
         {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos","/focosDeInfeccion"];
+            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos","/focosDeInfeccion", "/perfil"];
             if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.userInfo) == "undefined")
             {
                 $location.path("/login");

@@ -477,3 +477,42 @@ button:disabled{
   }
 
 }
+/*---------------------------------------- PERFIL USUARIO ---------------------*/
+.input-container-profile{
+  display:block;
+  max-width: 60%;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: 1px solid #FFD2D2;
+  padding: 10px;
+  background: #F5F6FA;
+  text-align: center;
+}
+.container-izq{
+  display:inline-block;
+  width: 20%;
+  vertical-align: top;
+  background: #F5F6FA;
+}
+.container-der{
+  display:inline-block;
+  width:50%;
+  margin-left: 10%;
+  background: #F5F6FA;
+}
+.title-profile{
+  font-size: 30px;
+}
+.table-profile{
+  max-width: 80%;
+}
+.table-profile > tbody > tr {
+  border-top: 1px solid rgb(221, 221, 221);
+}
+.table-profile > tbody > tr:first-child {
+  border-top: 0;
+}
+.table-profile > tbody > tr > td {
+  border-top: 0;
+  text-align: left;
+}

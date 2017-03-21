@@ -1,0 +1,93 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
+            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
+            <li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+              <ul class="dropdown-menu">
+                <li><a ng-click="changeView('/perfil')">{{usuario.nombres}}</a></li>
+                <li><a ng-click="logout()">Cerrar Sesión</a></li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-xs-12" ng-show="!editarPerfil">
+    <form  class="form-horizontal">
+    <div class="input-container-profile">
+        <h3 class="title-profile">Información personal</h3><br>
+        <div class="container-izq">
+            <img alt="User Pic" src="userImg.png" class="img-circle img-responsive">
+        </div>
+        <div class="container-der">
+            <table class="table table-profile">
+            <tbody>
+                <tr>
+                    <td style="font-weight: bold;">Cédula:</td>
+                    <td>{{usuario.cedula}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Nombres:</td>
+                    <td>{{usuario.nombres}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Apellidos:</td>
+                    <td>{{usuario.apellidos}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Contraseña</td>
+                    <td>{{usuario.password}}</td>
+                </tr>
+                   
+                <tr>
+                <tr>
+                    <td style="font-weight: bold;">Cargo</td>
+                    <td>{{cargoPerfil()}}</td>
+                </tr>
+                <tr>
+                    <td style="font-weight: bold;">Email</td>
+                    <td>{{usuario.correo}}</td>
+                </tr>
+            </tbody>
+            </table>
+        </div>
+
+        <div class="element-container">
+            <button type = "submit" ng-click="editarPerfil = true" class="btn-safi">Editar información</button>
+        </div>
+    </div>
+    </form>
+</div>
+
+<div class="col-xs-12" ng-show="editarPerfil">
+    <form  class="form-horizontal">
+    <div class="input-container-profile">
+        <h3 class="title-profile">Información personal</h3><br>
+        <div class="container-izq">
+            <img alt="User Pic" src="userImg.png" class="img-circle img-responsive">
+        </div>
+        <div class="container-der">
+            <div class="element-container">
+                <input type="text" ng-init='{{usuario.nombres}}' class="login-input" ng-model="perfil.nombres">
+                <input type="text" value={{usuario.apellidos}} class="login-input" ng-model="perfil.apellidos">
+                <input type="email" value={{usuario.correo}} class="login-input" ng-model="perfil.correo">
+                <input type="password" class="login-input" ng-model="perfil.contrasena">    
+            </div>
+            <div class="error-center">
+                <span> {{updateError}} </span>
+            </div>
+
+            <div class="element-container">
+                <button type="submit" ng-click="editar()" class="btn-safi">Aceptar</button>
+                <button ng-click="editar=false" class="btn-safi">Cancelar</button>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
