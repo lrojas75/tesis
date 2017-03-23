@@ -207,7 +207,6 @@ class focoInfeccion extends DB {
 			return $focos;
 		}else{
 			error_log("Error in result ".$result );
-
 		}
 		$this->close_connection();
 	}

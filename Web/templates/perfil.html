@@ -18,76 +18,76 @@
     </div>
 </nav>
 
-<div class="col-xs-12" ng-show="!editarPerfil">
-    <form  class="form-horizontal">
+<form name="perfilForm"  class="form-horizontal">
     <div class="input-container-profile">
         <h3 class="title-profile">Información personal</h3><br>
         <div class="container-izq">
-            <img alt="User Pic" src="userImg.png" class="img-circle img-responsive">
+            <img alt="User Pic" src="img/userImg.png" class="img-circle img-responsive">
         </div>
         <div class="container-der">
-            <table class="table table-profile">
-            <tbody>
-                <tr>
-                    <td style="font-weight: bold;">Cédula:</td>
-                    <td>{{usuario.cedula}}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Nombres:</td>
-                    <td>{{usuario.nombres}}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Apellidos:</td>
-                    <td>{{usuario.apellidos}}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Contraseña</td>
-                    <td>{{usuario.password}}</td>
-                </tr>
-                   
-                <tr>
-                <tr>
-                    <td style="font-weight: bold;">Cargo</td>
-                    <td>{{cargoPerfil()}}</td>
-                </tr>
-                <tr>
-                    <td style="font-weight: bold;">Email</td>
-                    <td>{{usuario.correo}}</td>
-                </tr>
-            </tbody>
-            </table>
-        </div>
+            <div class="input-container">
 
+                <label>Cédula:</label>
+                <label>{{usuario.cedula}}</label>
+
+                <label>Nombres:</label>
+                <label>{{usuario.nombres}}</label>
+
+                <label>Apellidos:</label>
+                <label>{{usuario.apellidos}}</label>
+
+                <label>Cargo:</label>
+                <label>{{cargoPerfil()}}</label>
+
+                <label>Email:</label>
+                <label>{{usuario.correo}}</label>
+
+                <label>Contraseña:</label>
+                <input type="password" class="form-control" style="width: 35%;" id="passwordUser" ng-model="usuario.password" placeholder="Contraseña" required>
+
+                <label ng-show="mostrarContrasena"> Confirmar contraseña:</label>
+                <input type="password" class="form-control" style="width: 35%;" ng-show="mostrarContrasena" placeholder="Confirmar Contraseña" ng-model="confirmarContrasena" required>
+
+                <label style="width: auto; color: red;" ng-show="usuario.password!=confirmarContrasena && mostrarContrasena">Las contraseñas no coinciden</label>
+            </div>
+        </div>
         <div class="element-container">
-            <button type = "submit" ng-click="editarPerfil = true" class="btn-safi">Editar información</button>
+            <button type = "submit" ng-click="editarInformacion()" ng-disabled="!perfilForm.$valid" class="btn-safi">Editar</button>
+            <button ng-click="usuario=usuarioCopia; mostrarContrasena=false;" ng-disabled="checkChange()" class="btn-safi">Cancelar</button>
         </div>
     </div>
-    </form>
+</form>
+
+
+<!-- MODAL DE ERROR  -->
+
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="perfilErrorModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-danger">
+                <i class="material-icons">error_outline</i>
+            </div>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>
+            </div>
+        </div>
+    </div>
 </div>
+<!-- MODAL DE EXITO -->
 
-<div class="col-xs-12" ng-show="editarPerfil">
-    <form  class="form-horizontal">
-    <div class="input-container-profile">
-        <h3 class="title-profile">Información personal</h3><br>
-        <div class="container-izq">
-            <img alt="User Pic" src="userImg.png" class="img-circle img-responsive">
-        </div>
-        <div class="container-der">
-            <div class="element-container">
-                <input type="text" ng-init='{{usuario.nombres}}' class="login-input" ng-model="perfil.nombres">
-                <input type="text" value={{usuario.apellidos}} class="login-input" ng-model="perfil.apellidos">
-                <input type="email" value={{usuario.correo}} class="login-input" ng-model="perfil.correo">
-                <input type="password" class="login-input" ng-model="perfil.contrasena">    
+<div class="container">
+    <!-- Modal -->
+    <div class="modal fade" id="perfilSuccessModal" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <!-- Modal content-->
+            <div class="modal-success">
+                <i class="material-icons">done</i>
             </div>
-            <div class="error-center">
-                <span> {{updateError}} </span>
-            </div>
-
-            <div class="element-container">
-                <button type="submit" ng-click="editar()" class="btn-safi">Aceptar</button>
-                <button ng-click="editar=false" class="btn-safi">Cancelar</button>
+            <div class="modal-text">
+                <p>{{modalMessage}}</p>
             </div>
         </div>
     </div>
-    </form>
 </div>

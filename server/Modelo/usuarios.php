@@ -7,6 +7,7 @@ class usuarios extends DB {
 	const INSERT_USER = "insert into usuario (cedula,nombres,apellidos,correo,password,rolUsuario) values (?,?,?,?,?,?)";
 	const UPDATE_SUPERVISOR = "update usuario set IDSupervisor=? where cedula=?";
 	const UPDATE_ROL = "update usuario set rolUsuario=? where cedula=?";
+	const UPDATE_INFO = "update usuario set password=? where cedula=?";
 //--------FUNCION PARA INICIAR SESION (RETORNA "SI", SI LOS DATOS SON CORRECTOS)------------------>>>
 
 	public function login($username,$password){
@@ -68,12 +69,29 @@ class usuarios extends DB {
 		}
 	}
 
+
 	public function updateRol($data){
 		$this->open_connection();
-		$statement = $this->conn->prepare(self::UPDATE_ROL);		
+		$statement = $this->conn->prepare(self::UPDATE_ROL);
 		if($statement){
 			if(!is_null($data) && count($data)>0){
-				$statement->bind_param("si",$data['nuevoRol'],$data['cedula']);				
+				$statement->bind_param("si",$data['nuevoRol'],$data['cedula']);
+			}
+			$result = $statement->execute();
+			$statement->close();
+			$this->close_connection();
+			return $result;
+		}else{
+			return false;
+		}
+	}
+
+	public function updateInfo($data){
+		$this->open_connection();
+		$statement = $this->conn->prepare(self::UPDATE_INFO);
+		if($statement){
+			if(!is_null($data) && count($data)>0){
+				$statement->bind_param("si",md5($data['contrasena']),$data['cedula']);
 			}
 			$result = $statement->execute();
 			$statement->close();

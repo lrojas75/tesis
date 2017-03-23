@@ -210,6 +210,22 @@ class WebAPI extends REST {
     }
   }
 
+private function editarInformacion(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario =  new usuarios();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result = $usuario->updateInfo($data);
+      if ($result) {
+        $this->response('',200);
+      }else{
+        $this->response('',400);
+      }
+    }
+  }
+
+
 //<<----------------------------FUNCIONES PARA FOCOS DE INFECCION WEB -------------------------------->>
   private function allFocos(){
     if ($this->get_request_method () != "GET") {
