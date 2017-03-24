@@ -287,6 +287,10 @@ button:disabled{
   -moz-border-radius: 0 0 4px 4px; -webkit-border-radius: 0 0 4px 4px; border-radius: 0 0 4px 4px;
   text-align: center;
 }
+
+.form-bottom a{
+  text-align: left;
+}
 /*Encierra los inputs y botones para que el ancho de form botton no se afecte por el del contenido*/
 .element-container{
   width: 100%;

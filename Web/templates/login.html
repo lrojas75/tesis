@@ -1,7 +1,7 @@
 <div class="login-body">
   <div class="login-wrapper">
     <div class="login-container">
-      <form name="loginForm" ng-show="showLogin" class="form-horizontal" novalidate>
+      <form name="loginForm" ng-show="activePage=='login'" class="form-horizontal" novalidate>
         <div class="form-top">
           <h3>SAFI Web</h3>
           <i class="fa fa-key"></i>          
@@ -19,12 +19,13 @@
 
           <div class="element-container">
             <button type="submit" class="btn-safi" ng-disabled="!loginForm.$valid" ng-click="login()">Iniciar Sesión</button>
-            <button type="submit" class="btn-safi" ng-click="changePage()">Registrarse</button>
+            <button type="submit" class="btn-safi" ng-click="changePage('registro')">Registrarse</button>
           </div>
+          <a ng-click="changePage('olvido')">¿Olvidaste tu contraseña?</a>
         </div>
       </form>
 
-      <form name="registerForm" ng-show="!showLogin" class="form-horizontal" novalidate>
+      <form name="registerForm" ng-show="activePage=='registro'" class="form-horizontal" novalidate>
         <div class="form-top">
           <h3>SAFI Web</h3>
           <i class="fa fa-key"></i>          
@@ -45,7 +46,24 @@
 
           <div class="element-container">
             <button type="submit" ng-disabled="!registerForm.$valid" ng-click="register()" class="btn-safi">Registrarse</button>
-            <button ng-click="changePage()" class="btn-safi">Iniciar sesión</button>
+            <button ng-click="changePage('login')" class="btn-safi">Iniciar sesión</button>
+          </div>
+        </div>
+      </form>
+
+      <form name="olvidoForm" ng-show="activePage=='olvido'" class="form-horizontal" novalidate>
+        <div class="form-top">
+          <h3>SAFI Web</h3>
+          <i class="fa fa-key"></i>          
+        </div>
+
+        <div class="form-bottom">
+          <div class="element-container">
+            <input type="number" required placeholder="Ingrese su cédula" class="login-input" ng-model="cedulaValidacion">
+          </div>
+          <div class="element-container">
+            <button type="submit" ng-disabled="!olvidoForm.$valid" ng-click="olvidoContrase()" class="btn-safi">Recuperar Contraseña</button>
+            <button ng-click="changePage('login')" class="btn-safi">Iniciar sesión</button>
           </div>
         </div>
       </form>

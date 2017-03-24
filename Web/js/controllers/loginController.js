@@ -1,19 +1,20 @@
 angular.module('app').controller("loginController", function($scope, $http, auth){
-		$scope.showLogin=true;
-		$scope.modalMessage='';
-		$scope.loginForm={
-				usuario:'',
-				contrasena:'',
-				coordinador:false
-		};
-		$scope.registroForm={
-				nombres:'',
-				apellidos:'',
-				correo:'',
-				cedula:'',
-				contrasena:'',
-				coordinador:false
-		};
+	$scope.cedulaValidacion='';
+	$scope.activePage='login';
+	$scope.modalMessage='';
+	$scope.loginForm={
+			usuario:'',
+			contrasena:'',
+			coordinador:false
+	};
+	$scope.registroForm={
+			nombres:'',
+			apellidos:'',
+			correo:'',
+			cedula:'',
+			contrasena:'',
+			coordinador:false
+	};
 //<--------------------------FUNCION PARA INICIO DE SESION ------------------------------------->
 	$scope.login = function(){
 
@@ -67,10 +68,50 @@ angular.module('app').controller("loginController", function($scope, $http, auth
 						}, 3000);
 				}
 			});
-	};  
+	};
+
+	$scope.olvidoContrase=function(){
+		$http.post(ip + '/webApi.php?val=buscarUsuario', {
+			username:$scope.cedulaValidacion,
+			password:'null'
+		}).success(function(data){			
+			$scope.cambioContrasena($scope.cedulaValidacion,data);
+		}).error(function(data){
+			$scope.modalMessage = "Usuario no encontrada.";
+	            $("#loginErrorModal").modal();
+	            setTimeout(function () {
+	                $("#loginErrorModal").modal("hide");
+	        }, 3000);
+		});
+	};
+
+
+
+	$scope.cambioContrasena=function(cedula,email){
+		var newContrasena = Math.random().toString(36).substring(7);
+		$http.post(ip + '/webApi.php?val=editarInformacion', {
+            contrasena:newContrasena,
+            correo:email,
+            cedula:cedula
+        }).success(function (data) {
+            $scope.modalMessage = "Se ha enviado la contraseña al correo de esta cuenta.";
+            $("#loginSuccessModal").modal();
+            setTimeout(function () {
+                $("#loginSuccessModal").modal("hide");
+            }, 3000);
+            $scope.cedulaValidacion='';
+            $scope.activePage='login';
+        }).error(function (data) {
+            $scope.modalMessage = "No se pudo reestablecer su contrasena. Intente más tarde.";
+            $("#loginErrorModal").modal();
+            setTimeout(function () {
+                $("#loginErrorModal").modal("hide");
+            }, 3000);
+        });
+	};
 
 	//Intercambia entre login y registro
-	$scope.changePage=function(){
-		$scope.showLogin=!$scope.showLogin;
+	$scope.changePage=function(page){
+		$scope.activePage=page;
 	};
 });

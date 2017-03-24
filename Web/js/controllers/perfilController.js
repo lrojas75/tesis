@@ -33,9 +33,9 @@ angular.module('app').controller('perfilController', function($scope, $http, $fi
     $scope.editarInformacion=function(){
         if ($scope.usuario.password==$scope.confirmarContrasena) {
             $http.post(ip + '/webApi.php?val=editarInformacion', {
-                email:$scope.usuario.correo,
                 contrasena:$scope.usuario.password,
-                cedula:$scope.usuario.cedula
+                cedula:$scope.usuario.cedula,
+                correo:$scope.usuario.correo
             }).success(function (data) {
                 $scope.modalMessage = "Datos actualizados correctamente.";
                 $("#perfilSuccessModal").modal();

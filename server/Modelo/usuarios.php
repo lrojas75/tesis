@@ -1,6 +1,6 @@
 <?php
 require_once 'DB/db.php';
-class usuarios extends DB {	
+class usuarios extends DB {
 	const ALL_USERS = "select * from usuario WHERE IDSupervisor=0 or IDSupervisor=?";//Con supervisor o supervisados por el usuario
 	const LOOK_USER = "SELECT * FROM usuario WHERE cedula=?";
 	const LOOK_REGISTER_USER = "SELECT * FROM usuario WHERE cedula=? or correo=?";
@@ -21,6 +21,19 @@ class usuarios extends DB {
 			} else {
 				return false;
 			}
+		} else {
+			return false;
+		}
+	}
+
+//---------FUNCION PARA BUSCAR UN USUSARIO POR CEDULA PARA RECUPERAR CONTRASENA----------------->>>
+
+	public function buscarUsuario($username,$password){
+		$arguments = ["username"=>$username];
+		$result=$this->query(self::LOOK_USER,$arguments);
+		$contact=$result->fetch_array(MYSQLI_ASSOC);
+		if (!empty($contact)){
+			return $contact['correo'];
 		} else {
 			return false;
 		}
@@ -96,7 +109,8 @@ class usuarios extends DB {
 			$result = $statement->execute();
 			$statement->close();
 			$this->close_connection();
-			return $result;
+			mail("<".$data['correo'].">", "Recuperacion de contrasena SAFI", "Su contrasena ha sido reestablecida. Nueva contrasena: ".$data['contrasena']);			
+			return $result;			
 		}else{
 			return false;
 		}

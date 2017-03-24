@@ -37,7 +37,7 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 			}
 
 			if(user.IDSupervisor=='0'){
-				user.IDSupervisor="No tiene supervisor";
+				user.IDSupervisor="No tiene";
 			}
 		});
 	};
