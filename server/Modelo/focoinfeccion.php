@@ -203,11 +203,9 @@ class focoInfeccion extends DB {
 		if ($result->num_rows > 0){
 			while ($row = $result->fetch_assoc()) {
 				array_push($focos, $row);
-			}
-			return $focos;
-		}else{
-			error_log("Error in result ".$result );
+			}			
 		}
+		return $focos;
 		$this->close_connection();
 	}
 

@@ -6,7 +6,6 @@ require_once 'Modelo/focoinfeccion.php';
 
 
 class WebAPI extends REST {
-
   public function processApi() {
     $func = strtolower (trim (str_replace ( "/", "", $_REQUEST ['val'])));
     if (( int ) method_exists ($this, $func) > 0){
@@ -53,7 +52,22 @@ class WebAPI extends REST {
       }
     }
   }
+    //<--------FUNCION PARA BUSCAR UN USUARIO------------------>
 
+  private function buscarUsuario(){
+    if ($this->get_request_method () != "POST") {
+      $this->response ( '', 406 );
+    }else{
+      $usuario = new usuarios();
+      $data = json_decode(file_get_contents('php://input'),true);
+      $result=$usuario->buscarUsuario($data["username"],$data["password"]);
+      if ($result){        
+        $this->response(json_encode($result), 200 );
+      } else {
+        $this->response('', 400 );
+      }
+    }
+  }
 //<<--------------------------FUNCION PARA VALIDAR QUE NO HAYA MÁS DE UNA INFORMACIÓN GENERAL POR DIA------------->>
   private function checkInfoGeneral(){
     if ($this->get_request_method () != "GET") {
@@ -234,11 +248,7 @@ private function editarInformacion(){
       $focoinfeccion = new focoInfeccion();
       $user = $_GET['usuario'];
       $result = $focoinfeccion->getFocos($user);
-      if ($result) {
-        $this->response(json_encode($result),200);
-      }else{
-        $this->response('',400);        
-      }
+      $this->response(json_encode($result),200);
     }
   }
 
