@@ -20,3 +20,8 @@
         </ul>
     </div>
 </nav>
+<div ng-init="iniciarDashboard()">    
+    <button ng-click="irController('usuarios')">Usted tiene {{dashboardVariables.usuarios}} usuarios bajo su cargo</button>
+    <button ng-click="irController('focos')">Se han registrado  {{dashboardVariables.focos}} focos</button>
+    <button ng-click="irController('mapa')">Ver mapa de calor</button>    
+</div>

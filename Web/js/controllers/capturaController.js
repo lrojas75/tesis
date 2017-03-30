@@ -534,15 +534,15 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 		var directionsService = new google.maps.DirectionsService();        
 		var stepDisplay;        
 		var myLatlng = { lat: 3.42, lng: -76.52 };
-
-		function initialize() {
-			var infoWindow = new google.maps.InfoWindow({map: map});
-			var mapOptions = {
+		var mapOptions = {
 				center: myLatlng,
 				zoom:14
 			};
-			map = new google.maps.Map(document.getElementById('map-canvas'),
-				mapOptions);
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		function initialize() {
+			var infoWindow = new google.maps.InfoWindow({map: map});
+			
+			
 			
 			// Create a renderer for directions and bind it to the map.
 			directionsDisplay.setMap(map);

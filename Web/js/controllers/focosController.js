@@ -1,4 +1,4 @@
-angular.module('app').controller('focosController', function($scope, $http, $filter, auth, $cookies){
+angular.module('app').controller('focosController', function($scope, $http, $filter, auth, sharedVariables, $cookies){
 	
 	var map, heatmap;
 	//Informacion del usuario
@@ -76,14 +76,21 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 		});
 	};
 
+	//Funcion que inicializa el controlodar de acuerdo a las variables del dashboard
+	$scope.iniciarController=function(){
+		if(sharedVariables.getProperty()=="MapaActive"){
+			$('.nav-tabs a[href="#mapaCalor"]').tab('show');
+		}
+		sharedVariables.setProperty('');
+	};
+
 	$scope.initMap=function() {
-		function initialize(){
-			map = new google.maps.Map(document.getElementById('heatmap'), {
+		map = new google.maps.Map(document.getElementById('heatmap'), {
 				zoom: 12,
 				center: {lat: 3.43, lng: -76.52},
 				mapTypeId: google.maps.MapTypeId.HYBRID
 			});
-
+		function initialize(){
 			heatmap = new google.maps.visualization.HeatmapLayer({
 				data: $scope.obtenerUbicaciones(null),
 				map: map

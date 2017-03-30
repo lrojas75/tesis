@@ -95,7 +95,25 @@ app.factory("auth", function($cookies,$cookieStore,$location)
 });
 
 
-//Paginacion inicio
+//Paso de variables entre controladores
+//El dashboard hace set de la variable dependiendo del item que hayan seleccionado
+//El controlador al que hace referencia el item debe hacer get de la variable desde una funcion en init para ajustar
+    // los valores que mostraba el item    
+//Luego de hacer get en el controlador destino las variables se limpiam
+app.service('sharedVariables', function () {
+    var property = '';
+    return {
+        getProperty: function () {
+            return property;
+        },
+        setProperty: function(value) {
+            property = value;
+        }
+    };
+});
+
+
+//Inicio de la Paginacion
 app.filter('startFrom', function() {
     return function(input, start) {
         start = +start; //parse to int

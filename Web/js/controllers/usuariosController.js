@@ -1,4 +1,4 @@
-angular.module('app').controller('usersController', function($scope, $http, $filter, auth, $cookies){
+angular.module('app').controller('usersController', function($scope, $http, $filter, auth, sharedVariables, $cookies){
 	$scope.Usuarios = [];
 
 	$scope.modalMessage='';
@@ -10,7 +10,14 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 	$scope.filterText='';
 	//Tamano paginacion
 	$scope.tamanoPagina=10;
-	//la función logout que llamamos en la vista llama a la función
+	
+	$scope.iniciarController = function(){
+		$scope.filterText=sharedVariables.getProperty();
+		console.log($scope.filterText);
+		sharedVariables.setProperty('');
+	};
+
+
 	//logout de la factoria auth
 	$scope.getAllUsers=function(){
 		$http.get(ip + '/webApi.php?val=allUsers', {
@@ -23,8 +30,12 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 			//Eliminar al usuario activo del array
 			var index = $scope.Usuarios.findIndex(x => x.cedula==parseInt($scope.usuario.cedula));
 			$scope.Usuarios.splice(index, 1);
-		}).error(function (data) {
-			alert("Error al consultar los usuarios");
+		}).error(function (data) {			
+			$scope.modalMessage = "Error al consultar los usuarios.";
+			$("#usuariosErrorModal").modal();
+			setTimeout(function () {
+				$("#usuariosErrorModal").modal("hide");
+			}, 3000);
 		});
 	};
 	//Funcion para cambiar los valores y que se filtren correctamente
@@ -86,6 +97,7 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 	$scope.usuariosSupervisados=function(){
 		$scope.filterText=$scope.usuario.cedula;
 	};
+
 	$scope.logout = function(){
 		auth.logout();
 	};
@@ -93,5 +105,6 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 	$scope.changeView= function(view){
 		auth.changeLocation(view);
 	};
+	
 	$scope.getAllUsers();
 });
