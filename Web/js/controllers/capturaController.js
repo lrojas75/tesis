@@ -4,6 +4,11 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 
 	//Variable para manipular el mapa
 	var map;
+
+	//Variable para el marcador del mapa
+	var marker;
+	//Variable que guarda la posicion en el mapa
+	var pos;
 	//Muestra el recorrido en caso de que no haya, si hay uno puede llenar algun formulario
 	$scope.hayRecorrido=false;
 
@@ -523,7 +528,7 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 	//Funcion para mostrar el valor de la ubicacion en el input
 	$scope.showUbicacion=function(){
 		var split = $scope.ubicacionActual.split(",");
-		return parseInt(split[0]).toFixed(2)+"-"+parseInt(split[1]).toFixed(2);
+		return "("+parseFloat(split[0]).toFixed(6)+") -- ("+parseFloat(split[1]).toFixed(6)+")";
 	};
 	//Inicializa el mapa
 	$scope.MapaGoogle = function () {
@@ -541,12 +546,8 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
 		function initialize() {
 			var infoWindow = new google.maps.InfoWindow({map: map});
-			
-			
-			
 			// Create a renderer for directions and bind it to the map.
 			directionsDisplay.setMap(map);
-
 			// Instantiate an info window to hold step text.
 			stepDisplay = new google.maps.InfoWindow();
 		}
@@ -558,27 +559,49 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 		google.maps.event.trigger(map, "resize");
 		//HTML5 soporte de ubicacion para ubicar automaticamente
 		if (navigator.geolocation) {
-			navigator.geolocation.getCurrentPosition(function(position) {
-				var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-				var marker = new google.maps.Marker({
+			navigator.geolocation.getCurrentPosition(function(position) {				
+				if(marker == undefined){
+					pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+					marker = new google.maps.Marker({
 					position: pos,
 					draggable: true,
 					title: "Tú posición"
 				});
+				}
 				map.setCenter(pos);
 				marker.setPosition(pos);
 				marker.setMap(map);
 				//Evento de arrastrar el marcador
-				google.maps.event.addListener(marker, 'dragend', function (evt) {
-					$scope.ubicacionActual=evt.latLng.lat() + "," + evt.latLng.lng();
-				});
+				// google.maps.event.addListener(marker, 'dragend', function (evt) {
+				// 	$scope.$apply(function() {
+				// 		$scope.ubicacionActual=evt.latLng.lat() + "," + evt.latLng.lng();
+				// 	});
+				// });
+				//Evento para poner el marcador donde dio click
+				google.maps.event.addListener(map, 'click', function(evt) {
+					marker.setMap(null);
+  					placeMarker(map, evt.latLng);
+  					$scope.$apply(function() {
+						$scope.ubicacionActual=evt.latLng.lat() + "," + evt.latLng.lng();
+					});
+  				});
 				//Apply para que los datos del modelo se renderizen correctamente, hay que hacerlo porque esta dentro de un event y angular no sabe que hubo una variable modificada
 				$scope.$apply(function() {
-					$scope.ubicacionActual=position.coords.latitude + "," + position.coords.longitude;					
+					$scope.ubicacionActual=position.coords.latitude + "," + position.coords.longitude;
 				});
+
+				//funcion para crear el marcador y su mensaje de informacion.
+				function placeMarker(map, location) {
+					marker = new google.maps.Marker({
+				    	position: location,
+				    	map: map
+				  	});
+				  	var infowindow = new google.maps.InfoWindow({
+				    	content: 'Latitude: ' + location.lat() +'<br>Longitude: ' + location.lng()
+				  	});
+				  	infowindow.open(map,marker);
+				}
 			});
 		}
-
 	});
-	
 });

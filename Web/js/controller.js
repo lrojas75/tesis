@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngCookies']);
-var ip = "http://192.168.0.15/";
+var ip = "http://192.168.0.144/server/";
 
 //Config de ruta y de headers
 app.config(function ($httpProvider,$routeProvider) {
