@@ -20,6 +20,24 @@ class focoInfeccion extends DB {
 
 	const GET_FOCOS_SUPERVISOR = "SELECT f.Tipo, f.Tipo, f.Habitantes,f.Nombre,f.Apellido,f.Cedula,f.Clave,f.Ubicacion,f.Plazo,f.Tratamiento,f.Larvas,f.Pupas,f.Estado, u.cedula,i.Fecha,i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on f.idInfoGeneral=i.ID INNER JOIN usuario u on i.ID_Usuario=u.cedula WHERE (u.IDSupervisor=?) or (u.cedula=?)";
 
+	const FOCOS_ID_INFO_GEN = "select id from focoInfeccion where (idInfoGeneral=?) and (Tipo=?)";
+
+	public function focosPorId($idInfoGen, $tipoFoco){
+		$this->open_connection();
+		$stmt = $this->conn->prepare(self::FOCOS_ID_INFO_GEN);
+		$stmt->bind_param("is", $idInfoGen, $tipoFoco);
+		$stmt->execute();
+		$result=$stmt->get_result();
+		$focos=[];
+		if ($result->num_rows > 0){
+			while ($row = $result->fetch_assoc()) {
+				array_push($focos, $row);
+			}			
+		}
+		return $focos;
+		$this->close_connection();
+	}
+
 	public function agregarSumidero($sumidero){
 		$this->open_connection();
 		$statement = $this->conn->prepare(self::INSERT_SUMIDERO);

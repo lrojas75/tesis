@@ -1,6 +1,3 @@
-
-
-
 <nav class="navbar navbar-dark bg-primary">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -21,7 +18,47 @@
     </div>
 </nav>
 <div ng-init="iniciarDashboard()">    
-    <button ng-click="irController('usuarios')">Usted tiene {{dashboardVariables.usuarios}} usuarios bajo su cargo</button>
-    <button ng-click="irController('focos')">Se han registrado  {{dashboardVariables.focos}} focos</button>
-    <button ng-click="irController('mapa')">Ver mapa de calor</button>    
+    <div class="row">
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="info-box blue-bg" ng-click="irController('usuarios')">
+                <i class="fa fa-user-o"></i>
+                <div class="count">{{dashboardVariables.usuarios}}</div>
+                <div class="title">Mis trabajadores</div>                       
+            </div><!--/.info-box-->         
+        </div><!--/.col-->
+        
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="info-box blue-bg" ng-click="irController('focos')">
+                <i class="fa fa-globe"></i>
+                <div class="count">{{dashboardVariables.focos}}</div>
+                <div class="title">Focos de infección nuevos</div>                      
+            </div><!--/.info-box-->         
+        </div><!--/.col-->  
+        
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="info-box blue-bg" ng-click="irController('captura')">
+                <i class="fa fa-plus"></i>
+                <div class="title-captura">Agrega un foco de infección</div>
+            </div><!--/.info-box-->         
+        </div><!--/.col-->
+        
+        <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
+            <div class="info-box blue-bg" ng-click="irController('mapa')">
+                <i class="fa fa-map-o"></i>
+                <div class="title-mapa">Ver mapa de calor</div>
+            </div><!--/.info-box-->         
+        </div><!--/.col-->
+    
+    </div><!--row-->
+
+    <!-- Grafico de Barra d Google -->
+    <div class="row-graph">
+        <div id="columnchart_material" class="googleGraph"></div>
+        
+        <!-- Calendario -->
+        <div id='wrap'>
+        <div id='calendar'></div>
+        <div style='clear:both'></div>
+    </div>
 </div>
+

@@ -5,7 +5,25 @@ class infoGeneral extends DB {
 	const LAST_INFO_GENERAL = "select max(ID) from informaciongeneral where id_usuario=?";
 	const INSERT_COMUNA_BARRIO = "insert into comunaxbarrio (ID_InfoGeneral,Comuna,Barrio, Actividad) values (?,?,?,?)";
 	const CHECK_USER_INFO = "select id, municipio from informaciongeneral where (id_usuario=?) and (fecha=?)";
+	const INFO_GENERAL_OF_USER = "select id, fecha from informaciongeneral where (id_usuario=?)";
 //--------AGREGAR INFORMACION GENERAL------------------>>>
+
+	public function infoGeneralPorMes($user){
+		$this->open_connection();		
+		if ($stmt = $this->conn->prepare(self::INFO_GENERAL_OF_USER)) {
+			$stmt->bind_param("s", $user);
+			$stmt->execute();
+			$result=$stmt->get_result();
+			$focos=[];
+			if ($result->num_rows > 0){
+				while ($row = $result->fetch_assoc()) {
+					array_push($focos, $row);
+				}			
+			}
+			return $focos;
+			$this->close_connection();
+		}
+	}
 
 	public function agregarComunaBarrio($data){
 		$arguments=["id"=>$data["id"]];
