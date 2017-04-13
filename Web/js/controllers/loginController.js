@@ -53,7 +53,6 @@ angular.module('app').controller("loginController", function($scope, $http, auth
 				$scope.showLogin=true;
 
 			}).error(function(data) {
-				console.log(data);
 				if (data=="repetido") {
 						$scope.modalMessage ="Ya hay un usuario registrado con la misma cédula o el mismo correo.";
 						$("#loginErrorModal").modal();

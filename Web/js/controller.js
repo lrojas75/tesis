@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngCookies']);
-var ip = "http://192.168.0.7/server/";
+var ip = "http://192.168.0.15/";
 
 //Config de ruta y de headers
 app.config(function ($httpProvider,$routeProvider) {
@@ -77,6 +77,11 @@ app.factory("auth", function($cookies,$cookieStore,$location)
             {
                 $location.path("/home");
             }
+            //rutas accesibles solo por usuarios con rol de supervisor
+            if( $location.path()=="/usuarios" && typeof($cookies.userInfo) != "undefined" && JSON.parse($cookies.userInfo).rolUsuario=='false'){
+                $location.path("/home");
+            }
+
         },
         //Funcion para buscar la ruta needle=lo que se busca, haystack=donde se busca
         in_array : function(needle, haystack)

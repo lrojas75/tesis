@@ -20,6 +20,9 @@ class focoInfeccion extends DB {
 
 	const GET_FOCOS_SUPERVISOR = "SELECT f.Tipo, f.Tipo, f.Habitantes,f.Nombre,f.Apellido,f.Cedula,f.Clave,f.Ubicacion,f.Plazo,f.Tratamiento,f.Larvas,f.Pupas,f.Estado, u.cedula,i.Fecha,i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on f.idInfoGeneral=i.ID INNER JOIN usuario u on i.ID_Usuario=u.cedula WHERE (u.IDSupervisor=?) or (u.cedula=?)";
 
+	//Selecciona y agrupa los focos por tipo y fecha, devuelve la cantidad de cada uno
+	const GET_FOCOS_GRAFICO = "SELECT COUNT(f.id) as cantidad,i.fecha, f.Tipo FROM focoinfeccion f INNER JOIN informaciongeneral i GROUP BY i.Fecha, f.Tipo";
+
 	const FOCOS_ID_INFO_GEN = "select id from focoInfeccion where (idInfoGeneral=?) and (Tipo=?)";
 
 	public function focosPorId($idInfoGen, $tipoFoco){
@@ -225,6 +228,47 @@ class focoInfeccion extends DB {
 		}
 		return $focos;
 		$this->close_connection();
+	}
+
+	public function getFocosGrafico($year){		
+		$result = $this->query(self::GET_FOCOS_GRAFICO);
+		$focos_x_mes_vivienda=[0,0,0,0,0,0,0,0,0,0,0,0];
+		$focos_x_mes_sumidero=[0,0,0,0,0,0,0,0,0,0,0,0];
+		$focos_x_mes_cdh=[0,0,0,0,0,0,0,0,0,0,0,0];
+		$focosActualYear=array();
+		$focos=mysqli_fetch_all($result,MYSQLI_ASSOC);
+		if (count($focos)> 0){
+			for ($mes=0; $mes < 12 ; $mes++) {
+				foreach ($focos as $row) {
+					$fechaFoco=date_parse_from_format("d-m-Y",$row['fecha']);
+					if ($fechaFoco['year']>=(int)$year) {						
+						if($mes==$fechaFoco['month']){
+							switch ($row['Tipo']) {
+
+								case 'Vivienda':
+									$focos_x_mes_vivienda[$mes]+=$row['cantidad'];									
+									break;
+
+								case 'Sumidero':
+									$focos_x_mes_sumidero[$mes]+=$row['cantidad'];
+									break;
+
+								case 'CDH':
+									$focos_x_mes_cdh[$mes]+=$row['cantidad'];									
+									break;
+								default:
+									# code...
+									break;
+							}
+						}
+						
+					}
+				}
+			}
+			
+		}
+		$focos_x_tipomes=[$focos_x_mes_vivienda,$focos_x_mes_sumidero,$focos_x_mes_cdh];
+		return $focos_x_tipomes;
 	}
 
 }

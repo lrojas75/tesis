@@ -7,7 +7,7 @@ angular.module('app').controller('perfilController', function($scope, $http, $fi
     $scope.contrasenaActual=$scope.usuario.password;
 
     $scope.cargoPerfil = function(){
-        if($scope.usuario.rolUsuario == true){
+        if($scope.usuario.rolUsuario=="true"){
             return "Supervisor";
         }else{
             return "Trabajador";

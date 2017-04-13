@@ -283,108 +283,15 @@ private function editarInformacion(){
 
   }
 /*-------------------- Funciones del DASHBOARD ------------------------*/
-  private function infoGeneralByMonth(){
-    $focos = [];
-    $ene = [0,0,0];
-    $feb = [0,0,0];
-    $mar = [0,0,0];
-    $abr = [0,0,0];
-    $mayo = [0,0,0];
-    $jun = [0,0,0];
-    $jul = [0,0,0];
-    $ago = [0,0,0];
-    $sept = [0,0,0];
-    $oct = [0,0,0];
-    $nov = [0,0,0];
-    $dic = [0,0,0];
-    $total = 0;
+  private function focosGrafico(){
     if ($this->get_request_method () != "GET") {
       $this->response ( '', 406 );
     }else{
-      $infogeneral =  new infoGeneral();
       $focoinfeccion =  new focoInfeccion();
-      $user = $_GET['usuario'];
-      $result = $infogeneral->infoGeneralPorMes($user);
-      if($result){
-        foreach ($result as $info) {
-          $date = strtotime($info['fecha']);
-          $mes = date("F", $date);
-          $resultSumidero = $focoinfeccion->focosPorId($info['id'],'Sumidero');
-          $resultVivienda = $focoinfeccion->focosPorId($info['id'],'Vivienda');
-          $resultCDH = $focoinfeccion->focosPorId($info['id'],'CDH');
-          switch ($mes) {
-            case "January":
-              $ene[0] = $ene[0]+count($resultSumidero);
-              $ene[1] = $ene[1]+count($resultVivienda);
-              $ene[2] = $ene[2]+count($resultCDH);
-              break;
-            case "February":
-              $feb[0] = $feb[0]+count($resultSumidero);
-              $feb[1] = $feb[1]+count($resultVivienda);
-              $feb[2] = $feb[2]+count($resultCDH);
-              break;
-            case "March":
-              $mar[0] = $mar[0]+count($resultSumidero);
-              $mar[1] = $mar[1]+count($resultVivienda);
-              $mar[2] = $mar[2]+count($resultCDH);
-              break;
-            case "April":
-              $abr[0] = $abr[0]+count($resultSumidero);
-              $abr[1] = $abr[1]+count($resultVivienda);
-              $abr[2] = $abr[2]+count($resultCDH);
-              break;
-            case "May":
-              $mayo[0] = $mayo[0]+count($resultSumidero);
-              $mayo[1] = $mayo[1]+count($resultVivienda);
-              $mayo[2] = $mayo[2]+count($resultCDH);
-              break;
-            case "June":
-              $jun[0] = $jun[0]+count($resultSumidero);
-              $jun[1] = $jun[1]+count($resultVivienda);
-              $jun[2] = $jun[2]+count($resultCDH);
-              break;
-            case "July":
-              $jul[0] = $jul[0]+count($resultSumidero);
-              $jul[1] = $jul[1]+count($resultVivienda);
-              $jul[2] = $jul[2]+count($resultCDH);
-              break;
-            case "August":
-              $ago[0] = $ago[0]+count($resultSumidero);
-              $ago[1] = $ago[1]+count($resultVivienda);
-              $ago[2] = $ago[2]+count($resultCDH);
-              break;
-            case "September":
-              $sept[0] = $sept[0]+count($resultSumidero);
-              $sept[1] = $sept[1]+count($resultVivienda);
-              $sept[2] = $sept[2]+count($resultCDH);
-              break;
-            case "October":
-              $oct[0] = $oct[0]+count($resultSumidero);
-              $oct[1] = $oct[1]+count($resultVivienda);
-              $oct[2] = $oct[2]+count($resultCDH);
-              break;
-            case "November":
-              $nov[0] = $nov[0]+count($resultSumidero);
-              $nov[1] = $nov[1]+count($resultVivienda);
-              $nov[2] = $nov[2]+count($resultCDH);
-              break;
-            case "December":
-              $dic[0] = $dic[0]+count($resultSumidero);
-              $dic[1] = $dic[1]+count($resultVivienda);
-              $dic[2] = $dic[2]+count($resultCDH);
-              break;
-            default:
-              $focos = ["No hay 1"];
-          }
-        }
-        $focos = array($ene,$feb,$mar,$abr,$mayo,$jun,$jul,$ago,$sept,$oct,$nov,$dic);
-        $this->response(json_encode($focos),200);
-      }else{
-        $focos = ["No hay 2"];
-        $this->response(json_encode($focos),200);
-      }
-      
+      $result=$focoinfeccion->getFocosGrafico($_GET['year']);
+      $this->response(json_encode($result),200);
     }
+
   }
 
 }

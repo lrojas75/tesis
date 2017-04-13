@@ -19,35 +19,44 @@
 </nav>
 <div ng-init="iniciarDashboard()">    
     <div class="row">
+    <!--DIV PARA LOS ITEMS QUE SON DE ROL SUPERVISOR-->
+    <div ng-show="usuario.rolUsuario">
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box blue-bg" ng-click="irController('usuarios')">
                 <i class="fa fa-user-o"></i>
                 <div class="count">{{dashboardVariables.usuarios}}</div>
-                <div class="title">Mis trabajadores</div>                       
-            </div><!--/.info-box-->         
+                <div class="title">Mis trabajadores</div>
+            </div><!--/.info-box-->
         </div><!--/.col-->
-        
+    </div>
+
+
+    <!--DIV PARA LOS ITEMS QUE SON DE ROL TRABAJADOR-->
+    <div>
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box blue-bg" ng-click="irController('focos')">
                 <i class="fa fa-globe"></i>
                 <div class="count">{{dashboardVariables.focos}}</div>
-                <div class="title">Focos de infección nuevos</div>                      
-            </div><!--/.info-box-->         
-        </div><!--/.col-->  
+                <div class="title">Focos de infección nuevos</div>
+            </div><!--/.info-box-->
+        </div><!--/.col-->
         
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box blue-bg" ng-click="irController('captura')">
                 <i class="fa fa-plus"></i>
                 <div class="title-captura">Agrega un foco de infección</div>
-            </div><!--/.info-box-->         
+            </div><!--/.info-box-->
         </div><!--/.col-->
         
         <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
             <div class="info-box blue-bg" ng-click="irController('mapa')">
                 <i class="fa fa-map-o"></i>
                 <div class="title-mapa">Ver mapa de calor</div>
-            </div><!--/.info-box-->         
-        </div><!--/.col-->
+            </div><!--/.info-box-->
+        </div>
+    </div>
+
+
     
     </div><!--row-->
 
@@ -57,8 +66,9 @@
         
         <!-- Calendario -->
         <div id='wrap'>
-        <div id='calendar'></div>
-        <div style='clear:both'></div>
+            <div id='calendar'></div>
+            <div style='clear:both'></div>
+        </div>
     </div>
 </div>
 

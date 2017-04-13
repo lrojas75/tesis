@@ -13,7 +13,6 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 	
 	$scope.iniciarController = function(){
 		$scope.filterText=sharedVariables.getProperty();
-		console.log($scope.filterText);
 		sharedVariables.setProperty('');
 	};
 
