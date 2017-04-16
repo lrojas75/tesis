@@ -1,0 +1,109 @@
+<nav class="navbar navbar-dark bg-primary">
+    <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a ng-click="changeView('/reportes')">Reportes</a></li>
+            <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
+            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
+            <li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+              <ul class="dropdown-menu">
+                <li><a ng-click="changeView('/perfil')">{{usuario.nombres}}</a></li>
+                <li><a ng-click="logout()">Cerrar Sesión</a></li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="titulo-reportes">Reporte</div>
+<div class="filter-div" ng-controller = "reportesController">   
+    <span style="margin-right: 2%">Ver reporte del mes:</span>
+    <div class="dropdown" style="margin-right: 1%">
+        <button class="white-button" type="button" data-toggle="dropdown">Mes
+        <span class="caret"></span></button>
+        <ul class="dropdown-menu">
+            <li ng-repeat="m in meses"><a ng-click="selectedMonth(m)">{{m}}</a></li>
+        </ul>
+    </div>
+    <button class="white-button" ng-click="getInfoReporte()">Ver reporte</button>
+</div>
+<div class = "container-reportes">
+    <div class="sumidero-reportes">
+        <table class="table" ng-form="tableForm">
+            <tr>
+                <th>Municipio</th>
+                <th>Total inspeccionados</th>
+                <th>Numero de positivos</th>
+                <th>Numero de tratados</th>
+                <th>Insecticida usado</th>
+                <th>Total insecticida usado</th>
+            </tr>
+            <!-- Paginacion y filtro  -->
+            <tr ng-repeat="foco in Focos">
+                <td>{{foco.Tipo}}</td>
+                <td>{{foco.cedula}}</td>
+                <td>{{fixedUbicacion(foco)}}</td>
+                <td>{{foco.Municipio}}</td>
+                <td>{{foco.Fecha}}</td>
+                <td>{{foco.Clave}}</td>
+                <td>{{foco.Estado}}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="vivienda-reportes">
+        <table class="table" ng-form="tableForm">
+            <tr>
+                <th>Municipio</th>
+                <th>Casas visitadas</th>
+                <th>Depositos encontrados</th>
+                <th>Depositos tratados</th>
+                <th>Depositos eliminados</th>
+                <th>Depositos con larvas</th>
+                <th>Total insecticida usado</th>
+            </tr>
+            <!-- Paginacion y filtro  -->
+            <tr ng-repeat="foco in Focos">
+                <td>{{foco.Tipo}}</td>
+                <td>{{foco.cedula}}</td>
+                <td>{{fixedUbicacion(foco)}}</td>
+                <td>{{foco.Municipio}}</td>
+                <td>{{foco.Fecha}}</td>
+                <td>{{foco.Clave}}</td>
+                <td>{{foco.Estado}}</td>
+            </tr>
+        </table>
+    </div>
+    <div class="cdh-reportes">
+        <table class="table" ng-form="tableForm">
+            <tr>
+                <th>Municipio</th>
+                <th>Lugares visitados</th>
+                <th>Depositos encontrados</th>
+                <th>Depositos tratados</th>
+                <th>Depositos eliminados</th>
+                <th>Depositos con larvas</th>
+                <th>Total insecticida usado</th>
+            </tr>
+            <!-- Paginacion y filtro  -->
+            <tr ng-repeat="foco in Focos">
+                <td>{{foco.Tipo}}</td>
+                <td>{{foco.cedula}}</td>
+                <td>{{fixedUbicacion(foco)}}</td>
+                <td>{{foco.Municipio}}</td>
+                <td>{{foco.Fecha}}</td>
+                <td>{{foco.Clave}}</td>
+                <td>{{foco.Estado}}</td>
+            </tr>
+        </table>
+    </div>
+    
+</div>
+<div class="div-exportar">
+    <span>Opciones para exportar reporte:</span>
+    <button class="white-button" ng-click="focosRegistrados()">Exportar reporte a PDF</button>
+</div>

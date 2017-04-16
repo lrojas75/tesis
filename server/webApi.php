@@ -291,9 +291,17 @@ private function editarInformacion(){
       $result=$focoinfeccion->getFocosGrafico($_GET['year']);
       $this->response(json_encode($result),200);
     }
-
   }
-
+/*-------------------- Funciones de reportes ------------------------*/
+  private function focosReporte(){
+    if ($this->get_request_method () != "GET") {
+      $this->response ( '', 406 );
+    }else{
+      $focoinfeccion =  new focoInfeccion();
+      $result=$focoinfeccion->focosReporte($_GET['month']);
+      $this->response(json_encode($result),200);
+    }
+  }
 }
 
 $api = new webApi();

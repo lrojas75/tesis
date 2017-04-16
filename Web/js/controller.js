@@ -1,5 +1,5 @@
 var app = angular.module('app', ['ngCookies']);
-var ip = "http://192.168.0.15/";
+var ip = "http://192.168.0.7/server";
 
 //Config de ruta y de headers
 app.config(function ($httpProvider,$routeProvider) {
@@ -32,10 +32,14 @@ app.config(function ($httpProvider,$routeProvider) {
     .when("/focosDeInfeccion",{
         controller: "focosController",
         templateUrl: "templates/focosDeInfeccion.html"
-    }).otherwise({redirectTo:'/home'})
+    })
     .when("/perfil",{
         controller: "perfilController",
         templateUrl: "templates/perfil.html"
+    })
+    .when("/reportes",{
+        controller: "reportesController",
+        templateUrl: "templates/reportes.html"
     }).otherwise({redirectTo:'/home'})
 });
 
@@ -67,7 +71,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
         checkStatus : function()
         {
             //creamos un array con las rutas que queremos controlar
-            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos","/focosDeInfeccion", "/perfil"];
+            var rutasPrivadas = ["/home","/login","/usuarios","/capturaDeDatos","/focosDeInfeccion", "/perfil", "/reportes"];
             if(this.in_array($location.path(),rutasPrivadas) && typeof($cookies.userInfo) == "undefined")
             {
                 $location.path("/login");
@@ -78,7 +82,7 @@ app.factory("auth", function($cookies,$cookieStore,$location)
                 $location.path("/home");
             }
             //rutas accesibles solo por usuarios con rol de supervisor
-            if( $location.path()=="/usuarios" && typeof($cookies.userInfo) != "undefined" && JSON.parse($cookies.userInfo).rolUsuario=='false'){
+            if( ($location.path()=="/usuarios" || $location.path()=="/reportes") && typeof($cookies.userInfo) != "undefined" && JSON.parse($cookies.userInfo).rolUsuario=='false'){
                 $location.path("/home");
             }
 

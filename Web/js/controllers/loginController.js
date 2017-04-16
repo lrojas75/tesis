@@ -18,7 +18,7 @@ angular.module('app').controller("loginController", function($scope, $http, auth
 //<--------------------------FUNCION PARA INICIO DE SESION ------------------------------------->
 	$scope.login = function(){
 
-		$http.post(ip+'webApi.php?val=loginUsuario',{
+		$http.post(ip+'/webApi.php?val=loginUsuario',{
 			username: $scope.loginForm.usuario,
 			password: $scope.loginForm.contrasena
 		}).success(function(data) {        
@@ -29,7 +29,7 @@ angular.module('app').controller("loginController", function($scope, $http, auth
 	};
 
 	$scope.register = function(){    
-		$http.post(ip+'webApi.php?val=registroUsuario',{
+		$http.post(ip+'/webApi.php?val=registroUsuario',{
 				cedula: $scope.registroForm.cedula,
 				nombres: $scope.registroForm.nombres,
 				apellidos: $scope.registroForm.apellidos,

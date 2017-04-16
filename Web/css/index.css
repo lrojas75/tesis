@@ -585,3 +585,59 @@ button:disabled{
   height: 100%;
   margin-left: 2%;
 }
+
+/* ------------------------------Reportes ------------------------------------*/
+.titulo-reportes{
+  text-align: center;
+  font-weight: bold;
+  font-size: 25px;
+  margin-bottom: 2%;
+}
+.dropdown{
+  display: inline-block;
+}
+.container-reportes{
+  background: #F5F6FA;
+  border-radius: 10px;
+  border: 1px solid #FFD2D2;
+  width: 90%;
+  height: 100%;
+  display: inline-block;
+  margin-left: 5%;
+}
+.sumidero-reportes{
+  margin-left: 5%;
+  width: 90%;
+  display: inline-block;
+  vertical-align: top;
+}
+.vivienda-reportes{
+  margin-top: 5%;
+  margin-left: 5%;
+  width: 90%;
+  display: inline-block;
+  vertical-align: top;
+}
+.cdh-reportes{
+  margin-top: 5%;
+  margin-left: 5%;
+  width: 90%;
+  display: inline-block;
+  vertical-align: top;
+}
+.contenedorIzq-reportes{
+  display: inline-block;
+  width: 50%;
+  vertical-align: top;
+}
+.contenedorDer-reportes{
+  display: inline-block;
+  width: 20%;
+  margin-left: 10px;
+}
+.div-exportar{
+  margin-left: 5%;
+  padding: 5px 0px;
+  text-align: left;
+  font-weight: bold;
+}

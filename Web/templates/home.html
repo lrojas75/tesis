@@ -4,6 +4,7 @@
           <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
         </div>
         <ul class="nav navbar-nav navbar-right">
+            <li><a ng-click="changeView('/reportes')">Reportes</a></li>
             <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
         	<li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
         	<li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>

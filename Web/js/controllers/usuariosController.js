@@ -67,7 +67,7 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 			IDSupervisor: usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):0,
 			cedula: usuario.cedula
 		};        
-		$http.post(ip+'webApi.php?val=cambiarSupervisor',jsonData).success(function(data){
+		$http.post(ip+'/webApi.php?val=cambiarSupervisor',jsonData).success(function(data){
 			usuario.IDSupervisor=usuario.IDSupervisor!=parseInt($scope.usuario.cedula) ? parseInt($scope.usuario.cedula):'No tiene supervisor';
 		  }).error(function(data) {
 			$scope.modalMessage = "No se pudo actualizar el supervisor.";
@@ -79,7 +79,7 @@ angular.module('app').controller('usersController', function($scope, $http, $fil
 	};
 
 	$scope.cambiarRol=function(usuario){
-		$http.post(ip+'webApi.php?val=cambiarRol',{
+		$http.post(ip+'/webApi.php?val=cambiarRol',{
 			nuevoRol:usuario.rolUsuario=='Supervisor' ? 'false':'true',
 			cedula: usuario.cedula
 		}).success(function(data){

@@ -21,25 +21,12 @@ class focoInfeccion extends DB {
 	const GET_FOCOS_SUPERVISOR = "SELECT f.Tipo, f.Tipo, f.Habitantes,f.Nombre,f.Apellido,f.Cedula,f.Clave,f.Ubicacion,f.Plazo,f.Tratamiento,f.Larvas,f.Pupas,f.Estado, u.cedula,i.Fecha,i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on f.idInfoGeneral=i.ID INNER JOIN usuario u on i.ID_Usuario=u.cedula WHERE (u.IDSupervisor=?) or (u.cedula=?)";
 
 	//Selecciona y agrupa los focos por tipo y fecha, devuelve la cantidad de cada uno
-	const GET_FOCOS_GRAFICO = "SELECT COUNT(f.id) as cantidad,i.fecha, f.Tipo FROM focoinfeccion f INNER JOIN informaciongeneral i GROUP BY i.Fecha, f.Tipo";
+	const GET_FOCOS_GRAFICO = "SELECT COUNT(f.id) as cantidad,i.fecha, f.Tipo FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE f.idInfoGeneral=i.ID GROUP BY i.Fecha, f.Tipo";
 
-	const FOCOS_ID_INFO_GEN = "select id from focoInfeccion where (idInfoGeneral=?) and (Tipo=?)";
 
-	public function focosPorId($idInfoGen, $tipoFoco){
-		$this->open_connection();
-		$stmt = $this->conn->prepare(self::FOCOS_ID_INFO_GEN);
-		$stmt->bind_param("is", $idInfoGen, $tipoFoco);
-		$stmt->execute();
-		$result=$stmt->get_result();
-		$focos=[];
-		if ($result->num_rows > 0){
-			while ($row = $result->fetch_assoc()) {
-				array_push($focos, $row);
-			}			
-		}
-		return $focos;
-		$this->close_connection();
-	}
+	//SELECT para la tabla Sumideros de REPORTES
+	const GET_FOCOS_REPORTE = "SELECT f.id, i.fecha, f.tipo, f.estado, f.tratamiento, f.insecticida, f.cantidad, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) AND (f.tipo = 'Sumidero') GROUP BY i.Fecha";
+
 
 	public function agregarSumidero($sumidero){
 		$this->open_connection();
@@ -230,6 +217,7 @@ class focoInfeccion extends DB {
 		$this->close_connection();
 	}
 
+
 	public function getFocosGrafico($year){		
 		$result = $this->query(self::GET_FOCOS_GRAFICO);
 		$focos_x_mes_vivienda=[0,0,0,0,0,0,0,0,0,0,0,0];
@@ -271,5 +259,18 @@ class focoInfeccion extends DB {
 		return $focos_x_tipomes;
 	}
 
+	//Funcion para la tabla de sumideros de REPORTES
+	public function focosReporte($mes){
+		$this->open_connection();
+		$result = $this->conn->query(self::GET_FOCOS_REPORTE);
+		$focosR=[];
+		if ($result->num_rows > 0){
+			while ($row = $result->fetch_assoc()) {
+				array_push($focosR, $row);
+			}
+			return $focosR;
+		}
+		$this->close_connection();
+	}
 }
 ?>
