@@ -24,8 +24,15 @@ class focoInfeccion extends DB {
 	const GET_FOCOS_GRAFICO = "SELECT COUNT(f.id) as cantidad,i.fecha, f.Tipo FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE f.idInfoGeneral=i.ID GROUP BY i.Fecha, f.Tipo";
 
 
-	//SELECT para la tabla Sumideros de REPORTES
-	const GET_FOCOS_REPORTE = "SELECT f.id, i.fecha, f.tipo, f.estado, f.tratamiento, f.insecticida, f.cantidad, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) AND (f.tipo = 'Sumidero') GROUP BY i.Fecha";
+	//SELECT para la tabla Sumideros
+	const GET_SUMIDEROS_REPORTE = "SELECT count(f.id) as cantidad, sum(case when f.Estado = 'Ninguno' then 1 else 0 end) positivos, sum(case when f.Tratamiento='Tratado' then 1 else 0 end) tratados, sum(f.Cantidad) totalinsecticida, i.fecha, f.tipo, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) and f.Tipo='Sumidero' GROUP BY i.Municipio";
+
+	//SELECT para la tabla vivienda
+	const GET_VIVIENDA_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT d.ID) as depositos, sum(case when d.eliminado = 'True' and d.IDFoco=f.ID then 1 else 0 end) eliminados, sum(case when d.tratado = 'True' and d.IDFoco=f.ID then 1 else 0 end) tratados, sum(case when d.IDFoco=F.ID then d.larvicida else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN depositosvivienda d where f.Tipo='Vivienda' GROUP BY i.Municipio";
+
+	//SELECT para la tabla cdh
+	const GET_CDH_REPORTES="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT cd.ID) as depositos, sum(case when cd.IDFoco=F.ID then cd.Cantidad else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN fococdh cd where f.Tipo='CDH' GROUP BY i.Municipio";
+
 
 
 	public function agregarSumidero($sumidero){
@@ -262,7 +269,7 @@ class focoInfeccion extends DB {
 	//Funcion para la tabla de sumideros de REPORTES
 	public function focosReporte($mes){
 		$this->open_connection();
-		$result = $this->conn->query(self::GET_FOCOS_REPORTE);
+		$result = $this->conn->query(self::GET_SUMIDEROS_REPORTE);
 		$focosR=[];
 		if ($result->num_rows > 0){
 			while ($row = $result->fetch_assoc()) {
