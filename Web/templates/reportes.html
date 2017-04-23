@@ -29,7 +29,7 @@
             <li ng-repeat="m in meses"><a ng-click="selectedMonth(m)">{{m}}</a></li>
         </ul>
     </div>
-    <button class="white-button" ng-click="getInfoReporte()">Ver reporte</button>
+    <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
 </div>
 <div class = "container-reportes">
     <div class="sumidero-reportes">
@@ -43,13 +43,13 @@
                 <th>Total insecticida usado</th>
             </tr>
             <!-- Paginacion y filtro  -->
-            <tr ng-repeat="foco in Focos">
-                <td>{{foco.Tipo}}</td>
-                <td>{{foco.cedula}}</td>
-                <td>{{fixedUbicacion(foco)}}</td>
+            <tr ng-repeat="foco in focosReporteSumidero">
                 <td>{{foco.Municipio}}</td>
-                <td>{{foco.Fecha}}</td>
-                <td>{{foco.Clave}}</td>
+                <td>{{foco.cantidad}}</td>
+                <td>{{foco.positivos}}</td>
+                <td>{{foco.tratados}}</td>
+                <td>{{foco.insecticida}}</td>
+                <td>{{foco.totalinsecticida}}</td>
                 <td>{{foco.Estado}}</td>
             </tr>
         </table>
@@ -67,14 +67,14 @@
                 <th>Total insecticida usado</th>
             </tr>
             <!-- Paginacion y filtro  -->
-            <tr ng-repeat="foco in Focos">
-                <td>{{foco.Tipo}}</td>
-                <td>{{foco.cedula}}</td>
-                <td>{{fixedUbicacion(foco)}}</td>
+            <tr ng-repeat="foco in focosReporteVivienda">
                 <td>{{foco.Municipio}}</td>
-                <td>{{foco.Fecha}}</td>
-                <td>{{foco.Clave}}</td>
-                <td>{{foco.Estado}}</td>
+                <td>{{foco.cantidad}}</td>
+                <td>{{foco.depositos}}</td>
+                <td>{{foco.tratados}}</td>
+                <td>{{foco.eliminados}}</td>
+                <td>{{foco.larvas}}</td>
+                <td>{{foco.insecticida}}</td>
             </tr>
         </table>
     </div>
@@ -90,14 +90,14 @@
                 <th>Total insecticida usado</th>
             </tr>
             <!-- Paginacion y filtro  -->
-            <tr ng-repeat="foco in Focos">
-                <td>{{foco.Tipo}}</td>
-                <td>{{foco.cedula}}</td>
-                <td>{{fixedUbicacion(foco)}}</td>
+            <tr ng-repeat="foco in focosReporteCDH">
                 <td>{{foco.Municipio}}</td>
-                <td>{{foco.Fecha}}</td>
-                <td>{{foco.Clave}}</td>
-                <td>{{foco.Estado}}</td>
+                <td>{{foco.cantidad}}</td>
+                <td>{{foco.depositos}}</td>
+                <td>{{foco.tratados}}</td>
+                <td>{{foco.eliminados}}</td>
+                <td>{{foco.larvas}}</td>
+                <td>{{foco.insecticida}}</td>
             </tr>
         </table>
     </div>
@@ -105,5 +105,5 @@
 </div>
 <div class="div-exportar">
     <span>Opciones para exportar reporte:</span>
-    <button class="white-button" ng-click="focosRegistrados()">Exportar reporte a PDF</button>
+    <button class="white-button" ng-click="exportarPDF()">Exportar reporte a PDF</button>
 </div>

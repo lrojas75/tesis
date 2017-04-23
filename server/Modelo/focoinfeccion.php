@@ -31,7 +31,7 @@ class focoInfeccion extends DB {
 	const GET_VIVIENDA_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT d.ID) as depositos, sum(case when d.eliminado = 'True' and d.IDFoco=f.ID then 1 else 0 end) eliminados, sum(case when d.tratado = 'True' and d.IDFoco=f.ID then 1 else 0 end) tratados, sum(case when d.IDFoco=F.ID then d.larvicida else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN depositosvivienda d where f.Tipo='Vivienda' GROUP BY i.Municipio";
 
 	//SELECT para la tabla cdh
-	const GET_CDH_REPORTES="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT cd.ID) as depositos, sum(case when cd.IDFoco=F.ID then cd.Cantidad else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN fococdh cd where f.Tipo='CDH' GROUP BY i.Municipio";
+	const GET_CDH_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT cd.ID) as depositos, sum(case when cd.IDFoco=F.ID then cd.Cantidad else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN fococdh cd where f.Tipo='CDH' GROUP BY i.Municipio";
 
 
 
@@ -267,17 +267,36 @@ class focoInfeccion extends DB {
 	}
 
 	//Funcion para la tabla de sumideros de REPORTES
-	public function focosReporte($mes){
+	public function focosReporte($year){
 		$this->open_connection();
-		$result = $this->conn->query(self::GET_SUMIDEROS_REPORTE);
-		$focosR=[];
-		if ($result->num_rows > 0){
-			while ($row = $result->fetch_assoc()) {
-				array_push($focosR, $row);
+		$resSum = $this->conn->query(self::GET_SUMIDEROS_REPORTE);
+		$resViv = $this->conn->query(self::GET_VIVIENDA_REPORTE);
+		$resCDH = $this->conn->query(self::GET_CDH_REPORTE);
+		$sumideros = [];
+		$viviendas = [];
+		$cdhs = [];
+		$reporte=[];
+		if ($resSum->num_rows > 0){
+			while ($row = $resSum->fetch_assoc()) {
+				$fechaFoco=date_parse_from_format("d-m-Y",$row['fecha']);
+				if ($fechaFoco['year']==(int)$year) {
+					array_push($sumideros, $row);
+				}
 			}
-			return $focosR;
 		}
+		if ($resViv->num_rows > 0){
+			while ($row = $resViv->fetch_assoc()) {
+				array_push($viviendas, $row);
+			}
+		}
+		if ($resCDH->num_rows > 0){
+			while ($row = $resCDH->fetch_assoc()) {
+				array_push($cdhs, $row);
+			}
+		}
+		$reporte = [$sumideros, $viviendas, $cdhs];
 		$this->close_connection();
+		return $reporte;
 	}
 }
 ?>

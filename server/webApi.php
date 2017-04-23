@@ -298,7 +298,7 @@ private function editarInformacion(){
       $this->response ( '', 406 );
     }else{
       $focoinfeccion =  new focoInfeccion();
-      $result=$focoinfeccion->focosReporte($_GET['month']);
+      $result=$focoinfeccion->focosReporte($_GET['year']);
       $this->response(json_encode($result),200);
     }
   }
