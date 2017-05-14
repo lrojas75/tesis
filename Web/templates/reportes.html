@@ -19,15 +19,12 @@
     </div>
 </nav>
 
+<div ng-controller = "reportesController">
 <div class="titulo-reportes">Reporte</div>
-<div class="filter-div" ng-controller = "reportesController">   
+<div class="filter-div">   
     <span style="margin-right: 2%">Ver reporte del mes:</span>
     <div class="dropdown" style="margin-right: 1%">
-        <button class="white-button" type="button" data-toggle="dropdown">Mes
-        <span class="caret"></span></button>
-        <ul class="dropdown-menu">
-            <li ng-repeat="m in meses"><a ng-click="selectedMonth(m)">{{m}}</a></li>
-        </ul>
+        <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
     </div>
     <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
 </div>
@@ -103,6 +100,7 @@
     </div>
     
 </div>
+</div> 
 <div class="div-exportar">
     <span>Opciones para exportar reporte:</span>
     <button class="white-button" ng-click="exportarPDF()">Exportar reporte a PDF</button>
