@@ -62,7 +62,7 @@ angular.module('app').controller('homeController', function($scope, $http, $cook
 				year:new Date().getFullYear()
 			}
 		}).success(function (data) {
-			//Pos 1 vivienda, pos 2 simdero, pos 3 cdh			
+			//Pos 1 vivienda, pos 2 sumidero, pos 3 cdh			
 			$scope.focosPorMesVivienda=data[0];
 			$scope.focosPorMesSumidero=data[1];
 			$scope.focosPorMesCDH=data[2];
@@ -126,7 +126,6 @@ angular.module('app').controller('homeController', function($scope, $http, $cook
 	          ['Meses', 'Viviendas', 'Sumideros', 'CDHs'],
 	          ['Ene', $scope.focosPorMesVivienda[0], $scope.focosPorMesSumidero[0], $scope.focosPorMesCDH[0]],
 	          ['Feb', $scope.focosPorMesVivienda[1], $scope.focosPorMesSumidero[1], $scope.focosPorMesCDH[1]],
-	          //['Mar', 660, focosPorMes[2], 300],
 	          ['Mar', $scope.focosPorMesVivienda[2], $scope.focosPorMesSumidero[2], $scope.focosPorMesCDH[2]],
 	          ['Abr', $scope.focosPorMesVivienda[3], $scope.focosPorMesSumidero[3], $scope.focosPorMesCDH[3]],
 	          ['May', $scope.focosPorMesVivienda[4], $scope.focosPorMesSumidero[4], $scope.focosPorMesCDH[4]],

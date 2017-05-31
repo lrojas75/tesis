@@ -1,6 +1,8 @@
 angular.module('app').controller('focosController', function($scope, $http, $filter, auth, sharedVariables, $cookies){
 	
-	var map, heatmap;
+	var map, heatmap, polylineMap;
+	var polymap;
+	$scope.markers = [];
 	//Informacion del usuario
 	$scope.usuario = JSON.parse($cookies.userInfo);
 
@@ -23,6 +25,22 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	//Tamano paginacion
 	$scope.tamanoPagina=5;
 	$scope.tamanoPaginaInsecticida=5;
+
+	$scope.meses = [
+	{mes:'Enero', valor:'-01-'}, 
+	{mes:'Febrero', valor:'-02-'},
+	{mes:'Marzo',valor:'-03-'}, 
+	{mes:'Abril',valor:'-04-'}, 
+	{mes:'Mayo',valor:'-05-'}, 
+	{mes:'Junio',valor:'-06-'}, 
+	{mes:'Julio',valor:'-07-'}, 
+	{mes:'Agosto',valor:'-08-'}, 
+	{mes:'Septiembre',valor:'-09-'}, 
+	{mes:'Octubre',valor:'-10-'}, 
+	{mes:'Noviembre',valor:'-11-'}, 
+	{mes:'Diciembre',valor:'-12-'}
+	];
+	$scope.mesusuario = '';
 
 	$scope.logout = function(){
 		auth.logout();
@@ -83,12 +101,17 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 		}
 		sharedVariables.setProperty('');
 	};
-
+	//Funcion para inicializar el mapa de calor
 	$scope.initMap=function() {
 		map = new google.maps.Map(document.getElementById('heatmap'), {
 				zoom: 12,
 				center: {lat: 3.43, lng: -76.52},
-				mapTypeId: google.maps.MapTypeId.HYBRID
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+		polylineMap = new google.maps.Map(document.getElementById('polymap'), {
+				zoom: 12,
+				center: {lat: 3.43, lng: -76.52},
+				mapTypeId: google.maps.MapTypeId.ROADMAP	
 			});
 		function initialize(){
 			heatmap = new google.maps.visualization.HeatmapLayer({
@@ -97,11 +120,59 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 			});
 			heatmap.set('radius', 20);
 			heatmap.set('opacity', null);
+			
+			var lineSymbol = {
+	          path: google.maps.SymbolPath.FORWARD_CLOSED_ARROW
+	        };
+			polymap = new google.maps.Polyline({
+	        	path: [],
+	        	icons: [{
+		            icon: lineSymbol,
+		            offset: '100%'
+		        }],
+	        	geodesic: true,
+	        	strokeColor: '#3d3d29',
+	        	strokeOpacity: 1.0,
+	        	strokeWeight: 4
+	        });
+	        polymap.setMap(polylineMap);
 		}
 		google.maps.event.addDomListener(window, 'load', initialize);
 	};
-
-	$scope.mostrarFiltro=function(){		
+	//Filtra focos para mapa de ruta
+	$scope.filtrarFocosPoly=function() {
+		$scope.borrarMarcadores();
+		$scope.filtroCedula = $filter('filter')($scope.Focos, $scope.filterPoly);
+		console.log("filtro cc: "+$scope.filtroCedula);
+		console.log("mes: "+$scope.mesusuario.valor);
+		console.log("filtro fecha: "+$filter('filter')($scope.filtroCedula, $scope.mesusuario.valor));
+		polymap.setPath($scope.focosRuta($filter('filter')($scope.filtroCedula, $scope.mesusuario.valor)));
+	};
+	$scope.focosRuta=function(arrayPuntos){
+		var posiciones = [];
+		if(arrayPuntos){
+			arrayPuntos.forEach( function(foco) {
+				var latLong=foco.Ubicacion.split(",");
+				posiciones.push(new google.maps.LatLng(parseFloat(latLong[0]), parseFloat(latLong[1])));
+				var marker = new google.maps.Marker({
+		          position: new google.maps.LatLng(parseFloat(latLong[0]), parseFloat(latLong[1])),
+		          map: polylineMap
+		        });
+		        $scope.markers.push(marker);
+			});
+		}
+		return posiciones;
+	};
+	$scope.borrarMarcadores=function(){
+            for (var i = 0; i < $scope.markers.length; i++) {
+                console.log("marcador: "+$scope.markers[i]);
+                $scope.markers[i].setMap(null);
+            }
+            $scope.markers.length = 0;
+	}
+	
+	//Filtra focos del heatmap
+	$scope.mostrarFiltro=function(){
 		heatmap.setData($scope.obtenerUbicaciones($filter('filter')($scope.Focos, $scope.filtroMap)));
 	};
 
@@ -194,9 +265,10 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	//Solucion al problema de renderizado del mapa causado por el cambio de pantallas
 	jQuery(document).ready(function() {
 	  checkContainer();
+	  checkContainerPoly();
 	});
 	//Funcion que revisa si el contenedor del mapa de calor es visible
-	function checkContainer () {
+	function checkContainer() {
 	  if($('#mapaCalor').is(':visible')){ //Si el container es visible
 	    google.maps.event.trigger(map, 'resize');
 		map.setCenter({lat: 3.43, lng: -76.52});
@@ -204,6 +276,15 @@ angular.module('app').controller('focosController', function($scope, $http, $fil
 	    setTimeout(checkContainer, 50); //espera 50ms y vuelve a intentar
 	  }
 	};
+	function checkContainerPoly() {
+	  if($('#recorridoUsuario').is(':visible')){ //Si el container es visible
+	    google.maps.event.trigger(polylineMap, 'resize');
+		map.setCenter({lat: 3.43, lng: -76.52});
+	  } else {
+	    setTimeout(checkContainerPoly, 50); //espera 50ms y vuelve a intentar
+	  }
+	};
+
 	
 	$scope.getAllFocos();
 	$scope.getInsecticidas();

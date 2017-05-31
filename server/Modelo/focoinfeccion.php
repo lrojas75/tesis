@@ -24,14 +24,21 @@ class focoInfeccion extends DB {
 	const GET_FOCOS_GRAFICO = "SELECT COUNT(f.id) as cantidad,i.fecha, f.Tipo FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE f.idInfoGeneral=i.ID GROUP BY i.Fecha, f.Tipo";
 
 
+	/*SELECT para la tabla Sumideros
+	const GET_SUMIDEROS_REPORTE = "SELECT count(f.id) as cantidad, sum(case when f.Estado = 'Ninguno' then 1 else 0 end) positivos, sum(case when f.Tratamiento='Tratado' then 1 else 0 end) tratados, sum(f.Cantidad) totalinsecticida, i.fecha, f.tipo, i.Municipio, f.Insecticida FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) and f.Tipo='Sumidero' GROUP BY i.Municipio";*/
+	
+	//Bota los del supervisor no mas, falta los de sus trabajadores
+	/*const GET_SUMIDEROS_REPORTE = "SELECT count(f.id) as cantidad, sum(case when f.Estado = 'Ninguno' then 1 else 0 end) positivos, sum(case when f.Tratamiento='Tratado' then 1 else 0 end) tratados, sum(f.Cantidad) totalinsecticida, i.fecha, f.tipo, i.Municipio, f.Insecticida FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) and f.Tipo='Sumidero' and (i.ID_Usuario=?) GROUP BY i.fecha";*/
+
 	//SELECT para la tabla Sumideros
-	const GET_SUMIDEROS_REPORTE = "SELECT count(f.id) as cantidad, sum(case when f.Estado = 'Ninguno' then 1 else 0 end) positivos, sum(case when f.Tratamiento='Tratado' then 1 else 0 end) tratados, sum(f.Cantidad) totalinsecticida, i.fecha, f.tipo, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) and f.Tipo='Sumidero' GROUP BY i.Municipio";
+	const GET_SUMIDEROS_REPORTE = "SELECT count(f.id) as cantidad, sum(case when f.Estado = 'Ninguno' then 1 else 0 end) positivos, sum(case when f.Tratamiento='Tratado' then 1 else 0 end) tratados, sum(f.Cantidad) totalinsecticida, i.fecha, f.tipo, i.Municipio, f.Insecticida FROM focoinfeccion f INNER JOIN informaciongeneral i WHERE (f.idInfoGeneral=i.ID) and f.Tipo='Sumidero' GROUP BY i.fecha";
+
 
 	//SELECT para la tabla vivienda
-	const GET_VIVIENDA_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT d.ID) as depositos, sum(case when d.eliminado = 'True' and d.IDFoco=f.ID then 1 else 0 end) eliminados, sum(case when d.tratado = 'True' and d.IDFoco=f.ID then 1 else 0 end) tratados, sum(case when d.IDFoco=F.ID then d.larvicida else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN depositosvivienda d where f.Tipo='Vivienda' GROUP BY i.Municipio";
+	const GET_VIVIENDA_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT d.ID) as depositos, sum(case when d.eliminado = 'True' and d.IDFoco=f.ID then 1 else 0 end) eliminados, sum(case when d.tratado = 'True' and d.IDFoco=f.ID then 1 else 0 end) tratados, sum(case when d.IDFoco=F.ID then d.larvicida else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio, sum(case when d.IDFoco=f.ID then d.L else 0 end) larvas FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN depositosvivienda d where f.Tipo='Vivienda' GROUP BY i.fecha";
 
 	//SELECT para la tabla cdh
-	const GET_CDH_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT cd.ID) as depositos, sum(case when cd.IDFoco=F.ID then cd.Cantidad else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN fococdh cd where f.Tipo='CDH' GROUP BY i.Municipio";
+	const GET_CDH_REPORTE="SELECT count(DISTINCT f.id) as cantidad, count(DISTINCT cd.ID) as depositos, sum(case when cd.IDFoco=F.ID then cd.Cantidad else 0 end) insecticida, i.fecha, f.tipo, f.idInfoGeneral, i.Municipio FROM focoinfeccion f INNER JOIN informaciongeneral i on (f.idInfoGeneral=i.ID) INNER JOIN fococdh cd where f.Tipo='CDH' GROUP BY i.fecha";
 
 
 
@@ -237,7 +244,7 @@ class focoInfeccion extends DB {
 				foreach ($focos as $row) {
 					$fechaFoco=date_parse_from_format("d-m-Y",$row['fecha']);
 					if ($fechaFoco['year']>=(int)$year) {						
-						if($mes==$fechaFoco['month']){
+						if($mes==$fechaFoco['month']-1){
 							switch ($row['Tipo']) {
 
 								case 'Vivienda':
@@ -286,12 +293,18 @@ class focoInfeccion extends DB {
 		}
 		if ($resViv->num_rows > 0){
 			while ($row = $resViv->fetch_assoc()) {
-				array_push($viviendas, $row);
+				$fechaFoco=date_parse_from_format("d-m-Y",$row['fecha']);
+				if ($fechaFoco['year']==(int)$year) {
+					array_push($viviendas, $row);
+				}
 			}
 		}
 		if ($resCDH->num_rows > 0){
 			while ($row = $resCDH->fetch_assoc()) {
-				array_push($cdhs, $row);
+				$fechaFoco=date_parse_from_format("d-m-Y",$row['fecha']);
+				if ($fechaFoco['year']==(int)$year) {
+					array_push($cdhs, $row);
+				}
 			}
 		}
 		$reporte = [$sumideros, $viviendas, $cdhs];

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Estilos, bootstrap, material icons, mains css-->
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link  rel='stylesheet' href="https://fonts.googleapis.com/icon?family=Material+Icons">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link  rel='stylesheet' href='index.css'>
+
+    <!-- Js angular, bootstrap y jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.0.4/angular-cookies.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>    
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <script src="http://cdn.jsdelivr.net/alasql/0.3/alasql.min.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/xlsx/0.7.12/xlsx.core.min.js"></script>
+    
+    <title>Reporte export</title>
+</head>
+
+<body>
+
+    <div ng-controller = "pruebaController">
+    <div class="titulo-reportes">Reporte</div>
+    <div class="filter-div">   
+        <span style="margin-right: 2%">Ver reporte del mes:</span>
+        <div class="dropdown" style="margin-right: 1%">
+            <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
+        </div>
+        <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
+    </div>
+    <div class = "container-reportes">
+        <div class="sumidero-reportes">
+            <table class="table" ng-form="tableForm" id="sumideros">
+                <thead>
+                <tr>
+                    <th>Municipio</th>
+                    <th>Total inspeccionados</th>
+                    <th>Numero de positivos</th>
+                    <th>Numero de tratados</th>
+                    <th>Insecticida usado</th>
+                    <th>Total insecticida usado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Paginacion y filtro  -->
+                <tr ng-repeat="foco in focosReporteSumidero">
+                    <td>{{foco.Municipio}}</td>
+                    <td>{{foco.cantidad}}</td>
+                    <td>{{foco.positivos}}</td>
+                    <td>{{foco.tratados}}</td>
+                    <td>{{foco.Insecticida}}</td>
+                    <td>{{foco.totalinsecticida}}</td>
+                    <td>{{foco.Estado}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="vivienda-reportes">
+            <table class="table" ng-form="tableForm" id="viviendas">
+                <thead>
+                <tr>
+                    <th>Municipio</th>
+                    <th>Casas visitadas</th>
+                    <th>Depositos encontrados</th>
+                    <th>Depositos tratados</th>
+                    <th>Depositos eliminados</th>
+                    <th>Depositos con larvas</th>
+                    <th>Total insecticida usado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Paginacion y filtro  -->
+                <tr ng-repeat="foco in focosReporteVivienda">
+                    <td>{{foco.Municipio}}</td>
+                    <td>{{foco.cantidad}}</td>
+                    <td>{{foco.depositos}}</td>
+                    <td>{{foco.tratados}}</td>
+                    <td>{{foco.eliminados}}</td>
+                    <td>{{foco.larvas}}</td>
+                    <td>{{foco.insecticida}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="cdh-reportes">
+            <table class="table" ng-form="tableForm" id="cdh">
+                <thead>
+                <tr>
+                    <th>Municipio</th>
+                    <th>Lugares visitados</th>
+                    <th>Depositos encontrados</th>
+                    <th>Depositos tratados</th>
+                    <th>Depositos eliminados</th>
+                    <th>Depositos con larvas</th>
+                    <th>Total insecticida usado</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Paginacion y filtro  -->
+                <tr ng-repeat="foco in focosReporteCDH">
+                    <td>{{foco.Municipio}}</td>
+                    <td>{{foco.cantidad}}</td>
+                    <td>{{foco.depositos}}</td>
+                    <td>{{foco.tratados}}</td>
+                    <td>{{foco.eliminados}}</td>
+                    <td>{{foco.larvas}}</td>
+                    <td>{{foco.insecticida}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+        <div class="div-exportar">
+            <button class="white-button" ng-click="export()">Exportar</button>
+        </div>
+    </div> 
+    
+    <script src="pruebaController.js"></script>
+</body>
+
+</html>

@@ -76,7 +76,7 @@ angular.module('app').controller("loginController", function($scope, $http, auth
 		}).success(function(data){			
 			$scope.cambioContrasena($scope.cedulaValidacion,data);
 		}).error(function(data){
-			$scope.modalMessage = "Usuario no encontrada.";
+			$scope.modalMessage = "Usuario no encontrado.";
 	            $("#loginErrorModal").modal();
 	            setTimeout(function () {
 	                $("#loginErrorModal").modal("hide");

@@ -24,6 +24,7 @@
   <li class="active"><a data-toggle="tab" href="#focosTabla">Listado de focos</a></li>
   <li><a data-toggle="tab" href="#mapaCalor">Mapa de Calor</a></li>
   <li><a data-toggle="tab" href="#insecticidasTabla">Insecticidas</a></li>
+  <li><a data-toggle="tab" href="#recorridoUsuario">Recorrido de un trabajador</a></li>
 </ul>
 
 <div class="tab-content">
@@ -182,6 +183,22 @@
             <button ng-disabled="paginaActualInsecticida >= filtrarInsecticidas().length/tamanoPaginaInsecticida - 1" ng-click="paginaActualInsecticida=paginaActualInsecticida+1"><span class="glyphicon glyphicon-forward"></span></button>
         </div>
     </div>
+
+    <!-- Recorrido de un usuario  -->
+    <div id="recorridoUsuario" class="tab-pane fade">
+        <div class="filter-div">   
+            <span>Cédula del usuario:</span>
+            <input type="text" class="filter-input" ng-model="filterPoly" placeholder="Ingresar numero de cédula"><br>
+            <span>Recorrido del mes:</span>
+            <div class="dropdown" style="margin-right: 1%">
+                <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
+            </div>
+            <button class="white-button" ng-click="filtrarFocosPoly()">Buscar</button>
+            <br>
+        </div>
+        <div ng-init="initMap()" style="height: 400px; width: 50%; margin: 0 auto" id="polymap"></div></div>
+    </div>
+
 </div>
 
 
