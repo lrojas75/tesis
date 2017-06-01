@@ -1,7 +1,7 @@
 var app = angular.module('movilapp', []);
 //Ip publica
 //var ip = "http://181.53.57.112:3000/server";
-var ip = "http://192.168.0.15";
+var ip = "http://192.168.0.123/server";
 
 app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     $scope.loginError = '';
@@ -26,7 +26,7 @@ app.controller("inicioController", ['$scope', '$http', function($scope, $http){
     window.localStorage.setItem("ipServer", ip);
     $scope.cambioIP = function () {
         if ($scope.ipServer.trim() != '') {
-            ip = $scope.ipServer;
+            ip = "http://"+$scope.ipServer;
             window.localStorage.setItem("ipServer", ip);
             alert("Se cambió la IP del servidor a: " + ip);
         } else {
