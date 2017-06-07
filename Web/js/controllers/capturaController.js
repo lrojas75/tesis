@@ -78,8 +78,8 @@ angular.module('app').controller('capturaController', function($scope, $http, $f
 	$scope.opciones = [
 		{ municipio: "Cali", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "17","19", "20", "21", "22"]},
 		{ municipio: "Palmira", comunaNum: ["1", "2", "3", "4", "5", "6","7", "8", "9","10", "11","13", "14", "15", "16"]},
-		{ municipio: "Cartago", comunaNum: ["1", "2", "3", "4", "5", "6","7"]}
-		];
+		{ municipio: "Cartago", comunaNum: ["1", "2", "3", "4", "5", "6","7"]},
+		{ municipio: "Yumbo", comunaNum: ["1", "2", "3", "4"]}];
 	//Inicializa el controlador, habilida el recorrido en caso que no haya, si existe recorrido habilita el ingreso de datos
 	$scope.initRecorrido = function(){        
 		$http.get(ip + '/webApi.php?val=checkInfoGeneral', {

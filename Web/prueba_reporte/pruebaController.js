@@ -41,4 +41,12 @@ angular.module('app', []).controller('pruebaController', function($scope){
 	}
 
 	$scope.mesActual();
+
+	//Funciones del menu lateral
+	$scope.openNav = function(){
+		document.getElementById("menu-lateral").style.width = "250px";
+	}
+	$scope.closeNav = function(){
+		document.getElementById("menu-lateral").style.width = "0";
+	}
 });

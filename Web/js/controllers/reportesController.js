@@ -4,6 +4,7 @@ angular.module('app').controller('reportesController', function($scope,$filter, 
 	
 	//Obtiene la fecha actual y el año
 	var hoy = new Date();
+	$scope.fechaHoy = hoy.getDate()+"/"+(hoy.getMonth()+1)+"/"+hoy.getFullYear();
 	$scope.yearusuario = hoy.getFullYear();
 	$scope.todos = [];
 	$scope.meses = [
@@ -96,6 +97,13 @@ angular.module('app').controller('reportesController', function($scope,$filter, 
         var cdh = alasql('SELECT * FROM HTML("#cdh",{headers:true})');
 		var opts = [{sheetid:'Reporte de sumideros',header:true},{sheetid:'Reporte de viviendas',header:false}, {sheetid:'Reporte de CDH',header:false}];
 		alasql('SELECT * INTO XLSX("Reporte SAFI.xlsx",?) \ FROM ?', [opts,[sumideros,viviendas,cdh]]);
+	}
+	//Funciones del menu lateral
+	$scope.openNav = function(){
+		document.getElementById("menu-lateral").style.width = "250px";
+	}
+	$scope.closeNav = function(){
+		document.getElementById("menu-lateral").style.width = "0";
 	}
 
 	$scope.mesActual();

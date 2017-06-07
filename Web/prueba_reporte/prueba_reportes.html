@@ -22,15 +22,50 @@
 </head>
 
 <body>
+    <!-- <nav class="navbar navbar-dark bg-primary navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+              <a class="navbar-brand" ng-click="#" style="color: white">SAFI web</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a ng-click="#">Reportes</a></li>
+                <li><a ng-click="#">Focos de Infección</a></li>
+                <li><a ng-click="#">Captura de datos</a></li>
+                <li><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a ng-click="#">opc1</a></li>
+                    <li><a ng-click="#">opc2</a></li>
+                  </ul>
+                </li>
+            </ul>
+        </div>
+    </nav> -->
+    <div id="menu-lateral" class="sidenav" ng-controller = "pruebaController">
+        <h4>SAFI WEB</h4>
+        <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+        <a ng-click="">REPORTES</a>
+        <a ng-click="">CAPTURA DE DATOS</a>
+        <a ng-click="changeView('/usuarios')">LISTADO DE EMPLEADOS</a>
+        <a ng-click="changeView('/usuarios')">USUARIO</a>
+        <a ng-click="changeView('/usuarios')">CERRAR SESIÓN</a>
+    </div>
 
     <div ng-controller = "pruebaController">
-    <div class="titulo-reportes">Reporte</div>
-    <div class="filter-div">   
-        <span style="margin-right: 2%">Ver reporte del mes:</span>
+    <div class="blue-button">
+        <a ng-click="openNav()">
+            <span class="glyphicon glyphicon-menu-hamburger"></span>
+            <h4>SAFI WEB</h4>
+        </a>
+    </div>
+    <div class="filter-div-reportes"><!-- Se cambio el nombre de la clase-->   
+        <span style="margin-right: 2%">REPORTE DEL MES:</span>
         <div class="dropdown" style="margin-right: 1%">
             <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
         </div>
         <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
+        <button class="white-button" ng-click="export()">Exportar a Excel</button> <!--Se cambio-->
     </div>
     <div class = "container-reportes">
         <div class="sumidero-reportes">
@@ -116,9 +151,6 @@
         </div>
         
     </div>
-        <div class="div-exportar">
-            <button class="white-button" ng-click="export()">Exportar</button>
-        </div>
     </div> 
     
     <script src="pruebaController.js"></script>

@@ -1,35 +1,34 @@
-<nav class="navbar navbar-dark bg-primary">
-    <div class="container-fluid">
-        <div class="navbar-header">
-          <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
-        </div>
-        <ul class="nav navbar-nav navbar-right">
-            <li><a ng-click="changeView('/reportes')">Reportes</a></li>
-            <li><a ng-click="changeView('/focosDeInfeccion')">Focos de Infección</a></li>
-            <li><a ng-click="changeView('/capturaDeDatos')">Captura de datos</a></li>
-            <li ng-show="usuario.rolUsuario"><a ng-click="changeView('/usuarios')">Listado de empleados</a></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-user"></span></a>
-              <ul class="dropdown-menu">
-                <li><a ng-click="changeView('/perfil')">{{usuario.nombres}}</a></li>
-                <li><a ng-click="logout()">Cerrar Sesión</a></li>
-              </ul>
-            </li>
-        </ul>
+<div id="menu-lateral" class="sidenav" ng-controller = "reportesController">
+        <a ng-click="changeView('/home')"><h4>SAFI WEB</h4></a>
+        <a href="javascript:void(0)" class="closebtn" ng-click="closeNav()">&times;</a>
+        <a ng-click="changeView('/reportes')">REPORTES</a>
+        <a ng-click="changeView('/focosDeInfeccion')">FOCOS DE INFECCIÓN</a></li>
+        <a ng-click="changeView('/capturaDeDatos')">CAPTURA DE DATOS</a>
+        <a ng-show="usuario.rolUsuario" ng-click="changeView('/usuarios')">LISTADO DE EMPLEADOS</a>
+        <a ng-click="changeView('/perfil')" style="text-transform: uppercase;">{{usuario.nombres}}</a>
+        <a ng-click="logout()">CERRAR SESIÓN</a>
     </div>
-</nav>
 
 <div ng-controller = "reportesController">
-<div class="titulo-reportes">Reporte</div>
-<div class="filter-div">   
-    <span style="margin-right: 2%">Ver reporte del mes:</span>
-    <div class="dropdown" style="margin-right: 1%">
-        <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
+    <div class="blue-button" ng-click="openNav()">
+        <span class="glyphicon glyphicon-menu-hamburger"></span>
+        <h4>SAFI WEB</h4>
     </div>
-    <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
-</div>
+    <div class="logoues" align="right">
+        <img src="img/uesvalle.jpg" alt="Logo UES" height="10%" width="20%"/>
+        <div class="fecha">Fecha: {{fechaHoy}}</div>
+    </div>
+    <div class="filter-div-reportes"><!-- Se cambio el nombre de la clase-->   
+        <span>REPORTE DEL MES:</span>
+        <div class="dropdown">
+            <select class="white-button" ng-model="mesusuario" ng-options="m.mes for m in meses"></select>
+        </div>
+        <button class="white-button" ng-click="filtrarPorMes()">Ver reporte</button>
+        <button class="white-button" ng-click="export()">Exportar a Excel</button> <!--Se cambio-->
+    </div>
 <div class = "container-reportes">
     <div class="sumidero-reportes">
+        <div><h4><b>Sumideros</b></h4></div>
         <table class="table" ng-form="tableForm" id="sumideros">
             <thead>
                 <tr>
@@ -57,6 +56,7 @@
     </div>
 
     <div class="vivienda-reportes">
+        <div><h4><b>Viviendas</b></h4></div>
         <table class="table" ng-form="tableForm" id="viviendas">
             <thead>
                 <tr>
@@ -84,6 +84,7 @@
         </table>
     </div>
     <div class="cdh-reportes">
+        <div><h4><b>Centros de concentracion humana</b></h4></div>
         <table class="table" ng-form="tableForm" id="cdh">
             <thead>
                 <tr>
@@ -111,8 +112,5 @@
         </table>
     </div>
     
-</div>
-<div class="div-exportar">
-    <button class="white-button" ng-click="export()">Exportar a Excel</button>
 </div>
 </div> 

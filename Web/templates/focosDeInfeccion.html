@@ -1,4 +1,4 @@
-<nav class="navbar navbar-dark bg-primary">
+<nav class="navbar navbar-dark bg-primary navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
           <a class="navbar-brand" ng-click="changeView('/home')" style="color: white">SAFI web</a>
@@ -17,20 +17,21 @@
             </li>
         </ul>
     </div>
-</nav>
+</nav><br>
 
-
-<ul class="nav nav-tabs" ng-init="iniciarController()">
-  <li class="active"><a data-toggle="tab" href="#focosTabla">Listado de focos</a></li>
-  <li><a data-toggle="tab" href="#mapaCalor">Mapa de Calor</a></li>
-  <li><a data-toggle="tab" href="#insecticidasTabla">Insecticidas</a></li>
-  <li><a data-toggle="tab" href="#recorridoUsuario">Recorrido de un trabajador</a></li>
-</ul>
+<div class="tabs-focos">
+    <ul class="nav nav-tabs" ng-init="iniciarController()" style="text-align: center">
+      <li class="active"><a data-toggle="tab" href="#focosTabla">Listado de focos</a></li>
+      <li><a data-toggle="tab" href="#mapaCalor">Mapa de Calor</a></li>
+      <li><a data-toggle="tab" href="#insecticidasTabla">Insecticidas</a></li>
+      <li><a data-toggle="tab" href="#recorridoUsuario">Recorrido de un trabajador</a></li>
+    </ul>
+</div>
 
 <div class="tab-content">
   <div id="focosTabla" class="tab-pane fade in active">
     <div class="filter-div">
-        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los focos de tipo vivienda basta con que escriba vivienda el input.</p>    
+        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar. (Ej: Vivienda para ver solo focos de infección de tipo vivienda).</p>    
         <span>Filtrar Focos:</span>
         <input type="text" class="filter-input" ng-model="filterText" placeholder="Tipo-CC-Municipio...">
         <button class="white-button" ng-click="focosRegistrados()">Ver mis Focos</button>
@@ -129,7 +130,7 @@
 
     <div id="mapaCalor" class="tab-pane fade">
     <div class="filter-div">
-        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar, es decir, si desea ver los focos de tipo vivienda basta con que escriba vivienda el input y presione el botón.</p>
+        <p>Puede filtrar los focos que se visualizan escribiendo el valor por el que desea filtrar. (Ej: Vivienda para ver solo focos de infección de tipo vivienda).</p>
         <span>Filtrar Focos:</span>
         <input type="text" class="filter-input" ng-model="filtroMap" placeholder="Tipo-CC-Municipio...">
         <button class="white-button" ng-click="mostrarFiltro()">Filtrar</button>
